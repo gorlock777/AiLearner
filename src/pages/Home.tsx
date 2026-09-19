@@ -220,7 +220,8 @@ export function Home() {
         }
       }
 
-      // Step 5: Save complete session (topics, flashcards, quiz) to localStorage for 1-click instant reloading
+      // Step 5: Mark all steps complete (100%), save session, and transition smoothly
+      setCurrentStep(5)
       const storeState = useAppStore.getState()
       saveDocumentSession(
         doc.id,
@@ -228,6 +229,9 @@ export function Home() {
         storeState.flashcardSets,
         storeState.quizSets
       )
+
+      // Brief delay so user sees green 100% COMPLETE checkmark on all steps
+      await new Promise((resolve) => setTimeout(resolve, 600))
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Processing failed'
       setError(msg)

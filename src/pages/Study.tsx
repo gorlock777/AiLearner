@@ -31,6 +31,14 @@ interface SessionCard {
   result: CardResult
 }
 
+function getCardFontSize(text: string) {
+  const len = text ? text.length : 0
+  if (len < 70) return 'text-xl sm:text-2xl md:text-3xl'
+  if (len < 150) return 'text-lg sm:text-xl md:text-2xl'
+  if (len < 260) return 'text-base sm:text-lg md:text-xl'
+  return 'text-xs sm:text-sm md:text-base'
+}
+
 export function Study() {
   const navigate = useNavigate()
   const { topics, getFlashcardsForTopic, addFlashcardSet, documents } = useAppStore()
@@ -369,8 +377,8 @@ export function Study() {
                     </div>
 
                     {/* Centered Editorial Typography */}
-                    <div className="my-auto py-8 text-center">
-                      <div className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-white leading-relaxed max-w-xl mx-auto">
+                    <div className="my-auto py-6 text-center overflow-y-auto max-h-[220px] px-2 font-sans text-zinc-100">
+                      <div className={`font-heading font-normal text-white leading-relaxed max-w-xl mx-auto ${getCardFontSize(currentCard.card.front)}`}>
                         {currentCard.card.front}
                       </div>
                     </div>
@@ -402,9 +410,9 @@ export function Study() {
                       </span>
                     </div>
 
-                    {/* Answer text */}
-                    <div className="my-auto py-6 text-center">
-                      <div className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-white leading-relaxed max-w-xl mx-auto">
+                    {/* Answer text with dynamic font sizing */}
+                    <div className="my-auto py-4 text-center overflow-y-auto max-h-[220px] px-2 font-sans text-zinc-100">
+                      <div className={`font-heading font-normal text-white leading-relaxed max-w-xl mx-auto ${getCardFontSize(currentCard.card.back)}`}>
                         {currentCard.card.back}
                       </div>
 

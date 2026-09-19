@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import {
   ArrowRight,
@@ -13,8 +14,9 @@ import {
   ScanText,
   Network,
   GaugeCircle,
+  ChevronDown,
 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
@@ -38,30 +40,55 @@ function GithubIcon({ size = 14 }: { size?: number }) {
 export function LandingPage() {
   const navigate = useNavigate()
   const { topics } = useAppStore()
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  // Scroll Progress across the 260vh hero track
+  const { scrollYProgress } = useScroll({
+    target: scrollContainerRef,
+    offset: ['start start', 'end end'],
+  })
+
+  // Phase 1: Main Headline & CTA (fades out as you plunge)
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.3], [1, 0])
+  const heroY = useTransform(scrollYProgress, [0, 0.3], [0, -80])
+  const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 0.92])
+
+  // Black Hole 3D Camera Plunge
+  const blackHoleScale = useTransform(scrollYProgress, [0, 0.65, 1], [1, 1.4, 1.75])
+  const blackHoleY = useTransform(scrollYProgress, [0, 1], [0, 60])
+  const blackHoleDistance = useTransform(scrollYProgress, [0, 0.8], [24, 12])
+
+  // Phase 2: In-Flight Gravitational Insights (warps in at mid-scroll)
+  const insightOpacity = useTransform(scrollYProgress, [0.32, 0.52, 0.76, 0.94], [0, 1, 1, 0])
+  const insightY = useTransform(scrollYProgress, [0.32, 0.52, 0.76, 0.94], [80, 0, 0, -60])
+  const insightScale = useTransform(scrollYProgress, [0.32, 0.52, 0.76, 0.94], [0.92, 1, 1, 0.96])
+
+  // Scroll Indicator Fade
+  const indicatorOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0])
 
   return (
     <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white linear-grid">
       {/* ── Top Navigation Bar ── */}
-      <header className="sticky top-0 z-50 w-full border-b border-zinc-800/80 bg-[#09090b]/85 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between">
+      <header className="fixed top-0 z-50 w-full border-b border-zinc-800/80 bg-[#09090b]/80 backdrop-blur-md">
+        <div className="max-w-6xl mx-auto px-6 h-14 flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-6 h-6 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center font-bold text-[11px] text-zinc-100 group-hover:border-zinc-500 transition-colors">
+            <Link to="/" className="flex items-center gap-2.5 group">
+              <div className="w-7 h-7 rounded-lg border border-zinc-700 bg-zinc-900 flex items-center justify-center font-bold text-xs text-zinc-100 group-hover:border-zinc-500 transition-colors shadow-inner">
                 AL
               </div>
-              <span className="text-xs font-semibold tracking-tight text-zinc-100 group-hover:text-white font-mono">
+              <span className="text-sm font-semibold tracking-tight text-zinc-100 group-hover:text-white font-mono">
                 AiLearner
               </span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-5 text-xs text-zinc-400">
-              <a href="#pipeline" className="hover:text-zinc-200 transition-colors">
+            <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-400">
+              <a href="#pipeline" className="hover:text-zinc-200 transition-colors font-mono">
                 Pipeline
               </a>
-              <a href="#features" className="hover:text-zinc-200 transition-colors">
+              <a href="#features" className="hover:text-zinc-200 transition-colors font-mono">
                 Architecture
               </a>
-              <a href="#faq" className="hover:text-zinc-200 transition-colors">
+              <a href="#faq" className="hover:text-zinc-200 transition-colors font-mono">
                 FAQ
               </a>
             </nav>
@@ -72,84 +99,175 @@ export function LandingPage() {
               href="https://github.com/gorlock777/AiLearner"
               target="_blank"
               rel="noreferrer"
-              className="btn-secondary h-7 px-2.5 text-xs"
+              className="btn-secondary h-8 px-3 text-xs"
             >
-              <GithubIcon size={12} />
+              <GithubIcon size={13} />
               <span className="hidden sm:inline font-mono text-[11px]">gorlock777/AiLearner</span>
             </a>
 
             <ShimmerButton
               onClick={() => navigate(topics.length > 0 ? '/study' : '/app')}
-              className="h-7 px-3 text-xs"
+              className="h-8 px-4 text-xs font-mono"
             >
               <span>{topics.length > 0 ? 'Resume Study' : 'Launch Workspace'}</span>
-              <ArrowRight size={11} />
+              <ArrowRight size={12} />
             </ShimmerButton>
           </div>
         </div>
       </header>
 
-      {/* ── Hero Section with Schwarzschild WebGL Canvas ── */}
-      <section className="relative min-h-[92svh] w-full md:min-h-[720px] overflow-hidden bg-black">
-        <BlackHoleHeroSection
-          distance={24}
-          elevation={-5.5}
-          fov={42}
-          glow={1}
-          steps={300}
-          resolution={0.7}
-          scrim="left"
-          scrimStrength={0.9}
-        >
-          <div className="flex h-full min-h-[92svh] items-start px-6 pt-14 sm:px-10 md:min-h-[720px] md:items-center md:pt-0 lg:px-20">
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="max-w-[36rem]"
-            >
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-zinc-950/80 border border-zinc-800 text-[11px] font-mono text-zinc-400 mb-5 backdrop-blur-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>OpenRouter Neural Synthesis · 100% Client Side</span>
+      {/* ── 260vh Scroll-Driven Black Hole Cinema Container ── */}
+      <div ref={scrollContainerRef} className="relative h-[260vh] w-full bg-black">
+        {/* Sticky Viewport Stage */}
+        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+          {/* Black Hole 3D Layer with Scroll-Driven Transforms */}
+          <motion.div
+            style={{
+              scale: blackHoleScale,
+              y: blackHoleY,
+            }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <BlackHoleHeroSection
+              distance={24}
+              elevation={-5.5}
+              fov={42}
+              glow={1.1}
+              steps={240}
+              resolution={0.7}
+              scrim="none"
+              className="w-full h-full"
+            />
+          </motion.div>
+
+          {/* Radial Dark Vignette for Editorial Typography Readability */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-radial from-black/20 via-black/60 to-black/90"
+          />
+
+          {/* ── STAGE 1: Big Grand Merriweather Headline (Scroll 0% → 30%) ── */}
+          <motion.div
+            style={{
+              opacity: heroOpacity,
+              y: heroY,
+              scale: heroScale,
+            }}
+            className="relative z-20 max-w-4xl mx-auto px-6 text-center flex flex-col items-center pointer-events-auto"
+          >
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-950/85 border border-zinc-800 text-[11px] font-mono text-zinc-300 mb-6 backdrop-blur-md shadow-2xl">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>The Singularity of Learning · OpenRouter Free</span>
+            </div>
+
+            {/* Giant Grand Merriweather Heading */}
+            <h1 className="font-heading font-normal text-4xl sm:text-6xl md:text-7xl lg:text-[5rem] leading-[1.06] tracking-tight text-white mb-6 drop-shadow-2xl">
+              Turn dense notes <br className="hidden sm:inline" />
+              into effortless recall.
+            </h1>
+
+            <p className="max-w-xl text-sm sm:text-base md:text-lg text-zinc-300 leading-relaxed font-sans mb-8">
+              AiLearner plunges complex study materials into active recall flashcards, 3D memory physics, and diagnostic test feedback.
+            </p>
+
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <ShimmerButton
+                onClick={() => navigate('/app')}
+                className="px-6 py-3 text-xs font-mono"
+              >
+                <FileText size={14} />
+                <span>Launch Free Workspace</span>
+                <ArrowRight size={13} />
+              </ShimmerButton>
+
+              <a
+                href="#pipeline"
+                className="inline-flex items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-900/80 px-5 py-3 text-xs font-mono text-zinc-300 hover:text-white hover:border-zinc-700 transition-colors backdrop-blur-sm"
+              >
+                <span>Explore Architecture</span>
+              </a>
+            </div>
+          </motion.div>
+
+          {/* ── STAGE 2: In-Flight Gravitational Insights (Scroll 35% → 80%) ── */}
+          <motion.div
+            style={{
+              opacity: insightOpacity,
+              y: insightY,
+              scale: insightScale,
+            }}
+            className="absolute z-20 max-w-5xl mx-auto px-6 w-full pointer-events-none"
+          >
+            <div className="text-center mb-8">
+              <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-emerald-400 font-semibold mb-2 block">
+                Gravitational Synthesis Engine
+              </span>
+              <h2 className="font-heading font-normal text-3xl sm:text-4xl text-white tracking-tight">
+                Three Pillars of Knowledge Ingestion
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-2xl flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono text-emerald-400 mb-3">
+                    <span>01 / INGESTION</span>
+                    <ScanText size={16} />
+                  </div>
+                  <h3 className="font-heading text-lg font-normal text-white mb-2">
+                    Multimodal Vision OCR
+                  </h3>
+                  <p className="text-xs text-zinc-300 leading-relaxed">
+                    Processes scanned PDFs, lecture slides, and digital documents in-browser with zero upload to cloud storage.
+                  </p>
+                </div>
               </div>
 
-              <h1 className="font-heading text-[2.5rem] font-normal leading-[1.08] tracking-tight text-zinc-100 sm:text-6xl lg:text-[4.25rem]">
-                Turn dense notes
-                <br />
-                into mastery
-              </h1>
-
-              <p className="mt-6 max-w-md text-[0.95rem] leading-relaxed text-zinc-400 md:mt-7">
-                AiLearner transforms complex study notes into active recall decks, spaced repetition, and adaptive diagnostic practice — with zero database dependencies.
-              </p>
-
-              <div className="mt-8 flex flex-wrap items-center gap-3 md:mt-10">
-                <ShimmerButton
-                  onClick={() => navigate('/app')}
-                  className="px-6 py-2.5 text-xs font-mono"
-                >
-                  <FileText size={13} />
-                  <span>Launch Workspace</span>
-                  <ArrowRight size={12} />
-                </ShimmerButton>
-
-                <a
-                  href="https://github.com/gorlock777/AiLearner"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md border border-zinc-800 bg-zinc-900/60 px-5 py-2.5 text-xs font-medium text-zinc-300 transition hover:border-zinc-700 hover:text-white"
-                >
-                  <GithubIcon size={13} />
-                  <span>GitHub Repository</span>
-                </a>
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-2xl flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono text-sky-400 mb-3">
+                    <span>02 / STRUCTURE</span>
+                    <Network size={16} />
+                  </div>
+                  <h3 className="font-heading text-lg font-normal text-white mb-2">
+                    3D Active Flashcards
+                  </h3>
+                  <p className="text-xs text-zinc-300 leading-relaxed">
+                    Deconstructs complex material into spring-animated 3D flipcards with keyboard recall navigation.
+                  </p>
+                </div>
               </div>
-            </motion.div>
-          </div>
-        </BlackHoleHeroSection>
-      </section>
 
-      {/* ── 3-Step Precision Pipeline ── */}
-      <section id="pipeline" className="py-20 px-6 border-t border-zinc-800/80 bg-[#0c0c0e]">
+              <div className="p-6 rounded-2xl bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-2xl flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between text-xs font-mono text-amber-400 mb-3">
+                    <span>03 / DIAGNOSTIC</span>
+                    <GaugeCircle size={16} />
+                  </div>
+                  <h3 className="font-heading text-lg font-normal text-white mb-2">
+                    Adaptive Quizzing
+                  </h3>
+                  <p className="text-xs text-zinc-300 leading-relaxed">
+                    Diagnostic checkups with circular accuracy gauge dials and automated weak topic revision flags.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Floating Scroll Indicator */}
+          <motion.div
+            style={{ opacity: indicatorOpacity }}
+            className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1.5 text-zinc-400 font-mono text-[10px] uppercase tracking-widest pointer-events-none"
+          >
+            <span>Scroll to Enter Event Horizon</span>
+            <ChevronDown size={14} className="animate-bounce text-emerald-400" />
+          </motion.div>
+        </div>
+      </div>
+
+      {/* ── 3-Step Precision Pipeline with KokonutUI SpotlightCards ── */}
+      <section id="pipeline" className="py-24 px-6 border-t border-zinc-800/80 bg-[#0c0c0e] relative z-20">
         <div className="max-w-5xl mx-auto">
           <SpotlightCards
             eyebrow="Architecture"
@@ -182,8 +300,8 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Architecture & Capabilities Grid ── */}
-      <section id="features" className="py-20 px-6 border-t border-zinc-800/80 bg-[#09090b]">
+      {/* ── Architecture & Capabilities Grid with KokonutUI SpotlightCards ── */}
+      <section id="features" className="py-24 px-6 border-t border-zinc-800/80 bg-[#09090b] relative z-20">
         <div className="max-w-5xl mx-auto">
           <SpotlightCards
             eyebrow="Capabilities"
@@ -219,22 +337,21 @@ export function LandingPage() {
         </div>
       </section>
 
-
       {/* ── FAQ Section ── */}
-      <section id="faq" className="py-20 px-6 border-t border-zinc-800/80 bg-[#0c0c0e]">
+      <section id="faq" className="py-24 px-6 border-t border-zinc-800/80 bg-[#0c0c0e] relative z-20">
         <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <span className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 font-semibold block mb-1">
+          <div className="mb-10 text-center">
+            <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-zinc-400 font-semibold block mb-2">
               Reference
             </span>
-            <h2 className="font-heading text-2xl font-normal tracking-tight text-zinc-100">
+            <h2 className="font-heading text-3xl font-normal tracking-tight text-zinc-100">
               Frequently Asked Questions
             </h2>
           </div>
 
-          <div className="flex flex-col divide-y divide-zinc-800 border border-zinc-800 rounded bg-zinc-900/40">
-            <div className="p-4">
-              <h3 className="text-xs font-medium text-zinc-200 mb-1 font-mono">
+          <div className="flex flex-col divide-y divide-zinc-850 border border-zinc-800/80 rounded-2xl bg-zinc-950/60 shadow-xl overflow-hidden">
+            <div className="p-6">
+              <h3 className="text-sm font-semibold text-zinc-100 mb-2 font-mono">
                 Which LLM models does AiLearner use?
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
@@ -242,48 +359,37 @@ export function LandingPage() {
               </p>
             </div>
 
-            <div className="p-4">
-              <h3 className="text-xs font-medium text-zinc-200 mb-1 font-mono">
-                How are scanned PDFs or slide screenshots handled?
+            <div className="p-6">
+              <h3 className="text-sm font-semibold text-zinc-100 mb-2 font-mono">
+                How are scanned slides and textbooks parsed?
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                When a PDF lacks an embedded text layer, the in-browser parser renders each page onto an HTML5 canvas and triggers multimodal vision OCR to transcribe the slide frames into clean text.
+                If digital text is detected via PDF.js, extraction runs instantly. If pages are scanned bitmap graphics, in-browser canvas renders the frames to base64 images and routes them through OpenRouter vision models for OCR synthesis.
               </p>
             </div>
 
-            <div className="p-4">
-              <h3 className="text-xs font-medium text-zinc-200 mb-1 font-mono">
-                Where is study data stored?
+            <div className="p-6">
+              <h3 className="text-sm font-semibold text-zinc-100 mb-2 font-mono">
+                Where is study data saved?
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                All data is stored directly in your browser's localStorage via Zustand. No account creation, login, or remote database is required.
+                All data resides strictly in your browser's <code className="text-zinc-300 font-mono">localStorage</code>. No external database or login account is required.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Footer ── */}
-      <footer className="mt-auto border-t border-zinc-800/80 py-8 px-6 bg-[#09090b]">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center font-bold text-[10px] text-zinc-100">
+      {/* ── Clean Footer ── */}
+      <footer className="py-12 border-t border-zinc-800/80 bg-[#09090b] text-center text-xs font-mono text-zinc-500 relative z-20">
+        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center font-bold text-[10px] text-zinc-300">
               AL
             </div>
-            <span className="text-xs text-zinc-400 font-mono">
-              AiLearner · E2 Hackathon 2026 · gorlock777
-            </span>
+            <span>AiLearner — OpenRouter Free Ingestion</span>
           </div>
-
-          <div className="flex items-center gap-3">
-            <ShimmerButton
-              onClick={() => navigate('/app')}
-              className="text-xs px-3 py-1.5"
-            >
-              <span>Launch Workspace</span>
-              <ArrowRight size={12} />
-            </ShimmerButton>
-          </div>
+          <div>MIT License · High-Performance Local Storage Engine</div>
         </div>
       </footer>
     </div>

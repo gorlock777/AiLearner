@@ -5,22 +5,25 @@ import { Home } from './pages/Home'
 import { Study } from './pages/Study'
 import { Quiz } from './pages/Quiz'
 import { Progress } from './pages/Progress'
+import { SmoothScrollProvider } from './components/layout/SmoothScroll'
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Public Landing Page */}
-        <Route path="/" element={<LandingPage />} />
+    <SmoothScrollProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* Public Landing Page */}
+          <Route path="/" element={<LandingPage />} />
 
-        {/* Study App Workspace */}
-        <Route element={<AppShell />}>
-          <Route path="/app" element={<Home />} />
-          <Route path="/study" element={<Study />} />
-          <Route path="/quiz" element={<Quiz />} />
-          <Route path="/progress" element={<Progress />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+          {/* Study App Workspace */}
+          <Route element={<AppShell />}>
+            <Route path="/app" element={<Home />} />
+            <Route path="/study" element={<Study />} />
+            <Route path="/quiz" element={<Quiz />} />
+            <Route path="/progress" element={<Progress />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </SmoothScrollProvider>
   )
 }

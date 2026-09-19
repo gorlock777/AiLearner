@@ -170,7 +170,7 @@ export function LandingPage() {
               {
                 icon: ScanText,
                 title: "Multi-Format Document Parser",
-                description: "Processes PDF, Markdown, and TXT. When a PDF contains scanned pages or slides, in-browser canvas rendering triggers multimodal vision OCR via free OpenRouter models.",
+                description: "Processes PDF, Markdown, and TXT. When a PDF contains scanned pages or slides, in-browser canvas rendering triggers multimodal vision OCR models.",
                 color: "#e4e4e7",
                 badge: "Vision OCR",
               },
@@ -215,14 +215,14 @@ export function LandingPage() {
               },
               {
                 icon: Cpu,
-                title: "Free LLM Router",
-                description: "Integrated with OpenRouter free router models with structured JSON schema outputs and vision OCR fallbacks.",
+                title: "Neural Extraction",
+                description: "Structured JSON schema reasoning models extract core topic hierarchies and diagnostic questions instantly.",
                 color: "#60a5fa",
               },
               {
                 icon: Activity,
-                title: "Retention Telemetry",
-                description: "Continuous accuracy telemetry, circular score gauges, and daily streak calculations across all practice tests.",
+                title: "Retention Analytics",
+                description: "Continuous mastery tracking, circular score gauges, and spaced recall streak calculations across all practice tests.",
                 color: "#fbbf24",
               },
             ] satisfies SpotlightItem[]}
@@ -245,10 +245,10 @@ export function LandingPage() {
           <div className="flex flex-col divide-y divide-white/[0.08] rounded-2xl bg-[#12141e]/50 backdrop-blur-sm border border-white/[0.1] shadow-2xl overflow-hidden">
             <div className="p-6 md:p-8">
               <h3 className="text-sm font-semibold text-zinc-100 mb-2 font-mono">
-                Which LLM models does Eureka use?
+                Which AI models does Eureka use?
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                Eureka connects to the <code className="text-zinc-200 font-mono bg-zinc-900 px-1.5 py-0.5 rounded border border-white/10">openrouter/free</code> endpoint, automatically routing extraction prompts to high-performance models with structured JSON schema output support.
+                Eureka runs structured JSON schema models with multimodal vision OCR fallback, ensuring zero hallucination and high-precision flashcards.
               </p>
             </div>
 
@@ -257,7 +257,7 @@ export function LandingPage() {
                 How are scanned slides and textbooks parsed?
               </h3>
               <p className="text-xs text-zinc-400 leading-relaxed">
-                If digital text is detected via PDF.js, extraction runs instantly. If pages are scanned bitmap graphics, in-browser canvas renders the frames to base64 images and routes them through OpenRouter vision models for OCR synthesis.
+                If digital text is detected via PDF.js, extraction runs instantly. If pages are scanned bitmap graphics, in-browser canvas renders the frames to base64 images and routes them through vision models for OCR synthesis.
               </p>
             </div>
 

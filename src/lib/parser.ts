@@ -27,40 +27,52 @@ export async function parseFile(file: File): Promise<string> {
 async function parseText(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
-    reader.onload = (e) => resolve(e.target?.result as string ?? '')
+    reader.onload = (e) => resolve((e.target?.result as string) ?? '')
     reader.onerror = () => reject(new Error('Failed to read file'))
     reader.readAsText(file, 'UTF-8')
   })
 }
 
 async function parsePDF(file: File): Promise<string> {
-  const { GlobalWorkerOptions, getDocument } = await import('pdfjs-dist')
+  try {
+    // Dynamic runtime loader via Function constructor bypasses TypeScript URL module resolution
+    const importDynamic = new Function('url', 'return import(url)')
+    const pdfjsLib: any = await importDynamic(
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs'
+    )
 
-  // Use CDN worker to avoid bundling issues
-  GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${(await import('pdfjs-dist')).version}/build/pdf.worker.min.mjs`
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs'
 
-  const arrayBuffer = await file.arrayBuffer()
-  const pdf = await getDocument({ data: arrayBuffer }).promise
+    const arrayBuffer = await file.arrayBuffer()
+    const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer) })
+    const pdf = await loadingTask.promise
 
-  const textParts: string[] = []
-  const maxPages = Math.min(pdf.numPages, 50) // cap at 50 pages
+    const textParts: string[] = []
+    const maxPages = Math.min(pdf.numPages, 50)
 
-  for (let i = 1; i <= maxPages; i++) {
-    const page = await pdf.getPage(i)
-    const content = await page.getTextContent()
-    const pageText = content.items
-      .map((item) => ('str' in item ? item.str : ''))
-      .join(' ')
-    textParts.push(pageText)
+    for (let i = 1; i <= maxPages; i++) {
+      const page = await pdf.getPage(i)
+      const content = await page.getTextContent()
+      const pageText = content.items
+        .map((item: any) => ('str' in item ? item.str : ''))
+        .join(' ')
+      textParts.push(pageText)
+    }
+
+    const fullText = textParts.join('\n\n').replace(/\s+/g, ' ').trim()
+
+    if (!fullText) {
+      throw new Error('Could not extract text from PDF. The file may be image-based (scanned). Please use a text-based PDF.')
+    }
+
+    return fullText
+  } catch (err: any) {
+    console.error('PDF parsing error:', err)
+    throw new Error(
+      err?.message || 'Failed to parse PDF. Please ensure the file contains readable text or convert to TXT/Markdown.'
+    )
   }
-
-  const fullText = textParts.join('\n\n').replace(/\s+/g, ' ').trim()
-
-  if (!fullText) {
-    throw new Error('Could not extract text from PDF. The file may be image-based (scanned). Please use a text-based PDF.')
-  }
-
-  return fullText
 }
 
 export function estimateTokens(text: string): number {
@@ -72,4 +84,3 @@ export function truncateToTokens(text: string, maxTokens: number): string {
   if (text.length <= maxChars) return text
   return text.slice(0, maxChars) + '\n\n[... content truncated for processing ...]'
 }
-

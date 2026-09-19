@@ -166,7 +166,7 @@ export function Home() {
       <div className="w-full text-center mb-8">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-mono text-zinc-400 mb-4">
           <Sparkles size={12} className="text-zinc-200" />
-          Linear-Style Active Recall Engine
+          Active Recall System
         </div>
         <h1 className="text-3xl font-semibold tracking-tight text-zinc-100 mb-2">
           Transform notes into active practice
@@ -184,7 +184,7 @@ export function Home() {
         </div>
       )}
 
-      {/* Active Topics Present */}
+      {/* Active Topics Present: Render Shadcn Extraction Data View */}
       {hasTopics && !isProcessing ? (
         <div className="w-full flex flex-col items-center mb-8">
           <ExtractionDataView topics={topics} />

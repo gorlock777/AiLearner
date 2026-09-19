@@ -74,7 +74,7 @@ function SkeletonCard() {
 
 // ─── Main Component ──────────────────────────────────────────────────────────
 
-export default function Study() {
+export function Study() {
   const navigate = useNavigate()
   const { topics, getFlashcardsForTopic, addFlashcardSet, documents } = useAppStore()
 
@@ -597,8 +597,8 @@ export default function Study() {
                           <motion.span
                             initial={{ opacity: 0.7 }}
                             animate={{ opacity: [0.7, 0.4, 0.7] }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 1.8, repeat: Infinity, exit: { duration: 0.3 } }}
+                            exit={{ opacity: 0, transition: { duration: 0.3 } }}
+                            transition={{ duration: 1.8, repeat: Infinity }}
                             className="absolute bottom-4 text-xs"
                             style={{ color: 'rgba(255,255,255,0.3)' }}
                           >

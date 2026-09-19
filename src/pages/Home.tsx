@@ -31,6 +31,7 @@ import { ShimmerButton } from '../components/ui/shimmer-button'
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert'
 import { DropzoneUpload } from '../components/ui/dropzone-upload'
 import { LoadingStepper } from '../components/ui/loading-stepper'
+import { NeuralCanvas } from '../components/ui/neural-canvas'
 import { SpotlightCards } from '../components/ui/spotlight-cards'
 import type { SpotlightItem } from '../components/ui/spotlight-cards'
 
@@ -308,14 +309,30 @@ export function Home() {
           /* Upload & Ingestion Workbench */
           <div className="flex flex-col gap-6">
             {isProcessing ? (
-              <div className="linear-card p-10 border flex flex-col items-center max-w-md mx-auto w-full my-8">
-                <div className="text-xs font-semibold text-zinc-200 mb-1 font-mono uppercase tracking-wider">
-                  Synthesizing Knowledge Deck
+              <div className="relative w-full overflow-hidden rounded-3xl border border-emerald-500/20 bg-[#0d0e12] py-12 px-6 my-4 shadow-2xl flex flex-col items-center justify-center min-h-[420px]">
+                {/* Brain Charging Neural Canvas Background */}
+                <div className="absolute inset-0 z-0 opacity-80 pointer-events-none">
+                  <NeuralCanvas />
                 </div>
-                <div className="text-xs text-zinc-400 mb-6 font-mono text-center">
-                  Extracting concept topology, flashcards & quiz
+
+                {/* Soft ambient overlay */}
+                <div className="absolute inset-0 z-0 bg-radial from-emerald-500/10 via-transparent to-[#0d0e12]/80 pointer-events-none" />
+
+                {/* Foreground Stepper Container */}
+                <div className="relative z-10 linear-card p-8 sm:p-10 border border-white/10 bg-[#12141e]/90 backdrop-blur-xl flex flex-col items-center max-w-md mx-auto w-full rounded-2xl shadow-2xl">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono text-emerald-400 mb-4 animate-pulse">
+                    <Zap size={12} />
+                    <span>Neural Network Charging</span>
+                  </div>
+
+                  <div className="text-sm font-semibold text-zinc-100 mb-1 font-mono uppercase tracking-wider text-center">
+                    Synthesizing Knowledge Deck
+                  </div>
+                  <div className="text-xs text-zinc-400 mb-6 font-mono text-center">
+                    Extracting concept topology, active recall cards &amp; quiz
+                  </div>
+                  <LoadingStepper steps={STEPS} currentStep={currentStep} />
                 </div>
-                <LoadingStepper steps={STEPS} currentStep={currentStep} />
               </div>
             ) : (
               <div className="flex flex-col gap-8">

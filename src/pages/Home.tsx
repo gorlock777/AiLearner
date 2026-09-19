@@ -237,26 +237,26 @@ export function Home() {
 
   return (
     <div className="min-h-full flex flex-col">
-      {/* ── Spacious Editorial Hero Header (Ultra Fast 60fps Atmosphere) ── */}
+      {/* ── Spacious Editorial Hero Header ── */}
       {!hasTopics && !isProcessing && (
-        <section className="relative w-full py-12 md:py-16 border-b border-zinc-800/80 overflow-hidden bg-gradient-to-b from-zinc-950 via-[#0a0a0d] to-[#09090b]">
-          {/* Subtle radial atmosphere glow */}
+        <section className="relative w-full py-16 md:py-20 border-b border-white/[0.08] overflow-hidden bg-gradient-to-b from-[#0e1017] via-[#0d0e14] to-[#0d0e12]">
+          {/* Subtle atmosphere glow */}
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full opacity-35 blur-[90px] bg-gradient-to-br from-emerald-500/20 via-indigo-500/15 to-transparent"
+            className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] sm:w-[900px] h-[400px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(52,211,153,0.12)_0%,rgba(52,211,153,0.02)_40%,transparent_70%)]"
           />
 
-          <div className="relative z-10 max-w-2xl mx-auto text-center px-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-[11px] font-mono text-zinc-400 mb-4 shadow-sm backdrop-blur-md">
+          <div className="relative z-10 max-w-3xl mx-auto text-center px-6">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-mono text-zinc-300 mb-6 shadow-sm backdrop-blur-md">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>AI Ingestion Engine · OpenRouter Free</span>
+              <span>Eureka · Neural Ingestion Engine</span>
             </div>
 
-            <h1 className="font-heading font-normal text-3xl sm:text-4xl text-zinc-100 tracking-tight leading-tight mb-3">
+            <h1 className="font-heading font-normal text-3xl sm:text-5xl text-white tracking-tight leading-tight mb-4 drop-shadow-sm">
               Neural Document Ingestion
             </h1>
 
-            <p className="text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed">
+            <p className="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto leading-relaxed font-sans">
               Transform PDFs, lecture slides, and notes into active recall decks & diagnostic quizzes with editorial clarity.
             </p>
           </div>
@@ -264,15 +264,15 @@ export function Home() {
       )}
 
       {/* ── Main Workspace Content ── */}
-      <div className="px-6 py-8 max-w-4xl mx-auto w-full flex flex-col gap-6">
+      <div className="px-6 py-10 max-w-5xl mx-auto w-full flex flex-col gap-8">
         {/* Workspace Top Bar (when topics loaded) */}
         {hasTopics && !isProcessing && (
-          <div className="flex items-center justify-between border-b border-zinc-800/80 pb-4">
+          <div className="flex items-center justify-between border-b border-white/[0.08] pb-6">
             <div>
-              <h2 className="font-heading text-lg font-normal text-zinc-100 tracking-tight">
+              <h2 className="font-heading font-normal text-2xl text-white tracking-tight">
                 Knowledge Workspace
               </h2>
-              <p className="text-xs text-zinc-400 mt-0.5">
+              <p className="text-xs text-zinc-400 mt-1 font-sans">
                 Review extracted topic matrix or reset to load a new document.
               </p>
             </div>
@@ -284,10 +284,10 @@ export function Home() {
                 clearAll()
                 setFile(null)
               }}
-              className="text-xs font-mono h-8 px-3"
+              className="text-xs font-mono h-9 px-4 rounded-full border-white/10 bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white"
             >
-              <RotateCcw size={12} />
-              Reset Workspace
+              <RotateCcw size={13} />
+              <span>Reset Workspace</span>
             </Button>
           </div>
         )}

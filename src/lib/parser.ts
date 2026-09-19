@@ -45,7 +45,6 @@ async function renderPageToJpeg(page: any): Promise<string> {
   canvas.height = viewport.height
   canvas.width = viewport.width
 
-  // Render white background
   context.fillStyle = '#FFFFFF'
   context.fillRect(0, 0, canvas.width, canvas.height)
 

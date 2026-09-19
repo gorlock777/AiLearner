@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useLocation } from 'react-router-dom'
+import { Outlet, NavLink, Link, useLocation } from 'react-router-dom'
 import {
   UploadCloud,
   Layers,
@@ -12,7 +12,7 @@ import { useState } from 'react'
 import { useAppStore } from '../../store/useAppStore'
 
 const navItems = [
-  { to: '/', icon: UploadCloud, label: 'Upload Notes' },
+  { to: '/app', icon: UploadCloud, label: 'Upload Notes' },
   { to: '/study', icon: Layers, label: 'Flashcards' },
   { to: '/quiz', icon: CheckCircle, label: 'Practice Quiz' },
   { to: '/progress', icon: BarChart3, label: 'Analytics' },
@@ -83,11 +83,11 @@ export function AppShell() {
       {/* ── Linear Sidebar ── */}
       <aside className="relative z-20 flex flex-col items-center py-4 flex-shrink-0 w-16 bg-[#0c0c0e] border-r border-zinc-800/80">
         {/* Logo */}
-        <div className="mb-6 flex items-center justify-center">
-          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-700/80 text-white shadow-inner font-bold text-xs">
+        <Link to="/" className="mb-6 flex items-center justify-center group" title="Back to Landing Page">
+          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-700/80 text-white shadow-inner font-bold text-xs group-hover:border-zinc-500 transition-colors">
             AL
           </div>
-        </div>
+        </Link>
 
         {/* Nav list */}
         <nav className="flex flex-col items-center gap-2 flex-1 w-full">

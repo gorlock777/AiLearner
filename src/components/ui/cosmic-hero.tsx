@@ -19,12 +19,12 @@ export function CosmicHero({ children, className, ...props }: CosmicHeroProps) {
       {/* ── Layer 1: Hardware-Accelerated 60fps HTML5 Space Canvas ── */}
       <CosmicCanvas className="absolute inset-0 w-full h-full pointer-events-none z-0" />
 
-      {/* ── Layer 2: Subtle Ambient Light Glow ── */}
+      {/* ── Layer 2: Subtle Ambient Light Glow (Zero Blur GPU Layer) ── */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 overflow-hidden transform-gpu z-0"
+        className="pointer-events-none absolute inset-0 overflow-hidden z-0"
       >
-        <div className="absolute top-28 left-1/2 -translate-x-1/2 w-[700px] sm:w-[900px] h-[500px] rounded-full bg-[radial-gradient(circle_at_center,rgba(52,211,153,0.12)_0%,rgba(96,165,250,0.04)_40%,transparent_70%)] blur-[90px]" />
+        <div className="absolute top-24 left-1/2 -translate-x-1/2 w-[700px] sm:w-[960px] h-[540px] rounded-full bg-[radial-gradient(ellipse_at_center,rgba(52,211,153,0.12)_0%,rgba(52,211,153,0.03)_40%,transparent_70%)]" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#0d0e12] to-transparent" />
       </div>
 

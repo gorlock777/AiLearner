@@ -182,3 +182,4 @@
     border-right-color: var(--border);
   }
 }
+/* Reset default Vite styles - all styling now in index.css */

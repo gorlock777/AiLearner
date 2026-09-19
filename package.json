@@ -1,7 +1,11 @@
 {
   "name": "ailearnertemp",
+  "name": "ailearner",
   "private": true,
   "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "AI-powered study companion that transforms notes into active learning",
+  "homepage": "https://ailearner.vercel.app",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,8 +14,17 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "clsx": "^2.1.1",
+    "framer-motion": "^13.4.0",
+    "lucide-react": "^1.47.0",
+    "pdfjs-dist": "^6.3.289",
     "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.18.4",
+    "tailwind-merge": "^3.7.0",
+    "tailwindcss": "^4.3.3",
+    "zustand": "^5.0.15"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",

@@ -189,16 +189,28 @@ export function Home() {
           try {
             const fcMessages = generateFlashcardsPrompt(topic.title, text)
             const rawFc = await fetchCompletion(fcMessages)
-            const parsedFc = parseJSONResponse<{ flashcards: FlashcardSet['cards'] }>(rawFc)
-            if (parsedFc?.flashcards?.length) {
+            const rawObj = parseJSONResponse<Record<string, unknown> | Array<unknown>>(rawFc)
+            const cardsList = Array.isArray(rawObj)
+              ? rawObj
+              : (rawObj?.flashcards as Array<unknown>) ?? (rawObj?.cards as Array<unknown>) ?? (rawObj?.deck as Array<unknown>) ?? []
+
+            if (Array.isArray(cardsList) && cardsList.length > 0) {
+              const normalizedCards = cardsList.map((c: any, i: number) => ({
+                id: c.id ?? `card-${topic.id}-${i}-${Date.now()}`,
+                front: c.front ?? c.question ?? c.term ?? 'Concept',
+                back: c.back ?? c.answer ?? c.definition ?? 'Definition',
+                hint: c.hint ?? '',
+                sourceQuote: c.sourceQuote ?? c.quote ?? '',
+              }))
+
               addFlashcardSet({
                 topicId: topic.id,
-                cards: parsedFc.flashcards,
+                cards: normalizedCards,
                 generatedAt: Date.now(),
               })
             }
-          } catch {
-            // Continue
+          } catch (e) {
+            console.warn(`Flashcard generation warning for ${topic.title}:`, e)
           }
         })
       )
@@ -210,16 +222,28 @@ export function Home() {
           try {
             const quizMessages = generateQuizPrompt(topic.title, text)
             const rawQuiz = await fetchCompletion(quizMessages)
-            const parsedQuiz = parseJSONResponse<{ questions: QuizSet['questions'] }>(rawQuiz)
-            if (parsedQuiz?.questions?.length) {
+            const rawObj = parseJSONResponse<Record<string, unknown> | Array<unknown>>(rawQuiz)
+            const questionsList = Array.isArray(rawObj)
+              ? rawObj
+              : (rawObj?.questions as Array<unknown>) ?? (rawObj?.quiz as Array<unknown>) ?? (rawObj?.quizQuestions as Array<unknown>) ?? []
+
+            if (Array.isArray(questionsList) && questionsList.length > 0) {
+              const normalizedQuestions = questionsList.map((q: any, i: number) => ({
+                id: q.id ?? `q-${topic.id}-${i}-${Date.now()}`,
+                question: q.question ?? q.prompt ?? 'Question',
+                options: Array.isArray(q.options) && q.options.length >= 2 ? q.options : ['Option A', 'Option B', 'Option C', 'Option D'],
+                correctIndex: typeof q.correctIndex === 'number' && q.correctIndex >= 0 && q.correctIndex < 4 ? q.correctIndex : 0,
+                explanation: q.explanation ?? 'Correct answer based on study notes.',
+              }))
+
               addQuizSet({
                 topicId: topic.id,
-                questions: parsedQuiz.questions,
+                questions: normalizedQuestions,
                 generatedAt: Date.now(),
               })
             }
-          } catch {
-            // Continue
+          } catch (e) {
+            console.warn(`Quiz generation warning for ${topic.title}:`, e)
           }
         })
       )

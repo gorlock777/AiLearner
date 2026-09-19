@@ -83,16 +83,16 @@ Schema:
 {
   "questions": [
     {
-      "id": "string",
-      "question": "string",
-      "options": ["string", "string", "string", "string"],
+      "id": "q1",
+      "question": "What is...?",
+      "options": ["Option A", "Option B", "Option C", "Option D"],
       "correctIndex": 0,
-      "explanation": "string (concise explanation)"
+      "explanation": "Why this answer is correct"
     }
   ]
 }
 
-Generate 4–5 multiple-choice questions for this topic.`,
+Generate 4–5 multiple-choice questions for topic "${topic}". Ensure correctIndex is an integer 0, 1, 2, or 3.`,
     },
     {
       role: 'user',

@@ -53,7 +53,7 @@ export function LoadingStepper({
       </div>
 
       {/* ── Step items — slide in one at a time ── */}
-      <div className="flex flex-col gap-1.5 border border-zinc-800/60 rounded-xl bg-zinc-950/60 p-3.5 overflow-hidden">
+      <div className="flex flex-col gap-1.5 border border-white/10 rounded-xl bg-black/40 backdrop-blur-md p-3.5 overflow-hidden">
         <AnimatePresence initial={false}>
           {steps.map((step, i) => {
             const isDone = currentStep > step.id

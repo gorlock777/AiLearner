@@ -309,26 +309,26 @@ export function Home() {
           /* Upload & Ingestion Workbench */
           <div className="flex flex-col gap-6">
             {isProcessing ? (
-              <div className="relative w-full overflow-hidden rounded-3xl border border-emerald-500/20 bg-[#0d0e12] py-12 px-6 my-4 shadow-2xl flex flex-col items-center justify-center min-h-[420px]">
-                {/* Brain Charging Neural Canvas Background */}
-                <div className="absolute inset-0 z-0 opacity-80 pointer-events-none">
+              <div className="fixed inset-0 z-50 bg-[#0a0b10] flex items-center justify-center p-4 sm:p-6 overflow-hidden">
+                {/* Fullscreen Brain Charging Neural Canvas Background */}
+                <div className="absolute inset-0 z-0 pointer-events-none opacity-95">
                   <NeuralCanvas />
                 </div>
 
-                {/* Soft ambient overlay */}
-                <div className="absolute inset-0 z-0 bg-radial from-emerald-500/10 via-transparent to-[#0d0e12]/80 pointer-events-none" />
+                {/* Soft ambient lighting gradient overlay */}
+                <div className="absolute inset-0 z-0 bg-radial from-emerald-500/15 via-transparent to-[#0a0b10]/70 pointer-events-none" />
 
-                {/* Foreground Stepper Container */}
-                <div className="relative z-10 linear-card p-8 sm:p-10 border border-white/10 bg-[#12141e]/90 backdrop-blur-xl flex flex-col items-center max-w-md mx-auto w-full rounded-2xl shadow-2xl">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono text-emerald-400 mb-4 animate-pulse">
-                    <Zap size={12} />
+                {/* Highly Translucent Frosted Glass Stepper Box */}
+                <div className="relative z-10 p-8 sm:p-10 border border-emerald-500/30 bg-[#0c0e18]/40 backdrop-blur-2xl flex flex-col items-center max-w-md mx-auto w-full rounded-3xl shadow-[0_0_80px_rgba(52,211,153,0.18)]">
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/15 border border-emerald-500/40 text-[10px] font-mono text-emerald-300 mb-5 shadow-lg animate-pulse">
+                    <Zap size={12} className="text-emerald-400" />
                     <span>Neural Network Charging</span>
                   </div>
 
-                  <div className="text-sm font-semibold text-zinc-100 mb-1 font-mono uppercase tracking-wider text-center">
+                  <div className="text-base font-semibold text-white mb-1 font-mono uppercase tracking-wider text-center drop-shadow-sm">
                     Synthesizing Knowledge Deck
                   </div>
-                  <div className="text-xs text-zinc-400 mb-6 font-mono text-center">
+                  <div className="text-xs text-zinc-300 mb-6 font-mono text-center">
                     Extracting concept topology, active recall cards &amp; quiz
                   </div>
                   <LoadingStepper steps={STEPS} currentStep={currentStep} />

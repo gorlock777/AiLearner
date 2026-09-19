@@ -94,38 +94,45 @@ export function Progress() {
 
   return (
     <div className="min-h-full px-6 py-6 max-w-4xl mx-auto flex flex-col gap-5">
-      {/* Header */}
-      <div className="border-b border-zinc-800/80 pb-4">
-        <h1 className="text-base font-semibold text-zinc-100 font-mono uppercase tracking-wider">
-          Performance Analytics
-        </h1>
-        <p className="text-xs text-zinc-400 mt-0.5">
+      {/* Editorial Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-6">
+        <div>
+          <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-zinc-300 font-semibold mb-1.5 block">
+            Telemetry & Retention
+          </span>
+          <h1 className="font-heading font-normal text-2xl sm:text-3xl text-zinc-100 tracking-tight">
+            Performance Analytics
+          </h1>
+        </div>
+        <p className="text-xs text-zinc-400 max-w-xs sm:text-right leading-relaxed font-mono">
           Diagnostic accuracy, weak area revision priorities, and study streaks
         </p>
       </div>
 
       {/* Primary KPI Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <div className="linear-card p-4">
-          <div className="flex items-center justify-between text-xs text-zinc-400 mb-1.5 font-mono">
-            <span>KNOWLEDGE MODULES</span>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="p-5 rounded-xl bg-[#0e0e12] border border-zinc-800/80 shadow-md flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-zinc-300 font-mono mb-3">
+            <span className="uppercase tracking-wider text-[10px]">Knowledge Modules</span>
             <BookOpen size={14} className="text-zinc-400" />
           </div>
-          <div className="text-xl font-bold font-mono text-zinc-100">{topics.length}</div>
-          <div className="text-[11px] text-zinc-400 mt-0.5">Organized from documents</div>
+          <div>
+            <div className="font-heading text-2xl font-normal text-zinc-100 mb-0.5">{topics.length}</div>
+            <div className="text-[11px] text-zinc-400">Organized from documents</div>
+          </div>
         </div>
 
-        <div className="linear-card p-4 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-zinc-400 mb-1.5 font-mono">
-            <span>AVERAGE ACCURACY</span>
+        <div className="p-5 rounded-xl bg-[#0e0e12] border border-zinc-800/80 shadow-md flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-zinc-300 font-mono mb-3">
+            <span className="uppercase tracking-wider text-[10px]">Average Accuracy</span>
             <TrendingUp size={14} className="text-emerald-400" />
           </div>
-          <div className="flex items-center justify-between mt-1">
+          <div className="flex items-center justify-between">
             <div>
-              <div className="text-xl font-bold font-mono text-zinc-100">
+              <div className="font-heading text-2xl font-normal text-zinc-100 mb-0.5">
                 {avgScore !== null ? `${avgScore}%` : '—'}
               </div>
-              <div className="text-[11px] text-zinc-400 mt-0.5 font-mono">
+              <div className="text-[11px] text-zinc-400 font-mono">
                 {quizAttempts.length} attempt{quizAttempts.length !== 1 ? 's' : ''} logged
               </div>
             </div>
@@ -141,15 +148,17 @@ export function Progress() {
           </div>
         </div>
 
-        <div className="linear-card p-4">
-          <div className="flex items-center justify-between text-xs text-zinc-400 mb-1.5 font-mono">
-            <span>DAILY STREAK</span>
+        <div className="p-5 rounded-xl bg-[#0e0e12] border border-zinc-800/80 shadow-md flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-zinc-300 font-mono mb-3">
+            <span className="uppercase tracking-wider text-[10px]">Daily Streak</span>
             <Calendar size={14} className="text-amber-400" />
           </div>
-          <div className="text-xl font-bold font-mono text-zinc-100">
-            {streak} {streak === 1 ? 'day' : 'days'}
+          <div>
+            <div className="font-heading text-2xl font-normal text-zinc-100 mb-0.5">
+              {streak} <span className="text-sm font-normal text-zinc-400 font-sans">{streak === 1 ? 'day' : 'days'}</span>
+            </div>
+            <div className="text-[11px] text-zinc-400">Active retention tracking</div>
           </div>
-          <div className="text-[11px] text-zinc-400 mt-0.5">Active retention tracking</div>
         </div>
       </div>
 

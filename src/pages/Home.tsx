@@ -7,9 +7,6 @@ import {
   Loader2,
   Check,
   RotateCcw,
-  Layers,
-  Sparkles,
-  Zap,
 } from 'lucide-react'
 
 import { parseFile } from '../lib/parser'
@@ -23,7 +20,6 @@ import { useAppStore } from '../store/useAppStore'
 import type { Topic, FlashcardSet, QuizSet } from '../store/useAppStore'
 import { ExtractionDataView } from '../components/extraction/ExtractionDataView'
 import { Button } from '../components/ui/button'
-import { Badge } from '../components/ui/badge'
 import { Progress } from '../components/ui/progress'
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert'
 import { BlackHoleHeroSection } from '../components/ui/blackhole-hero-section'
@@ -199,7 +195,7 @@ export function Home() {
                   fromFontVariationSettings="'wght' 200"
                   toFontVariationSettings="'wght' 800"
                   radius={90}
-                  className="text-2xl sm:text-4xl font-semibold tracking-tight text-zinc-100 text-shadow"
+                  className="text-2xl sm:text-4xl font-semibold tracking-tight text-zinc-100 font-serif"
                 >
                   Neural Document Ingestion
                 </VariableFontCursorProximity>

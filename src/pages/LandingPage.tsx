@@ -71,7 +71,7 @@ export function LandingPage() {
           </div>
           <div className="text-[11px] font-mono text-zinc-400 space-y-0.5">
             <div>ENGINE: <span className="text-zinc-200">CLIENT-SIDE</span></div>
-            <div>LATENCY: <span className="text-emerald-400">&lt; 12ms SYNC</span></div>
+            <div>LATENCY: <span className="text-emerald-400">{'< 12ms SYNC'}</span></div>
             <div>DECK DB: <span className="text-blue-400">LOCALSTORAGE</span></div>
           </div>
         </motion.div>

@@ -329,7 +329,7 @@ export function Home() {
                     Synthesizing Knowledge Deck
                   </div>
                   <div className="text-xs text-zinc-300 mb-6 font-mono text-center">
-                    Extracting concept topology, active recall cards &amp; quiz
+                    Extracting concept topology, active recall cards {'&'} quiz
                   </div>
                   <LoadingStepper steps={STEPS} currentStep={currentStep} />
                 </div>

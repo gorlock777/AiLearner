@@ -204,7 +204,7 @@ export function Quiz() {
                       <XCircle size={14} className="text-rose-400 flex-shrink-0 mt-0.5" />
                     )}
                     <div className="flex-1">
-                      <div className="font-serif font-medium text-zinc-200 mb-1">
+                      <div className="font-heading font-medium text-zinc-200 mb-1">
                         0{idx + 1}. {q.question}
                       </div>
                       <div className="text-zinc-400 text-[11px] font-mono">
@@ -239,7 +239,7 @@ export function Quiz() {
               QUESTION 0{currentIndex + 1} OF 0{questions.length}
             </div>
 
-            <h2 className="font-serif text-base font-normal text-zinc-100 mb-5 leading-relaxed">
+            <h2 className="font-heading text-base font-normal text-zinc-100 mb-5 leading-relaxed">
               {currentQuestion.question}
             </h2>
 

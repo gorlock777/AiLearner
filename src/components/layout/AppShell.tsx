@@ -57,24 +57,37 @@ function SidebarNavItem({
       <NavLink
         to={to}
         end={isExact}
-        className={`relative flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-150 ${
+        className={`relative flex items-center justify-center w-10 h-10 rounded-lg transition-all duration-200 ${
           isActive
-            ? 'bg-zinc-800 text-white shadow-sm border border-zinc-700/80'
+            ? 'bg-zinc-800 text-white shadow-sm border border-zinc-700/50'
             : hovered
             ? 'bg-zinc-900 text-zinc-200 border border-zinc-800'
-            : 'text-zinc-400 hover:text-zinc-200 border border-transparent'
+            : 'text-zinc-500 hover:text-zinc-300 border border-transparent'
         }`}
       >
-        <Icon size={18} strokeWidth={isActive ? 2 : 1.75} />
+        {/* Active stripe indicator */}
+        {isActive && (
+          <motion.div
+            layoutId="nav-active-bar"
+            className="absolute left-0 top-2 bottom-2 w-[2px] rounded-full bg-emerald-400"
+            transition={{ type: 'spring', stiffness: 380, damping: 36 }}
+          />
+        )}
+        <Icon size={17} strokeWidth={isActive ? 2.1 : 1.6} />
       </NavLink>
 
-      {/* Floating tooltip */}
+      {/* Animated floating tooltip */}
       {hovered && (
-        <div className="pointer-events-none absolute left-[68px] top-1/2 -translate-y-1/2 z-50">
+        <motion.div
+          initial={{ opacity: 0, x: -4 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.12 }}
+          className="pointer-events-none absolute left-[68px] top-1/2 -translate-y-1/2 z-50"
+        >
           <div className="px-2.5 py-1 rounded-md bg-zinc-900 text-xs font-medium text-zinc-200 border border-zinc-700/80 shadow-xl whitespace-nowrap">
             {label}
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   )

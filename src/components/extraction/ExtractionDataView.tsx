@@ -1,7 +1,24 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import {
+  Layers,
+  CheckCircle2,
+  ArrowRight,
+  Zap,
+  LayoutGrid,
+  ListTree,
+  Table as TableIcon,
+  Activity,
+  FileSearch,
+  BookOpen,
+  Sparkles,
+} from 'lucide-react'
+import { motion } from 'framer-motion'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { ShimmerButton } from '@/components/ui/shimmer-button'
+import { GaugeMeter } from '@/components/ui/gauge-meter'
 import {
   Table,
   TableHeader,
@@ -16,12 +33,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion'
-import {
-  Layers,
-  CheckCircle2,
-  ArrowRight,
-  Zap,
-} from 'lucide-react'
+import { DocumentInspectorDialog } from './DocumentInspectorDialog'
 import type { Topic } from '@/store/useAppStore'
 import { useAppStore } from '@/store/useAppStore'
 
@@ -31,7 +43,8 @@ interface ExtractionDataViewProps {
 
 export function ExtractionDataView({ topics }: ExtractionDataViewProps) {
   const navigate = useNavigate()
-  const { documents, flashcardSets, quizSets } = useAppStore()
+  const { documents, flashcardSets, quizSets, getBestScore } = useAppStore()
+  const [inspectorOpen, setInspectorOpen] = useState(false)
 
   const activeDoc = documents[0]
   const totalCards = flashcardSets.reduce((sum, s) => sum + s.cards.length, 0)
@@ -51,57 +64,179 @@ export function ExtractionDataView({ topics }: ExtractionDataViewProps) {
   }
 
   return (
-    <div className="w-full linear-card">
+    <div className="w-full linear-card flex flex-col">
+      {/* ── Top Header Toolbar ── */}
       <div className="border-b border-zinc-800/80 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-zinc-950/40">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-7 h-7 rounded bg-zinc-900 border border-zinc-700 text-emerald-400">
-            <CheckCircle2 size={15} />
+          <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-zinc-900 border border-zinc-700 text-emerald-400">
+            <CheckCircle2 size={16} />
           </div>
           <div>
             <div className="text-xs font-semibold text-zinc-100 flex items-center gap-2 font-mono">
-              EXTRACTED KNOWLEDGE TOPOLOGY
+              <span>EXTRACTED KNOWLEDGE MATRIX</span>
               <Badge variant="secondary">
                 {topics.length} topics
               </Badge>
             </div>
-            <div className="text-[11px] text-zinc-400 mt-0.5">
+            <div className="text-[11px] text-zinc-400 mt-0.5 font-mono">
               {activeDoc?.name ? `${activeDoc.name} · ` : ''}
-              Generated study sets ready
+              {totalCards} cards · {totalQuestions} quiz items synthesized
             </div>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <Button
+            variant="outline"
             size="sm"
+            onClick={() => setInspectorOpen(true)}
+            className="text-xs font-mono h-7 px-2.5"
+          >
+            <FileSearch size={12} className="text-zinc-400" />
+            <span>Inspect Doc</span>
+          </Button>
+
+          <ShimmerButton
             onClick={() => navigate('/study')}
-            className="text-xs h-7"
+            className="text-xs h-7 px-3"
           >
-            <Layers size={13} />
-            Study Flashcards
-          </Button>
-          <Button
-            variant="secondary"
-            size="sm"
-            onClick={() => navigate('/quiz')}
-            className="text-xs h-7"
-          >
-            <Zap size={13} />
-            Quiz
-          </Button>
+            <Layers size={12} />
+            <span>Study All</span>
+            <ArrowRight size={11} />
+          </ShimmerButton>
         </div>
       </div>
 
+      {/* ── Content Tabs ── */}
       <div className="p-4">
-        <Tabs defaultValue="topics">
-          <TabsList className="mb-4 bg-zinc-900 border border-zinc-800 rounded">
-            <TabsTrigger value="topics" className="text-xs font-mono">Hierarchy</TabsTrigger>
-            <TabsTrigger value="table" className="text-xs font-mono">Table</TabsTrigger>
-            <TabsTrigger value="metrics" className="text-xs font-mono">Telemetry</TabsTrigger>
-          </TabsList>
+        <Tabs defaultValue="matrix">
+          <div className="flex items-center justify-between mb-4">
+            <TabsList className="bg-zinc-900 border border-zinc-800 rounded">
+              <TabsTrigger value="matrix" className="text-xs font-mono gap-1.5">
+                <LayoutGrid size={12} /> Matrix
+              </TabsTrigger>
+              <TabsTrigger value="hierarchy" className="text-xs font-mono gap-1.5">
+                <ListTree size={12} /> Hierarchy
+              </TabsTrigger>
+              <TabsTrigger value="table" className="text-xs font-mono gap-1.5">
+                <TableIcon size={12} /> Table
+              </TabsTrigger>
+              <TabsTrigger value="telemetry" className="text-xs font-mono gap-1.5">
+                <Activity size={12} /> Telemetry
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-          {/* TAB 1: Accordion Topic Hierarchy */}
-          <TabsContent value="topics">
+          {/* TAB 1: Interactive Knowledge Matrix (Topic Cards with mini dials) */}
+          <TabsContent value="matrix" className="mt-0">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {topics.map((topic, idx) => {
+                const topicCards = flashcardSets.find((s) => s.topicId === topic.id)?.cards.length ?? 0
+                const topicQuestions = quizSets.find((s) => s.topicId === topic.id)?.questions.length ?? 0
+                const bestScore = getBestScore(topic.id)
+
+                return (
+                  <motion.div
+                    key={topic.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.2, delay: idx * 0.04 }}
+                    className="p-4 rounded-lg bg-zinc-900/40 border border-zinc-800/90 hover:border-zinc-700/90 transition-all flex flex-col justify-between group shadow-sm hover:shadow-md"
+                  >
+                    <div>
+                      {/* Topic Card Top Bar */}
+                      <div className="flex items-start justify-between gap-3 mb-2.5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-mono font-medium bg-zinc-950 text-zinc-400 border border-zinc-800">
+                            0{idx + 1}
+                          </span>
+                          <h3 className="font-heading text-xs font-semibold text-zinc-100 group-hover:text-white transition-colors">
+                            {topic.title}
+                          </h3>
+                        </div>
+
+                        <Badge variant={getDifficultyVariant(topic.difficulty)}>
+                          {topic.difficulty}
+                        </Badge>
+                      </div>
+
+                      {/* Summary */}
+                      <p className="text-[11px] text-zinc-400 line-clamp-2 leading-relaxed mb-3">
+                        {topic.summary}
+                      </p>
+
+                      {/* Concept Chips */}
+                      {topic.keyPoints && topic.keyPoints.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mb-4">
+                          {topic.keyPoints.slice(0, 3).map((kp, kIdx) => (
+                            <span
+                              key={kIdx}
+                              className="px-2 py-0.5 rounded bg-zinc-950/80 border border-zinc-800/80 text-[10px] font-mono text-zinc-300 truncate max-w-[200px]"
+                              title={kp}
+                            >
+                              {kp}
+                            </span>
+                          ))}
+                          {topic.keyPoints.length > 3 && (
+                            <span className="px-1.5 py-0.5 rounded bg-zinc-950/40 text-[10px] font-mono text-zinc-500">
+                              +{topic.keyPoints.length - 3} more
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Card Footer & Action Buttons */}
+                    <div className="pt-3 border-t border-zinc-800/70 flex items-center justify-between mt-auto">
+                      <div className="flex items-center gap-2">
+                        {bestScore !== null ? (
+                          <div className="flex items-center gap-1.5">
+                            <GaugeMeter
+                              value={bestScore}
+                              size={28}
+                              strokeWidth={3}
+                              label=""
+                            />
+                            <span className="text-[10px] font-mono text-zinc-400">
+                              {bestScore}% best
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="text-[10px] font-mono text-zinc-500">
+                            {topicCards} cards · {topicQuestions} Qs
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => navigate('/study')}
+                          className="h-6 px-2 text-[11px] font-mono text-zinc-300"
+                        >
+                          <Layers size={10} />
+                          Cards
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => navigate('/quiz')}
+                          className="h-6 px-2 text-[11px] font-mono text-zinc-300"
+                        >
+                          <Zap size={10} />
+                          Quiz
+                        </Button>
+                      </div>
+                    </div>
+                  </motion.div>
+                )
+              })}
+            </div>
+          </TabsContent>
+
+          {/* TAB 2: Accordion Hierarchy */}
+          <TabsContent value="hierarchy" className="mt-0">
             <Accordion type="single" defaultValue={topics[0]?.id}>
               {topics.map((topic, idx) => {
                 const topicCards = flashcardSets.find((s) => s.topicId === topic.id)?.cards.length ?? 0
@@ -114,7 +249,7 @@ export function ExtractionDataView({ topics }: ExtractionDataViewProps) {
                         <span className="w-5 h-5 rounded flex items-center justify-center text-[10px] font-mono font-medium bg-zinc-900 text-zinc-400 border border-zinc-800">
                           0{idx + 1}
                         </span>
-                        <span className="font-medium text-zinc-200 text-xs">{topic.title}</span>
+                        <span className="font-heading font-medium text-zinc-200 text-xs">{topic.title}</span>
                         <Badge variant={getDifficultyVariant(topic.difficulty)}>
                           {topic.difficulty}
                         </Badge>
@@ -153,8 +288,8 @@ export function ExtractionDataView({ topics }: ExtractionDataViewProps) {
             </Accordion>
           </TabsContent>
 
-          {/* TAB 2: Clean Linear Data Table */}
-          <TabsContent value="table">
+          {/* TAB 3: Clean Data Table */}
+          <TabsContent value="table" className="mt-0">
             <div className="rounded border border-zinc-800 overflow-hidden bg-zinc-950/30">
               <Table>
                 <TableHeader>
@@ -168,7 +303,7 @@ export function ExtractionDataView({ topics }: ExtractionDataViewProps) {
                 <TableBody>
                   {topics.map((t) => (
                     <TableRow key={t.id} className="border-zinc-800/60 hover:bg-zinc-850/40 text-xs">
-                      <TableCell className="font-medium text-zinc-200">
+                      <TableCell className="font-medium text-zinc-200 font-heading">
                         {t.title}
                       </TableCell>
                       <TableCell>
@@ -196,25 +331,35 @@ export function ExtractionDataView({ topics }: ExtractionDataViewProps) {
             </div>
           </TabsContent>
 
-          {/* TAB 3: Metrics Overview */}
-          <TabsContent value="metrics">
+          {/* TAB 4: Telemetry Overview */}
+          <TabsContent value="telemetry" className="mt-0">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="p-3.5 rounded bg-zinc-900/50 border border-zinc-800 text-center">
                 <div className="text-xl font-bold font-mono text-zinc-100 mb-0.5">{topics.length}</div>
-                <div className="text-[11px] text-zinc-400 font-mono">Topics</div>
+                <div className="text-[11px] text-zinc-400 font-mono">Total Modules</div>
               </div>
               <div className="p-3.5 rounded bg-zinc-900/50 border border-zinc-800 text-center">
                 <div className="text-xl font-bold font-mono text-emerald-400 mb-0.5">{totalCards}</div>
-                <div className="text-[11px] text-zinc-400 font-mono">Flashcards Ready</div>
+                <div className="text-[11px] text-zinc-400 font-mono">Flashcards Vault</div>
               </div>
               <div className="p-3.5 rounded bg-zinc-900/50 border border-zinc-800 text-center">
                 <div className="text-xl font-bold font-mono text-blue-400 mb-0.5">{totalQuestions}</div>
-                <div className="text-[11px] text-zinc-400 font-mono">Diagnostic Questions</div>
+                <div className="text-[11px] text-zinc-400 font-mono">Quiz Questions</div>
               </div>
             </div>
           </TabsContent>
         </Tabs>
       </div>
+
+      {/* ── Document Inspector Drawer Modal ── */}
+      <DocumentInspectorDialog
+        open={inspectorOpen}
+        onOpenChange={setInspectorOpen}
+        document={activeDoc}
+        topics={topics}
+      />
     </div>
   )
 }
+
+export default ExtractionDataView

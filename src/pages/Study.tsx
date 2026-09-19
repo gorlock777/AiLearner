@@ -316,7 +316,7 @@ export function Study() {
                   </div>
 
                   <div className="my-auto py-6 text-center">
-                    <div className="font-serif text-lg font-normal text-zinc-100 leading-relaxed max-w-lg mx-auto">
+                    <div className="font-heading text-lg font-normal text-zinc-100 leading-relaxed max-w-lg mx-auto">
                       {currentCard.card.front}
                     </div>
                   </div>
@@ -355,7 +355,7 @@ export function Study() {
                   </div>
 
                   <div className="my-auto py-6 text-center">
-                    <div className="font-serif text-lg font-normal text-zinc-100 leading-relaxed max-w-lg mx-auto">
+                    <div className="font-heading text-lg font-normal text-zinc-100 leading-relaxed max-w-lg mx-auto">
                       {currentCard.card.back}
                     </div>
                     {currentCard.card.hint && (

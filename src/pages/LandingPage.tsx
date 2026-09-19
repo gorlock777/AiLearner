@@ -108,7 +108,7 @@ export function LandingPage() {
                 <span>OpenRouter Neural Synthesis · 100% Client Side</span>
               </div>
 
-              <h1 className="font-serif text-[2.5rem] font-normal leading-[1.08] tracking-tight text-zinc-100 sm:text-6xl lg:text-[4.25rem]">
+              <h1 className="font-heading text-[2.5rem] font-normal leading-[1.08] tracking-tight text-zinc-100 sm:text-6xl lg:text-[4.25rem]">
                 Turn dense notes
                 <br />
                 into mastery
@@ -150,7 +150,7 @@ export function LandingPage() {
             <span className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 font-semibold block mb-1">
               Architecture
             </span>
-            <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-100">
+            <h2 className="font-heading text-2xl font-normal tracking-tight text-zinc-100">
               System Ingestion & Practice Loop
             </h2>
           </div>
@@ -205,7 +205,7 @@ export function LandingPage() {
             <span className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 font-semibold block mb-1">
               Capabilities
             </span>
-            <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-100">
+            <h2 className="font-heading text-2xl font-normal tracking-tight text-zinc-100">
               Built for Fast, Distraction-Free Study
             </h2>
           </div>
@@ -261,7 +261,7 @@ export function LandingPage() {
             <span className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 font-semibold block mb-1">
               Reference
             </span>
-            <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-100">
+            <h2 className="font-heading text-2xl font-normal tracking-tight text-zinc-100">
               Frequently Asked Questions
             </h2>
           </div>

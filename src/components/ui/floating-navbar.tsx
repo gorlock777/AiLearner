@@ -25,26 +25,26 @@ export function FloatingNavbar({ hasTopics }: { hasTopics: boolean }) {
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className="fixed top-5 inset-x-0 z-50 flex justify-center px-4 pointer-events-none"
     >
-      <div className="pointer-events-auto flex items-center justify-between gap-4 sm:gap-8 px-4 sm:px-6 py-2.5 rounded-full bg-white/90 border border-stone-200/90 backdrop-blur-xl shadow-[0_4px_24px_rgba(0,0,0,0.06)]">
+      <div className="pointer-events-auto flex items-center justify-between gap-4 sm:gap-8 px-4 sm:px-6 py-2.5 rounded-full bg-[#12141c]/90 border border-white/10 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
         {/* Brand Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-6 h-6 rounded-lg bg-stone-900 text-white flex items-center justify-center font-bold text-[10px] font-mono shadow-sm">
+          <div className="w-6 h-6 rounded-lg bg-zinc-100 text-zinc-950 flex items-center justify-center font-bold text-[10px] font-mono shadow-sm">
             EU
           </div>
-          <span className="text-sm font-semibold tracking-tight text-stone-900 group-hover:text-black font-mono">
+          <span className="text-sm font-semibold tracking-tight text-zinc-100 group-hover:text-white font-mono">
             Eureka
           </span>
         </Link>
 
         {/* Center Nav Links */}
-        <nav className="hidden md:flex items-center gap-6 text-xs text-stone-600">
-          <a href="#pipeline" className="hover:text-stone-900 transition-colors font-mono">
+        <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-400">
+          <a href="#pipeline" className="hover:text-zinc-200 transition-colors font-mono">
             Pipeline
           </a>
-          <a href="#features" className="hover:text-stone-900 transition-colors font-mono">
+          <a href="#features" className="hover:text-zinc-200 transition-colors font-mono">
             Architecture
           </a>
-          <a href="#faq" className="hover:text-stone-900 transition-colors font-mono">
+          <a href="#faq" className="hover:text-zinc-200 transition-colors font-mono">
             FAQ
           </a>
         </nav>
@@ -55,7 +55,7 @@ export function FloatingNavbar({ hasTopics }: { hasTopics: boolean }) {
             href="https://github.com/gorlock777/AiLearner"
             target="_blank"
             rel="noreferrer"
-            className="p-2 rounded-full text-stone-500 hover:text-stone-900 hover:bg-stone-100 transition-colors"
+            className="p-2 rounded-full text-zinc-400 hover:text-white hover:bg-white/5 transition-colors"
             title="GitHub Repository"
           >
             <GithubIcon size={14} />
@@ -63,7 +63,7 @@ export function FloatingNavbar({ hasTopics }: { hasTopics: boolean }) {
 
           <ShimmerButton
             onClick={() => navigate(hasTopics ? '/study' : '/app')}
-            className="h-7 px-3.5 text-xs font-mono rounded-full bg-stone-900 text-white hover:bg-stone-800"
+            className="h-7 px-3.5 text-xs font-mono rounded-full"
           >
             <span>{hasTopics ? 'Resume Study' : 'Launch Workspace'}</span>
             <ArrowRight size={11} />

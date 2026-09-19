@@ -1,5 +1,5 @@
 /**
- * SpotlightCards — adapted from KokonutUI (Alabaster Edition)
+ * SpotlightCards — adapted from KokonutUI (Lunar Space Titanium Edition)
  * @license MIT
  */
 
@@ -81,9 +81,9 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
       }}
       className={cn(
         "group relative flex flex-col gap-4 overflow-hidden rounded-xl border p-5",
-        "border-stone-200/90 bg-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.04)]",
+        "border-white/[0.08] bg-[#14161e]/90 shadow-[0_4px_24px_rgba(0,0,0,0.4)]",
         "transition-[border-color,box-shadow] duration-300",
-        "hover:border-stone-400 hover:shadow-[0_8px_24px_rgba(0,0,0,0.07)]",
+        "hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.6)]",
         item.onClick && "cursor-pointer"
       )}
       onMouseEnter={handleMouseEnter}
@@ -103,7 +103,7 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-xl"
         style={{
-          background: `radial-gradient(ellipse at 20% 20%, ${item.color}0a, transparent 65%)`,
+          background: `radial-gradient(ellipse at 20% 20%, ${item.color}10, transparent 65%)`,
         }}
       />
 
@@ -113,20 +113,20 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
         className="pointer-events-none absolute inset-0 rounded-xl"
         style={{
           opacity: glowOpacity,
-          background: `radial-gradient(ellipse at 20% 20%, ${item.color}18, transparent 65%)`,
+          background: `radial-gradient(ellipse at 20% 20%, ${item.color}24, transparent 65%)`,
         }}
       />
 
       {/* Icon badge + optional top badge */}
       <div className="relative z-10 flex items-start justify-between">
         <div
-          className="flex h-9 w-9 items-center justify-center rounded-lg bg-stone-100 border border-stone-200"
+          className="flex h-9 w-9 items-center justify-center rounded-lg bg-zinc-900 border border-white/10"
         >
           <Icon size={16} strokeWidth={1.9} style={{ color: item.color }} />
         </div>
         {item.badge && (
           <span
-            className="text-[10px] font-mono px-2 py-0.5 rounded border border-stone-200 bg-stone-50 text-stone-600 font-medium"
+            className="text-[10px] font-mono px-2 py-0.5 rounded border border-white/10 bg-zinc-900/80 text-zinc-300 font-medium"
           >
             {item.badge}
           </span>
@@ -135,17 +135,17 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
 
       {/* Text */}
       <div className="relative z-10 flex flex-col gap-1.5">
-        <h3 className="font-semibold text-[14px] text-stone-900 tracking-tight leading-snug font-heading">
+        <h3 className="font-semibold text-[14px] text-white tracking-tight leading-snug font-heading">
           {item.title}
         </h3>
-        <p className="text-[12px] text-stone-600 leading-relaxed font-sans">
+        <p className="text-[12px] text-zinc-400 leading-relaxed font-sans">
           {item.description}
         </p>
       </div>
 
       {/* Optional footer slot */}
       {item.footer && (
-        <div className="relative z-10 mt-auto pt-2 border-t border-stone-200/80">
+        <div className="relative z-10 mt-auto pt-2 border-t border-white/[0.08]">
           {item.footer}
         </div>
       )}
@@ -194,12 +194,12 @@ export function SpotlightCards({
       {(eyebrow || heading) && (
         <div className="mb-6 flex flex-col gap-1">
           {eyebrow && (
-            <p className="font-semibold text-[10px] text-stone-500 uppercase tracking-[0.22em] font-mono">
+            <p className="font-semibold text-[10px] text-zinc-400 uppercase tracking-[0.22em] font-mono">
               {eyebrow}
             </p>
           )}
           {heading && (
-            <h2 className="font-heading text-2xl text-stone-900 tracking-tight">
+            <h2 className="font-heading text-2xl text-white tracking-tight">
               {heading}
             </h2>
           )}

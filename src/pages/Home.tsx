@@ -182,43 +182,47 @@ export function Home() {
       }
       setTopics(parsedTopics.topics)
 
-      // Step 3: Flashcards
+      // Step 3: High-speed parallel flashcard generation across all topics
       setCurrentStep(3)
-      for (const topic of parsedTopics.topics) {
-        try {
-          const fcMessages = generateFlashcardsPrompt(topic.title, text)
-          const rawFc = await fetchCompletion(fcMessages)
-          const parsedFc = parseJSONResponse<{ flashcards: FlashcardSet['cards'] }>(rawFc)
-          if (parsedFc?.flashcards?.length) {
-            addFlashcardSet({
-              topicId: topic.id,
-              cards: parsedFc.flashcards,
-              generatedAt: Date.now(),
-            })
+      await Promise.all(
+        parsedTopics.topics.map(async (topic) => {
+          try {
+            const fcMessages = generateFlashcardsPrompt(topic.title, text)
+            const rawFc = await fetchCompletion(fcMessages)
+            const parsedFc = parseJSONResponse<{ flashcards: FlashcardSet['cards'] }>(rawFc)
+            if (parsedFc?.flashcards?.length) {
+              addFlashcardSet({
+                topicId: topic.id,
+                cards: parsedFc.flashcards,
+                generatedAt: Date.now(),
+              })
+            }
+          } catch {
+            // Continue
           }
-        } catch {
-          // Continue
-        }
-      }
+        })
+      )
 
-      // Step 4: Quiz
+      // Step 4: High-speed parallel quiz generation across all topics
       setCurrentStep(4)
-      for (const topic of parsedTopics.topics) {
-        try {
-          const quizMessages = generateQuizPrompt(topic.title, text)
-          const rawQuiz = await fetchCompletion(quizMessages)
-          const parsedQuiz = parseJSONResponse<{ questions: QuizSet['questions'] }>(rawQuiz)
-          if (parsedQuiz?.questions?.length) {
-            addQuizSet({
-              topicId: topic.id,
-              questions: parsedQuiz.questions,
-              generatedAt: Date.now(),
-            })
+      await Promise.all(
+        parsedTopics.topics.map(async (topic) => {
+          try {
+            const quizMessages = generateQuizPrompt(topic.title, text)
+            const rawQuiz = await fetchCompletion(quizMessages)
+            const parsedQuiz = parseJSONResponse<{ questions: QuizSet['questions'] }>(rawQuiz)
+            if (parsedQuiz?.questions?.length) {
+              addQuizSet({
+                topicId: topic.id,
+                questions: parsedQuiz.questions,
+                generatedAt: Date.now(),
+              })
+            }
+          } catch {
+            // Continue
           }
-        } catch {
-          // Continue
-        }
-      }
+        })
+      )
 
       // Step 5: Mark all steps complete (100%), save session, and transition smoothly
       setCurrentStep(5)

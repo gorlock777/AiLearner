@@ -4,8 +4,14 @@ const JSON_SYSTEM_PROMPT = `You are a study assistant AI. You MUST respond ONLY 
 
 // ─── Topic Extraction ──────────────────────────────────────────────────────
 
+function getSmartSample(text: string, maxLen = 4500): string {
+  if (text.length <= maxLen) return text
+  const half = Math.floor(maxLen / 2)
+  return `${text.slice(0, half)}\n\n[...middle content omitted for speed...]\n\n${text.slice(-half)}`
+}
+
 export function extractTopicsPrompt(text: string): Message[] {
-  const truncated = text.slice(0, 12000) // keep within token limits
+  const sample = getSmartSample(text, 5000)
   return [
     {
       role: 'system',
@@ -17,18 +23,18 @@ Schema:
     {
       "id": "string (slug, e.g. 'photosynthesis')",
       "title": "string",
-      "summary": "string (2-3 sentences)",
+      "summary": "string (2 sentences)",
       "keyPoints": ["string", "string", "string"],
       "difficulty": "beginner | intermediate | advanced"
     }
   ]
 }
 
-Extract 4–8 topics. Order from foundational to advanced.`,
+Extract 4–6 core topics. Keep summaries concise.`,
     },
     {
       role: 'user',
-      content: `Extract the main topics from these study notes:\n\n${truncated}`,
+      content: `Extract the main topics from these study notes:\n\n${sample}`,
     },
   ]
 }
@@ -36,7 +42,7 @@ Extract 4–8 topics. Order from foundational to advanced.`,
 // ─── Flashcard Generation ──────────────────────────────────────────────────
 
 export function generateFlashcardsPrompt(topic: string, text: string): Message[] {
-  const truncated = text.slice(0, 8000)
+  const sample = getSmartSample(text, 3500)
   return [
     {
       role: 'system',
@@ -47,19 +53,19 @@ Schema:
   "flashcards": [
     {
       "id": "string",
-      "front": "string (concise question or term)",
-      "back": "string (clear, complete answer or definition)",
-      "hint": "string (optional hint, can be empty string)",
-      "sourceQuote": "string (copy the exact sentence or two from the provided notes that this card was derived from — verbatim, not paraphrased)"
+      "front": "string (concise question or concept)",
+      "back": "string (clear answer)",
+      "hint": "string (optional hint)",
+      "sourceQuote": "string (verbatim quote from text)"
     }
   ]
 }
 
-Generate 8–12 flashcards. Mix definitions, concepts, and application questions. For sourceQuote, copy the most relevant 1-2 sentences from the input text verbatim.`,
+Generate 5–7 high-yield active recall flashcards for this topic.`,
     },
     {
       role: 'user',
-      content: `Generate flashcards for the topic "${topic}" from these notes:\n\n${truncated}`,
+      content: `Generate flashcards for topic "${topic}" from these notes:\n\n${sample}`,
     },
   ]
 }
@@ -67,7 +73,7 @@ Generate 8–12 flashcards. Mix definitions, concepts, and application questions
 // ─── Quiz Generation ───────────────────────────────────────────────────────
 
 export function generateQuizPrompt(topic: string, text: string): Message[] {
-  const truncated = text.slice(0, 8000)
+  const sample = getSmartSample(text, 3500)
   return [
     {
       role: 'system',
@@ -81,16 +87,16 @@ Schema:
       "question": "string",
       "options": ["string", "string", "string", "string"],
       "correctIndex": 0,
-      "explanation": "string (why the answer is correct)"
+      "explanation": "string (concise explanation)"
     }
   ]
 }
 
-Generate 5–8 multiple-choice questions. Vary difficulty. Make wrong answers plausible.`,
+Generate 4–5 multiple-choice questions for this topic.`,
     },
     {
       role: 'user',
-      content: `Generate a quiz for the topic "${topic}" from these notes:\n\n${truncated}`,
+      content: `Generate a practice quiz for topic "${topic}" from these notes:\n\n${sample}`,
     },
   ]
 }

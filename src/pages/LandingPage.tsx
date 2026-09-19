@@ -46,17 +46,6 @@ export function LandingPage() {
           style={{ y: heroTextY, opacity: heroTextOpacity, scale: heroTextScale }}
           className="w-full flex flex-col items-center will-change-transform"
         >
-          {/* Ambient Top Badge */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-mono text-zinc-300 mb-6 backdrop-blur-md shadow-sm"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Eureka · Neural Active Recall Engine</span>
-          </motion.div>
-
           {/* Big Grand Merriweather Headline (Starlight Metallic Rim Gradient) */}
           <motion.h1
             initial={{ opacity: 0, y: 14 }}
@@ -249,7 +238,7 @@ export function LandingPage() {
             <div className="w-5 h-5 rounded-md bg-zinc-900 border border-white/10 text-white flex items-center justify-center font-bold text-[9px] font-mono">
               EU
             </div>
-            <span className="text-zinc-300 font-semibold">Eureka — Neural Ingestion Engine</span>
+            <span className="text-zinc-300 font-semibold">Eureka</span>
           </div>
           <div className="text-zinc-500">MIT License · Lunar Space Titanium Architecture</div>
         </div>

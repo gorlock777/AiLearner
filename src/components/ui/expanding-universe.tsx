@@ -155,12 +155,6 @@ export function ExpandingUniverse({ children, className }: ExpandingUniverseProp
             }}
             className="lg:col-span-5 flex flex-col items-center lg:items-start text-center lg:text-left z-20 pointer-events-auto"
           >
-            {/* Subtle Ambient Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-mono text-zinc-300 mb-5 shadow-sm backdrop-blur-md">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Eureka · Neural Recall Engine</span>
-            </div>
-
             <h1 className="font-heading font-normal text-4xl sm:text-5xl lg:text-[3.6rem] leading-[1.08] tracking-tight text-white mb-5 drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]">
               Turn dense notes <br className="hidden sm:inline" />
               into effortless recall.

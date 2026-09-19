@@ -247,13 +247,8 @@ export function Home() {
           />
 
           <div className="relative z-10 max-w-3xl mx-auto text-center px-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-mono text-zinc-300 mb-6 shadow-sm backdrop-blur-md">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              <span>Eureka · Neural Ingestion Engine</span>
-            </div>
-
             <h1 className="font-heading font-normal text-3xl sm:text-5xl text-white tracking-tight leading-tight mb-4 drop-shadow-sm">
-              Neural Document Ingestion
+              Document Ingestion & Synthesis
             </h1>
 
             <p className="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto leading-relaxed font-sans">

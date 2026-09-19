@@ -13,6 +13,8 @@ import {
 import { useAppStore } from '../store/useAppStore'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
+import { GaugeMeter } from '../components/ui/gauge-meter'
+import { ShimmerButton } from '../components/ui/shimmer-button'
 
 function formatDate(ts: number): string {
   const d = new Date(ts)
@@ -83,9 +85,9 @@ export function Progress() {
         <p className="text-xs text-zinc-400 mb-4">
           Import documents and complete quizzes to populate your retention telemetry.
         </p>
-        <Button size="sm" onClick={() => navigate('/app')}>
+        <ShimmerButton onClick={() => navigate('/app')}>
           Import Notes
-        </Button>
+        </ShimmerButton>
       </div>
     )
   }
@@ -113,16 +115,29 @@ export function Progress() {
           <div className="text-[11px] text-zinc-400 mt-0.5">Organized from documents</div>
         </div>
 
-        <div className="linear-card p-4">
+        <div className="linear-card p-4 flex flex-col justify-between">
           <div className="flex items-center justify-between text-xs text-zinc-400 mb-1.5 font-mono">
             <span>AVERAGE ACCURACY</span>
             <TrendingUp size={14} className="text-emerald-400" />
           </div>
-          <div className="text-xl font-bold font-mono text-zinc-100">
-            {avgScore !== null ? `${avgScore}%` : '—'}
-          </div>
-          <div className="text-[11px] text-zinc-400 mt-0.5 font-mono">
-            {quizAttempts.length} attempt{quizAttempts.length !== 1 ? 's' : ''} logged
+          <div className="flex items-center justify-between mt-1">
+            <div>
+              <div className="text-xl font-bold font-mono text-zinc-100">
+                {avgScore !== null ? `${avgScore}%` : '—'}
+              </div>
+              <div className="text-[11px] text-zinc-400 mt-0.5 font-mono">
+                {quizAttempts.length} attempt{quizAttempts.length !== 1 ? 's' : ''} logged
+              </div>
+            </div>
+            {avgScore !== null && (
+              <GaugeMeter
+                value={avgScore}
+                size={52}
+                strokeWidth={5}
+                label=""
+                className="-my-1"
+              />
+            )}
           </div>
         </div>
 

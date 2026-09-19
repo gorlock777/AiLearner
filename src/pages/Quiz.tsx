@@ -16,6 +16,8 @@ import type { QuizQuestion } from '../store/useAppStore'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Progress } from '../components/ui/progress'
+import { GaugeMeter } from '../components/ui/gauge-meter'
+import { ShimmerButton } from '../components/ui/shimmer-button'
 
 export function Quiz() {
   const navigate = useNavigate()
@@ -172,19 +174,22 @@ export function Quiz() {
           </div>
         ) : quizFinished ? (
           /* Results Screen */
-          <div className="linear-card linear-card-highlight p-6 max-w-xl mx-auto text-center">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-              Assessment Summary
+          <div className="linear-card linear-card-highlight p-6 max-w-xl mx-auto text-center flex flex-col items-center">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-4">
+              Diagnostic Assessment Summary
             </div>
-            <div className="text-3xl font-bold font-mono text-zinc-100 mb-1">
-              {finalScore}% Accuracy
-            </div>
-            <p className="text-xs text-zinc-400 mb-6">
-              {correctCount} of {questions.length} questions answered correctly
-            </p>
+
+            <GaugeMeter
+              value={finalScore}
+              size={140}
+              strokeWidth={10}
+              label="Score"
+              sublabel={`${correctCount} of ${questions.length} questions correct`}
+              className="mb-6"
+            />
 
             {/* Questions breakdown */}
-            <div className="flex flex-col gap-2 text-left mb-6">
+            <div className="w-full flex flex-col gap-2 text-left mb-6">
               {questions.map((q, idx) => {
                 const userAns = answers[idx]
                 const isCorrect = userAns === q.correctIndex
@@ -199,7 +204,7 @@ export function Quiz() {
                       <XCircle size={14} className="text-rose-400 flex-shrink-0 mt-0.5" />
                     )}
                     <div className="flex-1">
-                      <div className="font-medium text-zinc-200 mb-1">
+                      <div className="font-serif font-medium text-zinc-200 mb-1">
                         0{idx + 1}. {q.question}
                       </div>
                       <div className="text-zinc-400 text-[11px] font-mono">
@@ -211,15 +216,15 @@ export function Quiz() {
               })}
             </div>
 
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-3">
               <Button variant="secondary" size="sm" onClick={handleRestart}>
                 <RotateCcw size={12} />
                 Retry Test
               </Button>
-              <Button size="sm" onClick={() => navigate('/progress')}>
+              <ShimmerButton onClick={() => navigate('/progress')}>
                 <BarChart3 size={12} />
                 View Analytics
-              </Button>
+              </ShimmerButton>
             </div>
           </div>
         ) : currentQuestion ? (
@@ -234,7 +239,7 @@ export function Quiz() {
               QUESTION 0{currentIndex + 1} OF 0{questions.length}
             </div>
 
-            <h2 className="text-sm font-medium text-zinc-100 mb-5 leading-relaxed">
+            <h2 className="font-serif text-base font-normal text-zinc-100 mb-5 leading-relaxed">
               {currentQuestion.question}
             </h2>
 
@@ -297,10 +302,10 @@ export function Quiz() {
             {/* Next Button */}
             {isAnswered && (
               <div className="flex justify-end pt-2 border-t border-zinc-800/80">
-                <Button size="sm" onClick={handleNext}>
+                <ShimmerButton onClick={handleNext}>
                   {currentIndex < questions.length - 1 ? 'Next Question' : 'Complete Assessment'}
                   <ArrowRight size={12} />
-                </Button>
+                </ShimmerButton>
               </div>
             )}
           </div>

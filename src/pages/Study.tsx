@@ -19,6 +19,9 @@ import type { Flashcard } from '../store/useAppStore'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
 import { Alert, AlertDescription } from '../components/ui/alert'
+import { CardFlip } from '../components/ui/card-flip'
+import { GaugeMeter } from '../components/ui/gauge-meter'
+import { ShimmerButton } from '../components/ui/shimmer-button'
 
 type CardResult = 'known' | 'review' | null
 
@@ -253,23 +256,26 @@ export function Study() {
                 </Alert>
               </div>
             )}
-            <Button size="sm" onClick={handleGenerate} className="mx-auto">
+            <ShimmerButton onClick={handleGenerate} className="mx-auto">
               Generate Cards
-            </Button>
+            </ShimmerButton>
           </div>
         ) : sessionComplete ? (
-          <div className="linear-card linear-card-highlight w-full p-8 text-center">
-            <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
-              Deck Completed
+          <div className="linear-card linear-card-highlight w-full p-8 text-center flex flex-col items-center">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-4">
+              Active Recall Session Complete
             </div>
-            <div className="text-3xl font-bold text-zinc-100 mb-1 font-mono">
-              {cards.length > 0 ? Math.round((knownCount / cards.length) * 100) : 0}% Accuracy
-            </div>
-            <p className="text-xs text-zinc-400 mb-6">
-              Active recall session summary
-            </p>
 
-            <div className="grid grid-cols-2 gap-3 mb-6">
+            <GaugeMeter
+              value={cards.length > 0 ? Math.round((knownCount / cards.length) * 100) : 0}
+              size={140}
+              strokeWidth={10}
+              label="Mastery"
+              sublabel={`${knownCount} of ${cards.length} cards retained`}
+              className="mb-6"
+            />
+
+            <div className="grid grid-cols-2 gap-3 w-full max-w-sm mb-6">
               <div className="p-3.5 rounded bg-zinc-900/50 border border-zinc-800 text-center">
                 <div className="text-xl font-bold font-mono text-emerald-400">{knownCount}</div>
                 <div className="text-[11px] text-zinc-400 font-mono mt-0.5">Mastered</div>
@@ -280,66 +286,108 @@ export function Study() {
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-2">
+            <div className="flex items-center justify-center gap-3">
               <Button variant="secondary" size="sm" onClick={handleRestart}>
                 <RotateCcw size={12} />
                 Restart Deck
               </Button>
-              <Button size="sm" onClick={() => navigate('/quiz')}>
+              <ShimmerButton onClick={() => navigate('/quiz')}>
                 Take Practice Quiz
                 <ArrowRight size={12} />
-              </Button>
+              </ShimmerButton>
             </div>
           </div>
         ) : currentCard ? (
           <div className="w-full flex flex-col items-center">
-            {/* Precision Flashcard Panel */}
-            <div
-              onClick={handleFlip}
-              className="w-full min-h-[260px] cursor-pointer select-none linear-card linear-card-highlight p-6 flex flex-col justify-between relative border border-zinc-800 hover:border-zinc-700 transition-colors"
-            >
-              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 border-b border-zinc-800/60 pb-2.5">
-                <span className="uppercase text-[10px] text-zinc-400">
-                  {isFlipped ? 'ANSWER / DETAILS' : 'CONCEPT / PROMPT'}
-                </span>
-                <span className="flex items-center gap-1 text-[11px] text-zinc-400">
-                  <kbd className="kbd">Space</kbd> Flip
-                </span>
-              </div>
-
-              <div className="my-auto py-6 text-center">
-                <div className="text-base font-medium text-zinc-100 leading-relaxed max-w-lg mx-auto">
-                  {isFlipped ? currentCard.card.back : currentCard.card.front}
-                </div>
-                {isFlipped && currentCard.card.hint && (
-                  <div className="mt-3 text-xs text-zinc-400 font-mono">
-                    Hint: {currentCard.card.hint}
+            {/* Precision 3D CardFlip */}
+            <CardFlip
+              isFlipped={isFlipped}
+              onFlip={handleFlip}
+              className="w-full min-h-[270px]"
+              front={
+                <div className="w-full h-full min-h-[270px] linear-card linear-card-highlight p-6 flex flex-col justify-between border border-zinc-800 hover:border-zinc-700 transition-colors shadow-lg">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 border-b border-zinc-800/60 pb-2.5">
+                    <span className="uppercase text-[10px] text-zinc-400 font-mono">
+                      CONCEPT / PROMPT
+                    </span>
+                    <span className="flex items-center gap-1 text-[11px] text-zinc-400 font-mono">
+                      <kbd className="kbd">Space</kbd> Flip
+                    </span>
                   </div>
-                )}
-              </div>
 
-              {/* Progress Tracker */}
-              <div className="flex items-center justify-between pt-2.5 border-t border-zinc-800/60 text-[10px] font-mono text-zinc-400">
-                <span>{activeTopic?.title}</span>
-                <div className="flex items-center gap-1">
-                  {cards.map((c, idx) => (
-                    <div
-                      key={c.card.id || idx}
-                      className={`h-1 rounded-sm transition-all ${
-                        idx === currentIndex
-                          ? 'w-4 bg-zinc-200'
-                          : c.result === 'known'
-                          ? 'w-1.5 bg-emerald-500'
-                          : c.result === 'review'
-                          ? 'w-1.5 bg-amber-500'
-                          : 'w-1.5 bg-zinc-800'
-                      }`}
-                    />
-                  ))}
+                  <div className="my-auto py-6 text-center">
+                    <div className="font-serif text-lg font-normal text-zinc-100 leading-relaxed max-w-lg mx-auto">
+                      {currentCard.card.front}
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2.5 border-t border-zinc-800/60 text-[10px] font-mono text-zinc-400">
+                    <span>{activeTopic?.title}</span>
+                    <div className="flex items-center gap-1">
+                      {cards.map((c, idx) => (
+                        <div
+                          key={c.card.id || idx}
+                          className={`h-1 rounded-sm transition-all ${
+                            idx === currentIndex
+                              ? 'w-4 bg-zinc-200'
+                              : c.result === 'known'
+                              ? 'w-1.5 bg-emerald-500'
+                              : c.result === 'review'
+                              ? 'w-1.5 bg-amber-500'
+                              : 'w-1.5 bg-zinc-800'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span>{currentIndex + 1} / {cards.length}</span>
+                  </div>
                 </div>
-                <span>{currentIndex + 1} / {cards.length}</span>
-              </div>
-            </div>
+              }
+              back={
+                <div className="w-full h-full min-h-[270px] linear-card linear-card-highlight p-6 flex flex-col justify-between border border-zinc-700/80 bg-zinc-900/95 shadow-xl">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 border-b border-zinc-800/60 pb-2.5">
+                    <span className="uppercase text-[10px] text-emerald-400 font-mono">
+                      ANSWER / KEY CONCEPT
+                    </span>
+                    <span className="flex items-center gap-1 text-[11px] text-zinc-400 font-mono">
+                      <kbd className="kbd">Space</kbd> Flip Back
+                    </span>
+                  </div>
+
+                  <div className="my-auto py-6 text-center">
+                    <div className="font-serif text-lg font-normal text-zinc-100 leading-relaxed max-w-lg mx-auto">
+                      {currentCard.card.back}
+                    </div>
+                    {currentCard.card.hint && (
+                      <div className="mt-3 text-xs text-zinc-400 font-mono">
+                        Hint: {currentCard.card.hint}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2.5 border-t border-zinc-800/60 text-[10px] font-mono text-zinc-400">
+                    <span className="text-emerald-400/80">{activeTopic?.title}</span>
+                    <div className="flex items-center gap-1">
+                      {cards.map((c, idx) => (
+                        <div
+                          key={c.card.id || idx}
+                          className={`h-1 rounded-sm transition-all ${
+                            idx === currentIndex
+                              ? 'w-4 bg-zinc-200'
+                              : c.result === 'known'
+                              ? 'w-1.5 bg-emerald-500'
+                              : c.result === 'review'
+                              ? 'w-1.5 bg-amber-500'
+                              : 'w-1.5 bg-zinc-800'
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span>{currentIndex + 1} / {cards.length}</span>
+                  </div>
+                </div>
+              }
+            />
 
             {/* Navigation & Command Legend */}
             <div className="w-full mt-4 flex items-center justify-between">

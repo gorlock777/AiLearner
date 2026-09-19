@@ -1,11 +1,7 @@
 import { useCallback, useRef, useState } from 'react'
 import {
-  UploadCloud,
-  FileText,
   AlertCircle,
   ArrowRight,
-  Loader2,
-  Check,
   RotateCcw,
 } from 'lucide-react'
 
@@ -20,10 +16,12 @@ import { useAppStore } from '../store/useAppStore'
 import type { Topic, FlashcardSet, QuizSet } from '../store/useAppStore'
 import { ExtractionDataView } from '../components/extraction/ExtractionDataView'
 import { Button } from '../components/ui/button'
-import { Progress } from '../components/ui/progress'
+import { ShimmerButton } from '../components/ui/shimmer-button'
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert'
 import { BlackHoleHeroSection } from '../components/ui/blackhole-hero-section'
 import { VariableFontCursorProximity } from '../components/ui/variable-font-cursor-proximity'
+import { DropzoneUpload } from '../components/ui/dropzone-upload'
+import { LoadingStepper } from '../components/ui/loading-stepper'
 
 const STEPS = [
   { id: 1, label: 'Parse document content & text layer' },
@@ -32,14 +30,7 @@ const STEPS = [
   { id: 4, label: 'Compile adaptive practice questions' },
 ]
 
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-}
-
 export function Home() {
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const heroContainerRef = useRef<HTMLDivElement>(null)
 
   const {
@@ -53,7 +44,6 @@ export function Home() {
   } = useAppStore()
 
   const [file, setFile] = useState<File | null>(null)
-  const [isDragging, setIsDragging] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [currentStep, setCurrentStep] = useState(0)
   const [error, setError] = useState<string | null>(null)
@@ -69,23 +59,6 @@ export function Home() {
     setError(null)
     setFile(f)
   }
-
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-    const droppedFile = e.dataTransfer.files?.[0]
-    if (droppedFile) handleFile(droppedFile)
-  }, [])
-
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }, [])
-
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }, [])
 
   const handleProcess = async () => {
     if (!file) return
@@ -253,137 +226,38 @@ export function Home() {
         ) : (
           /* Upload & Ingestion Workbench */
           <div className="flex flex-col gap-4">
-            <div
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onClick={() => !isProcessing && fileInputRef.current?.click()}
-              className={`linear-card p-6 border transition-colors relative select-none ${
-                isProcessing
-                  ? 'cursor-default'
-                  : 'cursor-pointer hover:border-zinc-700 bg-zinc-950/40'
-              } ${isDragging ? 'border-zinc-500 bg-zinc-900/60' : ''}`}
-            >
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept=".pdf,.txt,.md"
-                className="hidden"
-                onChange={(e) => {
-                  const f = e.target.files?.[0]
-                  if (f) handleFile(f)
-                }}
-              />
-
-              {isProcessing ? (
-                <div className="py-6 flex flex-col items-center max-w-md mx-auto">
-                  <Loader2 size={20} className="animate-spin text-zinc-300 mb-3" />
-                  <div className="text-xs font-semibold text-zinc-200 mb-1 font-mono">
-                    PROCESSING DOCUMENT
-                  </div>
-                  <div className="text-xs text-zinc-400 mb-4 font-mono text-center">
-                    Extracting concept hierarchy and questions
-                  </div>
-
-                  <div className="w-full mb-5">
-                    <Progress value={currentStep} max={4} />
-                  </div>
-
-                  <div className="w-full flex flex-col gap-2 border border-zinc-800 rounded bg-zinc-900/40 p-3">
-                    {STEPS.map((step) => {
-                      const isDone = currentStep > step.id
-                      const isCurrent = currentStep === step.id
-                      return (
-                        <div
-                          key={step.id}
-                          className={`text-xs flex items-center justify-between font-mono ${
-                            isDone
-                              ? 'text-emerald-400'
-                              : isCurrent
-                              ? 'text-zinc-200 font-medium'
-                              : 'text-zinc-400'
-                          }`}
-                        >
-                          <span className="flex items-center gap-2">
-                            <span className="text-[10px] text-zinc-400">0{step.id}</span>
-                            <span>{step.label}</span>
-                          </span>
-                          {isDone ? (
-                            <Check size={12} className="text-emerald-400" />
-                          ) : isCurrent ? (
-                            <Loader2 size={12} className="animate-spin text-zinc-300" />
-                          ) : (
-                            <span className="text-[10px] text-zinc-400">QUEUED</span>
-                          )}
-                        </div>
-                      )
-                    })}
-                  </div>
+            {isProcessing ? (
+              <div className="linear-card p-6 border flex flex-col items-center max-w-md mx-auto w-full">
+                <div className="text-xs font-semibold text-zinc-200 mb-1 font-mono">
+                  SYNTHESIZING KNOWLEDGE DECK
                 </div>
-              ) : file ? (
-                /* Selected File Ready State */
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-300">
-                      <FileText size={18} />
-                    </div>
-                    <div>
-                      <div className="text-xs font-semibold text-zinc-100 font-mono">
-                        {file.name}
-                      </div>
-                      <div className="text-[11px] text-zinc-400 font-mono mt-0.5">
-                        {formatBytes(file.size)} · Ready to parse
-                      </div>
-                    </div>
-                  </div>
+                <div className="text-xs text-zinc-400 mb-4 font-mono text-center">
+                  Extracting concept topology, flashcards & quiz
+                </div>
+                <LoadingStepper steps={STEPS} currentStep={currentStep} />
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                <DropzoneUpload
+                  selectedFile={file}
+                  onFileSelect={handleFile}
+                  onFileRemove={() => setFile(null)}
+                  isProcessing={isProcessing}
+                />
 
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        setFile(null)
-                      }}
-                      className="text-xs font-mono"
+                {file && (
+                  <div className="flex justify-end">
+                    <ShimmerButton
+                      onClick={handleProcess}
+                      className="px-4 py-2 font-mono text-xs"
                     >
-                      Change File
-                    </Button>
-                    <Button
-                      size="sm"
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleProcess()
-                      }}
-                      className="text-xs font-mono"
-                    >
-                      Generate Modules
-                      <ArrowRight size={12} />
-                    </Button>
+                      <span>Synthesize Study Modules</span>
+                      <ArrowRight size={13} />
+                    </ShimmerButton>
                   </div>
-                </div>
-              ) : (
-                /* Default Dropzone */
-                <div className="py-6 flex flex-col items-center text-center">
-                  <div className="w-9 h-9 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mb-3">
-                    <UploadCloud size={18} />
-                  </div>
-                  <div className="text-xs font-medium text-zinc-200 mb-1">
-                    Drag and drop your study document, or click to browse
-                  </div>
-                  <div className="text-[11px] text-zinc-400 mb-3">
-                    Supports text or scanned PDF, Markdown (.md), and plain text (.txt)
-                  </div>
-
-                  <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-400">
-                    <span className="px-1.5 py-0.5 rounded border border-zinc-800 bg-zinc-900">PDF</span>
-                    <span className="px-1.5 py-0.5 rounded border border-zinc-800 bg-zinc-900">TXT</span>
-                    <span className="px-1.5 py-0.5 rounded border border-zinc-800 bg-zinc-900">MD</span>
-                    <span>· Multimodal Vision OCR fallback enabled</span>
-                  </div>
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
 
             {/* Ingestion Specifications Grid */}
             <div className="linear-card p-4">

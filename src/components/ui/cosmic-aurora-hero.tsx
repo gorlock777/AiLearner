@@ -1,6 +1,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { cn } from '@/lib/utils'
+import { BackgroundPaths } from './background-paths'
 
 export interface CosmicAuroraHeroProps extends React.HTMLAttributes<HTMLDivElement> {
   children?: React.ReactNode
@@ -16,6 +17,9 @@ export function CosmicAuroraHero({ children, className, ...props }: CosmicAurora
       )}
       {...props}
     >
+      {/* ── Layer 0: Kokonut UI Animated Background Paths ── */}
+      <BackgroundPaths />
+
       {/* ── Layer 1: Ambient Glowing Multi-Color Aurora Gradients (No blank black void) ── */}
       <div
         aria-hidden="true"

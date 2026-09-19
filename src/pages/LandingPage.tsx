@@ -20,6 +20,8 @@ import { SpotlightCards } from '../components/ui/spotlight-cards'
 import type { SpotlightItem } from '../components/ui/spotlight-cards'
 import { FloatingNavbar } from '../components/ui/floating-navbar'
 
+import { CinematicTitle } from '../components/ui/cinematic-title'
+
 export function LandingPage() {
   const navigate = useNavigate()
   const { topics } = useAppStore()
@@ -39,25 +41,12 @@ export function LandingPage() {
           <span>Eureka · Neural Active Recall Engine · OpenRouter Free</span>
         </motion.div>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-heading font-normal text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] leading-[1.05] tracking-tight text-white mb-6 drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
-        >
-          Turn dense notes <br className="hidden sm:inline" />
-          into effortless recall.
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="max-w-2xl text-sm sm:text-base md:text-lg text-zinc-300 leading-relaxed font-sans mb-8"
-        >
-          Eureka transforms complex lecture notes and textbooks into 3D active flashcards,
-          spaced memory intervals, and diagnostic test insights — completely in-browser.
-        </motion.p>
+        {/* Kokonut UI Inspired Cinematic Staggered Title */}
+        <CinematicTitle
+          text="Turn dense notes into effortless recall."
+          highlight="effortless"
+          subtitle="Eureka transforms complex lecture notes and textbooks into 3D active flashcards, spaced memory intervals, and diagnostic test insights — completely in-browser."
+        />
 
         <motion.div
           initial={{ opacity: 0, y: 14 }}

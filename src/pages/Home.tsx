@@ -237,30 +237,24 @@ export function Home() {
 
   return (
     <div className="min-h-full flex flex-col">
-      {/* ── Orbital Docking Bay Hero Header (1A) ── */}
+      {/* ── Orbital Docking Bay Hero Header ── */}
       {!hasTopics && !isProcessing && (
         <section className="relative w-full py-16 md:py-24 border-b border-white/[0.06] overflow-hidden" style={{ background: 'radial-gradient(ellipse at 50% 0%, #0b1120 0%, #0d0e12 60%)' }}>
           {/* Deep space starfield layer */}
           <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-            {/* Primary nebula glow — emerald */}
             <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[900px] h-[500px] rounded-full opacity-60" style={{ background: 'radial-gradient(ellipse at center, rgba(52,211,153,0.14) 0%, rgba(52,211,153,0.03) 45%, transparent 70%)' }} />
-            {/* Secondary cyan accent */}
             <div className="absolute top-0 right-1/4 w-[400px] h-[300px] rounded-full opacity-40" style={{ background: 'radial-gradient(ellipse at center, rgba(96,165,250,0.10) 0%, transparent 65%)' }} />
-            {/* Faint star specks */}
             <div className="absolute inset-0" style={{ backgroundImage: 'radial-gradient(1px 1px at 15% 25%, rgba(255,255,255,0.5) 0%, transparent 100%), radial-gradient(1px 1px at 72% 18%, rgba(255,255,255,0.4) 0%, transparent 100%), radial-gradient(1px 1px at 38% 55%, rgba(255,255,255,0.35) 0%, transparent 100%), radial-gradient(1px 1px at 85% 40%, rgba(255,255,255,0.45) 0%, transparent 100%), radial-gradient(1.5px 1.5px at 55% 75%, rgba(255,255,255,0.3) 0%, transparent 100%), radial-gradient(1px 1px at 25% 80%, rgba(255,255,255,0.4) 0%, transparent 100%), radial-gradient(1px 1px at 90% 65%, rgba(255,255,255,0.35) 0%, transparent 100%), radial-gradient(1.5px 1.5px at 10% 60%, rgba(52,211,153,0.6) 0%, transparent 100%), radial-gradient(1px 1px at 65% 30%, rgba(96,165,250,0.5) 0%, transparent 100%)' }} />
-            {/* Orbital trajectory rings */}
             <div className="absolute top-1/2 left-1/2 w-[700px] h-[200px] rounded-full border border-emerald-500/[0.06]" style={{ transform: 'translate(-50%, -50%) rotate(-15deg)' }} />
             <div className="absolute top-1/2 left-1/2 w-[500px] h-[140px] rounded-full border border-blue-400/[0.05]" style={{ transform: 'translate(-50%, -50%) rotate(20deg)' }} />
           </div>
 
           <div className="relative z-10 max-w-3xl mx-auto text-center px-6">
-
             <h1 className="font-heading font-normal text-3xl sm:text-5xl text-white tracking-tight leading-tight mb-4 drop-shadow-sm">
-              Document Ingestion & Synthesis
+              Document Ingestion {'&'} Synthesis
             </h1>
-
             <p className="text-sm sm:text-base text-zinc-400 max-w-xl mx-auto leading-relaxed font-sans">
-              Transform PDFs, lecture slides, and notes into active recall decks & diagnostic quizzes with editorial clarity.
+              Transform PDFs, lecture slides, and notes into active recall decks {'&'} diagnostic quizzes.
             </p>
           </div>
         </section>
@@ -341,14 +335,33 @@ export function Home() {
                   </div>
                 )}
 
+                {/* 1-Click Sample Pre-load Packs with KokonutUI SpotlightCards */}
                 {/* 1-Click Sample Pre-load Packs */}
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2">
                     <Sparkles size={13} className="text-emerald-400" />
                     <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-300 font-semibold">
+                      Or Try an Instant Sample Topic Pack
                       Try an Instant Sample Topic Pack
                     </span>
                   </div>
+                  <SpotlightCards
+                    columns={3}
+                    items={SAMPLE_PRESETS.map((preset) => ({
+                      icon: preset.icon,
+                      title: preset.name,
+                      description: `1-click load · ${preset.badge}`,
+                      color: preset.color,
+                      badge: preset.badge,
+                      onClick: () => handleLoadPreset(preset),
+                      footer: (
+                        <div className="flex items-center gap-1 text-[10px] font-mono text-white/40 group-hover:text-white/70 transition-colors">
+                          <span>Load & Synthesize</span>
+                          <ArrowRight size={10} />
+                        </div>
+                      ),
+                    } satisfies SpotlightItem))}
+                  />
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {SAMPLE_PRESETS.map((preset) => {
                       const Icon = preset.icon

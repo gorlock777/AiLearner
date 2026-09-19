@@ -125,11 +125,15 @@ export function Home() {
   const {
     topics,
     documents,
+    flashcardSets,
+    quizSets,
     addDocument,
     setActiveDocument,
     setTopics,
     addFlashcardSet,
     addQuizSet,
+    saveDocumentSession,
+    loadDocumentSession,
     clearAll,
   } = useAppStore()
 
@@ -215,6 +219,15 @@ export function Home() {
           // Continue
         }
       }
+
+      // Step 5: Save complete session (topics, flashcards, quiz) to localStorage for 1-click instant reloading
+      const storeState = useAppStore.getState()
+      saveDocumentSession(
+        doc.id,
+        parsedTopics.topics,
+        storeState.flashcardSets,
+        storeState.quizSets
+      )
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Processing failed'
       setError(msg)
@@ -382,7 +395,12 @@ export function Home() {
                           return (
                             <button
                               key={doc.id}
-                              onClick={() => processExtractedText(doc.text, doc.name, doc.size)}
+                              onClick={() => {
+                                const loaded = loadDocumentSession(doc.id)
+                                if (!loaded) {
+                                  processExtractedText(doc.text, doc.name, doc.size)
+                                }
+                              }}
                               className="group flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-zinc-950/60 border border-white/[0.06] hover:border-white/15 hover:bg-zinc-900/60 transition-all duration-200 text-left cursor-pointer"
                             >
                               <div className="flex items-center gap-2.5 min-w-0">

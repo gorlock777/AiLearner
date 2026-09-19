@@ -57,6 +57,9 @@ export interface Document {
   type: string
   text: string
   uploadedAt: number
+  topics?: Topic[]
+  flashcardSets?: FlashcardSet[]
+  quizSets?: QuizSet[]
 }
 
 export interface DocumentSummary {
@@ -109,6 +112,8 @@ interface AppState {
   removeDocument: (id: string) => void
   setActiveDocument: (id: string | null) => void
   setDocumentSummary: (summary: DocumentSummary | null) => void
+  saveDocumentSession: (docId: string, topics: Topic[], fcSets: FlashcardSet[], qSets: QuizSet[]) => void
+  loadDocumentSession: (docId: string) => boolean
   clearAll: () => void
 
   // Actions — AI content
@@ -158,6 +163,28 @@ export const useAppStore = create<AppState>()(
 
       setActiveDocument: (id) => set({ activeDocumentId: id }),
       setDocumentSummary: (summary) => set({ documentSummary: summary }),
+
+      saveDocumentSession: (docId, topics, fcSets, qSets) =>
+        set((state) => ({
+          documents: state.documents.map((d) =>
+            d.id === docId
+              ? { ...d, topics, flashcardSets: fcSets, quizSets: qSets }
+              : d
+          ),
+        })),
+
+      loadDocumentSession: (docId) => {
+        const doc = get().documents.find((d) => d.id === docId)
+        if (!doc || !doc.topics?.length) return false
+
+        set({
+          activeDocumentId: doc.id,
+          topics: doc.topics,
+          flashcardSets: doc.flashcardSets ?? [],
+          quizSets: doc.quizSets ?? [],
+        })
+        return true
+      },
 
       clearAll: () =>
         set({

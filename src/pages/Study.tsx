@@ -7,9 +7,9 @@ import {
   ArrowRight,
   Check,
   X,
-  BookOpen,
-  Loader2,
   Layers,
+  Loader2,
+  Sparkles,
 } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 import { fetchCompletion, parseJSONResponse } from '../lib/openrouter'
@@ -37,7 +37,7 @@ export function Study() {
   const [generateError, setGenerateError] = useState<string | null>(null)
   const [sessionComplete, setSessionComplete] = useState(false)
 
-  // Sync selected topic if list updates
+  // Sync selected topic
   useEffect(() => {
     if (!selectedTopicId && topics.length > 0) {
       setSelectedTopicId(topics[0].id)
@@ -67,7 +67,7 @@ export function Study() {
 
     const text = documents[0]?.text ?? ''
     if (!text) {
-      setGenerateError('No document text available. Please upload notes first.')
+      setGenerateError('No document text found. Please upload notes first.')
       return
     }
 
@@ -133,7 +133,7 @@ export function Study() {
     setSessionComplete(false)
   }
 
-  // Keyboard controls
+  // Keyboard navigation
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (['input', 'textarea'].includes((e.target as HTMLElement)?.tagName?.toLowerCase())) {
@@ -168,15 +168,15 @@ export function Study() {
   if (topics.length === 0) {
     return (
       <div className="min-h-full flex flex-col items-center justify-center p-8 text-center max-w-md mx-auto">
-        <div className="w-12 h-12 rounded-lg bg-[#182030] border border-[#252f44] flex items-center justify-center text-slate-400 mb-4">
-          <BookOpen size={20} />
+        <div className="w-11 h-11 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mb-4">
+          <Layers size={20} />
         </div>
-        <h2 className="text-lg font-semibold text-slate-100 mb-2">No notes uploaded</h2>
-        <p className="text-sm text-slate-400 mb-6">
-          Upload your notes or syllabus first to generate flashcard sets.
+        <h2 className="text-base font-semibold text-zinc-100 mb-1">No notes uploaded</h2>
+        <p className="text-xs text-zinc-400 mb-5">
+          Upload course material first to generate flashcard sets.
         </p>
         <Link to="/" className="btn-primary">
-          Go to Upload
+          Upload Material
         </Link>
       </div>
     )
@@ -187,9 +187,12 @@ export function Study() {
       {/* Header and Topic Tabs */}
       <div className="w-full mb-8">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-2xl font-semibold text-slate-100">Flashcards</h1>
-          <span className="text-xs text-slate-400">
-            {cards.length > 0 ? `${currentIndex + 1} of ${cards.length}` : '0 cards'}
+          <div>
+            <h1 className="text-xl font-semibold text-zinc-100">Flashcard Workspace</h1>
+            <p className="text-xs text-zinc-400">Interactive spaced repetition deck</p>
+          </div>
+          <span className="text-xs font-mono text-zinc-400 bg-zinc-900 border border-zinc-800 px-2 py-1 rounded">
+            {cards.length > 0 ? `${currentIndex + 1} / ${cards.length}` : '0 / 0'}
           </span>
         </div>
 
@@ -201,10 +204,10 @@ export function Study() {
               <button
                 key={t.id}
                 onClick={() => setSelectedTopicId(t.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-colors border ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all border ${
                   isSelected
-                    ? 'bg-[#2563eb] text-white border-blue-500'
-                    : 'bg-[#131926] text-slate-300 border-[#1e2638] hover:bg-[#182030]'
+                    ? 'bg-zinc-800 text-white border-zinc-700 shadow-sm font-semibold'
+                    : 'bg-zinc-900/60 text-zinc-400 border-zinc-800/80 hover:bg-zinc-850 hover:text-zinc-200'
                 }`}
               >
                 {t.title}
@@ -217,45 +220,48 @@ export function Study() {
       {/* Main Flashcard Work Area */}
       <div className="w-full max-w-xl flex flex-col items-center">
         {isGenerating ? (
-          <div className="ui-card w-full p-12 text-center flex flex-col items-center">
-            <Loader2 size={24} className="animate-spin text-blue-500 mb-3" />
-            <div className="text-sm font-medium text-slate-200">
-              Generating flashcards for topic
+          <div className="linear-card w-full p-12 text-center flex flex-col items-center">
+            <Loader2 size={24} className="animate-spin text-zinc-300 mb-3" />
+            <div className="text-sm font-medium text-zinc-200">
+              Generating active flashcards with AI...
             </div>
           </div>
         ) : cards.length === 0 ? (
-          <div className="ui-card w-full p-8 text-center">
-            <Layers size={24} className="text-slate-500 mx-auto mb-3" />
-            <div className="text-sm font-medium text-slate-200 mb-1">
+          <div className="linear-card w-full p-8 text-center">
+            <Layers size={22} className="text-zinc-500 mx-auto mb-3" />
+            <div className="text-sm font-medium text-zinc-200 mb-1">
               No flashcards for this topic yet
             </div>
-            <p className="text-xs text-slate-400 mb-4">
-              Synthesize a study deck from your document.
+            <p className="text-xs text-zinc-400 mb-4">
+              Synthesize a targeted flashcard deck for active recall.
             </p>
             {generateError && (
-              <div className="text-xs text-red-400 mb-4">{generateError}</div>
+              <div className="text-xs text-rose-400 mb-4">{generateError}</div>
             )}
             <button onClick={handleGenerate} className="btn-primary mx-auto">
               Generate Cards
             </button>
           </div>
         ) : sessionComplete ? (
-          <div className="ui-card w-full p-8 text-center">
-            <div className="text-lg font-semibold text-slate-100 mb-1">
-              Session Completed
+          <div className="linear-card linear-card-highlight w-full p-8 text-center">
+            <div className="text-xs font-mono uppercase tracking-wider text-zinc-400 mb-2">
+              Deck Completed
             </div>
-            <p className="text-xs text-slate-400 mb-6">
-              Review results for this deck
+            <div className="text-3xl font-bold text-zinc-100 mb-2 font-mono">
+              {cards.length > 0 ? Math.round((knownCount / cards.length) * 100) : 0}% Mastery
+            </div>
+            <p className="text-xs text-zinc-400 mb-6">
+              Summary of your active recall attempt
             </p>
 
             <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="ui-card-subtle p-4 text-center">
-                <div className="text-2xl font-bold text-emerald-400">{knownCount}</div>
-                <div className="text-xs text-slate-400 mt-0.5">Mastered</div>
+              <div className="p-4 rounded-lg bg-zinc-900/60 border border-zinc-800 text-center">
+                <div className="text-2xl font-bold font-mono text-emerald-400">{knownCount}</div>
+                <div className="text-[11px] text-zinc-400 mt-0.5">Mastered</div>
               </div>
-              <div className="ui-card-subtle p-4 text-center">
-                <div className="text-2xl font-bold text-rose-400">{reviewCount}</div>
-                <div className="text-xs text-slate-400 mt-0.5">Needs Review</div>
+              <div className="p-4 rounded-lg bg-zinc-900/60 border border-zinc-800 text-center">
+                <div className="text-2xl font-bold font-mono text-amber-400">{reviewCount}</div>
+                <div className="text-[11px] text-zinc-400 mt-0.5">Needs Review</div>
               </div>
             </div>
 
@@ -265,55 +271,58 @@ export function Study() {
                 Restart Deck
               </button>
               <button onClick={() => navigate('/quiz')} className="btn-primary">
-                Practice Quiz
+                Take Practice Quiz
                 <ArrowRight size={14} />
               </button>
             </div>
           </div>
         ) : currentCard ? (
           <div className="w-full flex flex-col items-center">
-            {/* 3D Physical Card */}
+            {/* Linear 3D Card */}
             <div
               onClick={handleFlip}
-              className="w-full h-72 cursor-pointer select-none rounded-xl bg-[#131926] border border-[#1e2638] hover:border-[#2b374e] transition-colors p-8 flex flex-col justify-between relative shadow-sm"
+              className="w-full h-72 cursor-pointer select-none linear-card linear-card-highlight p-8 flex flex-col justify-between relative shadow-lg"
             >
-              <div className="flex items-center justify-between text-xs text-slate-400">
-                <span className="font-semibold uppercase tracking-wider text-[10px]">
-                  {isFlipped ? 'Answer' : 'Question'}
+              <div className="flex items-center justify-between text-xs text-zinc-400 font-mono">
+                <span className="font-semibold uppercase tracking-wider text-[10px] text-zinc-400">
+                  {isFlipped ? 'ANSWER / EXPLANATION' : 'TERM / CONCEPT'}
                 </span>
-                <span>Click or Space to flip</span>
+                <span className="flex items-center gap-1 text-[11px]">
+                  Press <kbd className="kbd">Space</kbd> to flip
+                </span>
               </div>
 
               <div className="my-auto text-center">
-                <div className="text-lg font-medium text-slate-100 leading-relaxed">
+                <div className="text-lg font-medium text-zinc-100 leading-relaxed max-w-md mx-auto">
                   {isFlipped ? currentCard.card.back : currentCard.card.front}
                 </div>
                 {isFlipped && currentCard.card.hint && (
-                  <div className="mt-3 text-xs text-slate-400">
+                  <div className="mt-3 text-xs text-zinc-400 font-mono">
                     Hint: {currentCard.card.hint}
                   </div>
                 )}
               </div>
 
+              {/* Progress step dots */}
               <div className="flex items-center justify-center gap-1.5">
                 {cards.map((c, idx) => (
                   <div
                     key={c.card.id || idx}
                     className={`h-1.5 rounded-full transition-all ${
                       idx === currentIndex
-                        ? 'w-4 bg-blue-500'
+                        ? 'w-4 bg-zinc-200'
                         : c.result === 'known'
                         ? 'w-1.5 bg-emerald-500'
                         : c.result === 'review'
-                        ? 'w-1.5 bg-rose-500'
-                        : 'w-1.5 bg-[#1e2638]'
+                        ? 'w-1.5 bg-amber-500'
+                        : 'w-1.5 bg-zinc-800'
                     }`}
                   />
                 ))}
               </div>
             </div>
 
-            {/* Navigation and Actions */}
+            {/* Navigation & Keycap Legend */}
             <div className="w-full mt-5 flex items-center justify-between">
               <button
                 onClick={goPrev}
@@ -327,19 +336,19 @@ export function Study() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => handleResult('review')}
-                  className="px-4 py-2 rounded-lg text-xs font-medium border border-rose-900/50 bg-rose-950/20 text-rose-300 hover:bg-rose-950/40 transition-colors flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-zinc-800 bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors flex items-center gap-2"
                 >
-                  <X size={14} />
+                  <X size={13} className="text-amber-400" />
                   Review Again
-                  <span className="text-[10px] text-rose-400/60 ml-1">1</span>
+                  <kbd className="kbd">1</kbd>
                 </button>
                 <button
                   onClick={() => handleResult('known')}
-                  className="px-4 py-2 rounded-lg text-xs font-medium border border-emerald-900/50 bg-emerald-950/20 text-emerald-300 hover:bg-emerald-950/40 transition-colors flex items-center gap-1.5"
+                  className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-zinc-800 bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors flex items-center gap-2"
                 >
-                  <Check size={14} />
+                  <Check size={13} className="text-emerald-400" />
                   Mastered
-                  <span className="text-[10px] text-emerald-400/60 ml-1">2</span>
+                  <kbd className="kbd">2</kbd>
                 </button>
               </div>
 

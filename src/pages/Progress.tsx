@@ -10,6 +10,7 @@ import {
   CheckCircle2,
   Calendar,
   Layers,
+  Award,
 } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 import type { Topic, QuizAttempt } from '../store/useAppStore'
@@ -76,12 +77,12 @@ export function Progress() {
   if (topics.length === 0 && quizAttempts.length === 0) {
     return (
       <div className="min-h-full flex flex-col items-center justify-center p-8 text-center max-w-md mx-auto">
-        <div className="w-12 h-12 rounded-lg bg-[#182030] border border-[#252f44] flex items-center justify-center text-slate-400 mb-4">
+        <div className="w-11 h-11 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mb-4">
           <Layers size={20} />
         </div>
-        <h2 className="text-lg font-semibold text-slate-100 mb-2">No learning data yet</h2>
-        <p className="text-sm text-slate-400 mb-6">
-          Upload documents and take practice quizzes to track your retention.
+        <h2 className="text-base font-semibold text-zinc-100 mb-1">No learning metrics yet</h2>
+        <p className="text-xs text-zinc-400 mb-5">
+          Upload documents and complete quizzes to populate your retention telemetry.
         </p>
         <button onClick={() => navigate('/')} className="btn-primary">
           Upload Notes
@@ -91,76 +92,76 @@ export function Progress() {
   }
 
   return (
-    <div className="min-h-full px-6 py-8 max-w-4xl mx-auto flex flex-col gap-8">
+    <div className="min-h-full px-6 py-8 max-w-4xl mx-auto flex flex-col gap-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-semibold text-slate-100 mb-1">
-          Learning Analytics
+        <h1 className="text-xl font-semibold text-zinc-100 mb-1">
+          Performance Analytics
         </h1>
-        <p className="text-sm text-slate-400">
-          Track retention, test history, and topics needing revision.
+        <p className="text-xs text-zinc-400">
+          Retention analytics, quiz accuracy, and targeted revision priorities
         </p>
       </div>
 
       {/* Primary KPI Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="ui-card p-5">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>Topics Organized</span>
-            <BookOpen size={16} className="text-blue-400" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="linear-card p-5">
+          <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
+            <span>Knowledge Modules</span>
+            <BookOpen size={15} className="text-zinc-400" />
           </div>
-          <div className="text-2xl font-bold text-slate-100">{topics.length}</div>
-          <div className="text-[11px] text-slate-400 mt-1">Extracted from notes</div>
+          <div className="text-2xl font-bold font-mono text-zinc-100">{topics.length}</div>
+          <div className="text-[11px] text-zinc-400 mt-1">Organized from notes</div>
         </div>
 
-        <div className="ui-card p-5">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>Average Quiz Score</span>
-            <TrendingUp size={16} className="text-emerald-400" />
+        <div className="linear-card p-5">
+          <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
+            <span>Average Accuracy</span>
+            <TrendingUp size={15} className="text-emerald-400" />
           </div>
-          <div className="text-2xl font-bold text-slate-100">
+          <div className="text-2xl font-bold font-mono text-zinc-100">
             {avgScore !== null ? `${avgScore}%` : '—'}
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">
-            Across {quizAttempts.length} attempt{quizAttempts.length !== 1 ? 's' : ''}
+          <div className="text-[11px] text-zinc-400 mt-1 font-mono">
+            {quizAttempts.length} attempt{quizAttempts.length !== 1 ? 's' : ''} logged
           </div>
         </div>
 
-        <div className="ui-card p-5">
-          <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
-            <span>Study Streak</span>
-            <Calendar size={16} className="text-amber-400" />
+        <div className="linear-card p-5">
+          <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
+            <span>Consecutive Streak</span>
+            <Calendar size={15} className="text-amber-400" />
           </div>
-          <div className="text-2xl font-bold text-slate-100">
+          <div className="text-2xl font-bold font-mono text-zinc-100">
             {streak} {streak === 1 ? 'day' : 'days'}
           </div>
-          <div className="text-[11px] text-slate-400 mt-1">Consecutive days active</div>
+          <div className="text-[11px] text-zinc-400 mt-1">Daily active retention</div>
         </div>
       </div>
 
       {/* Weak Topics Alert (Needs Revision) */}
       {weakTopicObjects.length > 0 && (
-        <div className="ui-card p-5 border-amber-900/40 bg-amber-950/10">
-          <div className="flex items-center gap-2 text-amber-300 font-semibold text-sm mb-2">
-            <AlertTriangle size={16} />
-            <span>Topics Needing Revision ({weakTopicObjects.length})</span>
+        <div className="linear-card p-5 border-amber-500/20 bg-amber-950/10">
+          <div className="flex items-center gap-2 text-amber-300 font-semibold text-xs mb-1.5">
+            <AlertTriangle size={15} />
+            <span>High Priority Revision ({weakTopicObjects.length})</span>
           </div>
-          <p className="text-xs text-slate-400 mb-4">
-            These topics scored below 60% on recent tests and require additional practice.
+          <p className="text-xs text-zinc-400 mb-4">
+            Topics scoring under 60% on recent testing modules. Spaced review recommended.
           </p>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap gap-2">
             {weakTopicObjects.map((t) => (
               <div
                 key={t.id}
-                className="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#0f1420] border border-[#1e2638] text-xs"
+                className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs"
               >
-                <span className="font-medium text-slate-200">{t.title}</span>
+                <span className="font-medium text-zinc-200">{t.title}</span>
                 <button
                   onClick={() => navigate('/study')}
-                  className="text-blue-400 hover:text-blue-300 font-medium flex items-center gap-1"
+                  className="text-zinc-400 hover:text-white font-medium flex items-center gap-1 transition-colors text-[11px]"
                 >
-                  Review
-                  <ArrowRight size={12} />
+                  Study
+                  <ArrowRight size={11} />
                 </button>
               </div>
             ))}
@@ -169,48 +170,54 @@ export function Progress() {
       )}
 
       {/* Topics Breakdown */}
-      <div className="ui-card p-6">
-        <h2 className="text-base font-semibold text-slate-100 mb-4">
-          Topic Performance
-        </h2>
+      <div className="linear-card p-5">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-sm font-semibold text-zinc-100">
+            Module Performance Breakdown
+          </h2>
+          <span className="text-[11px] font-mono text-zinc-400">
+            {topics.length} topics
+          </span>
+        </div>
+
         {topics.length === 0 ? (
-          <div className="text-xs text-slate-400">No topics loaded.</div>
+          <div className="text-xs text-zinc-400">No topics loaded.</div>
         ) : (
-          <div className="flex flex-col divide-y divide-[#1e2638]">
+          <div className="flex flex-col divide-y divide-zinc-800/80">
             {topics.map((t) => {
               const best = getBestScore(t.id)
               const attempts = getAttemptsForTopic(t.id)
               const isWeak = weakTopics.includes(t.id)
 
               return (
-                <div key={t.id} className="py-3.5 flex items-center justify-between gap-4">
+                <div key={t.id} className="py-3 flex items-center justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-sm font-medium text-slate-200 truncate">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-xs font-medium text-zinc-200 truncate">
                         {t.title}
                       </span>
                       {isWeak && (
-                        <span className="badge badge-warning">Needs Review</span>
+                        <span className="badge badge-warning text-[10px]">Review</span>
                       )}
                     </div>
-                    <div className="text-xs text-slate-400">
-                      {attempts.length} attempt{attempts.length !== 1 ? 's' : ''}
+                    <div className="text-[11px] text-zinc-400 font-mono">
+                      {attempts.length} test{attempts.length !== 1 ? 's' : ''} completed
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-6 flex-shrink-0">
+                  <div className="flex items-center gap-4 flex-shrink-0">
                     <div className="text-right">
-                      <div className="text-sm font-semibold text-slate-100">
+                      <div className="text-xs font-bold font-mono text-zinc-200">
                         {best !== null ? `${best}%` : 'Unranked'}
                       </div>
-                      <div className="text-[10px] text-slate-400 uppercase tracking-wider">
+                      <div className="text-[9px] text-zinc-400 uppercase tracking-wider font-mono">
                         Best Score
                       </div>
                     </div>
 
                     <button
                       onClick={() => navigate('/quiz')}
-                      className="btn-secondary px-3 py-1.5 text-xs"
+                      className="btn-secondary py-1 px-2.5 text-xs"
                     >
                       Quiz
                     </button>
@@ -224,15 +231,15 @@ export function Progress() {
 
       {/* Recent History Table */}
       {sortedAttempts.length > 0 && (
-        <div className="ui-card p-6">
+        <div className="linear-card p-5">
           <div className="flex items-center gap-2 mb-4">
-            <Clock size={16} className="text-slate-400" />
-            <h2 className="text-base font-semibold text-slate-100">
-              Recent Quiz History
+            <Clock size={15} className="text-zinc-400" />
+            <h2 className="text-sm font-semibold text-zinc-100">
+              Recent Activity Stream
             </h2>
           </div>
 
-          <div className="flex flex-col divide-y divide-[#1e2638]">
+          <div className="flex flex-col divide-y divide-zinc-800/80">
             {sortedAttempts.map((attempt) => {
               const topic = topics.find((t) => t.id === attempt.topicId)
               const isPass = attempt.score >= 60
@@ -240,28 +247,28 @@ export function Progress() {
               return (
                 <div
                   key={attempt.id}
-                  className="py-3 flex items-center justify-between gap-4 text-xs"
+                  className="py-2.5 flex items-center justify-between gap-4 text-xs"
                 >
                   <div className="flex items-center gap-2.5">
                     {isPass ? (
-                      <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0" />
+                      <CheckCircle2 size={15} className="text-emerald-400 flex-shrink-0" />
                     ) : (
-                      <AlertTriangle size={16} className="text-rose-400 flex-shrink-0" />
+                      <AlertTriangle size={15} className="text-amber-400 flex-shrink-0" />
                     )}
                     <div>
-                      <div className="font-medium text-slate-200">
+                      <div className="font-medium text-zinc-200 text-xs">
                         {topic?.title ?? 'General Quiz'}
                       </div>
-                      <div className="text-slate-400">{formatDate(attempt.timestamp)}</div>
+                      <div className="text-zinc-400 text-[11px] font-mono">{formatDate(attempt.timestamp)}</div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="text-slate-400">
+                    <span className="text-zinc-400 text-[11px] font-mono">
                       {attempt.correctCount} / {attempt.totalQuestions}
                     </span>
                     <span
-                      className={`badge ${
+                      className={`badge font-mono text-[10px] ${
                         attempt.score >= 80
                           ? 'badge-success'
                           : attempt.score >= 60

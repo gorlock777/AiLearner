@@ -1,20 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --color-bg-primary: #0a0d14;
-  --color-bg-secondary: #0f1420;
-  --color-bg-card: #131926;
-  --color-bg-card-hover: #182030;
-  --color-border: #1e2638;
-  --color-border-subtle: #161d2b;
-  --color-text-primary: #f8fafc;
-  --color-text-secondary: #94a3b8;
-  --color-text-muted: #64748b;
-  --color-accent: #3b82f6;
-  --color-accent-hover: #2563eb;
-  --color-success: #10b981;
-  --color-danger: #ef4444;
-  --color-warning: #f59e0b;
+  --bg-app: #09090b;
+  --bg-surface: #111115;
+  --bg-surface-subtle: #18181b;
+  --bg-surface-hover: #222226;
+  --border-app: #27272a;
+  --border-subtle: #1f1f23;
+  --border-highlight: rgba(255, 255, 255, 0.08);
+  --text-primary: #fafafa;
+  --text-secondary: #a1a1aa;
+  --text-muted: #71717a;
 }
 
 * {
@@ -23,19 +19,21 @@
 
 html {
   scroll-behavior: smooth;
+  color-scheme: dark;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
 }
 
-/* Restrained scrollbar */
+/* Linear-style minimalist scrollbar */
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
@@ -44,130 +42,165 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #252e42;
-  border-radius: 4px;
+  background: #27272a;
+  border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #37435e;
+  background: #3f3f46;
 }
 
-/* Card surfaces — Solid, crisp, professional borders. No cliché heavy blur orbs. */
-.ui-card {
-  background-color: var(--color-bg-card);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
+/* 21st.dev Linear Premium Card Surface */
+.linear-card {
+  position: relative;
+  background: rgba(18, 18, 22, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 14px;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.ui-card-subtle {
-  background-color: var(--color-bg-secondary);
-  border: 1px solid var(--color-border-subtle);
-  border-radius: 10px;
+.linear-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
-/* Buttons — Direct, high-contrast, no neon gradients */
+/* Specular top highlight line */
+.linear-card-highlight::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  pointer-events: none;
+}
+
+/* 21st.dev Linear Buttons */
 .btn-primary {
-  background-color: #2563eb;
-  color: #ffffff;
-  border: 1px solid #3b82f6;
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 13px;
+  background: #ffffff;
+  color: #09090b;
   font-weight: 500;
-  cursor: pointer;
+  font-size: 13px;
+  border-radius: 8px;
+  padding: 7px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  gap: 6px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .btn-primary:hover {
-  background-color: #1d4ed8;
-  border-color: #2563eb;
+  background: #e4e4e7;
+  transform: translateY(-0.5px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
 }
 
 .btn-primary:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
+  transform: none;
 }
 
 .btn-secondary {
-  background-color: #131926;
-  color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 13px;
+  background: #18181b;
+  color: #e4e4e7;
   font-weight: 500;
-  cursor: pointer;
+  font-size: 13px;
+  border-radius: 8px;
+  padding: 7px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  gap: 6px;
+  border: 1px solid #27272a;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
 .btn-secondary:hover {
-  background-color: #1a2233;
-  border-color: #2b364d;
+  background: #27272a;
+  border-color: #3f3f46;
+  color: #ffffff;
+}
+
+.btn-secondary:active {
+  transform: translateY(0);
 }
 
 .btn-secondary:disabled {
-  opacity: 0.5;
+  opacity: 0.4;
   cursor: not-allowed;
 }
 
-/* Status Badges — Crisp, clean functional indicator tags */
+/* Linear Keycap Keyboard Badge */
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: #a1a1aa;
+  background: #18181b;
+  border: 1px solid #27272a;
+  border-radius: 5px;
+  box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.3);
+}
+
+/* Linear Status Badges */
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  padding: 3px 8px;
-  border-radius: 6px;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 9999px;
   font-size: 11px;
   font-weight: 500;
-  letter-spacing: 0.01em;
 }
 
 .badge-default {
-  background: #182030;
-  color: #94a3b8;
-  border: 1px solid #222d42;
-}
-
-.badge-blue {
-  background: rgba(37, 99, 235, 0.12);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.25);
+  background: #18181b;
+  color: #a1a1aa;
+  border: 1px solid #27272a;
 }
 
 .badge-success {
-  background: rgba(16, 185, 129, 0.12);
+  background: rgba(16, 185, 129, 0.1);
   color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.25);
-}
-
-.badge-danger {
-  background: rgba(239, 68, 68, 0.12);
-  color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .badge-warning {
-  background: rgba(245, 158, 11, 0.12);
+  background: rgba(245, 158, 11, 0.1);
   color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.25);
+  border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
-/* Shimmer loader */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+.badge-danger {
+  background: rgba(244, 63, 94, 0.1);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.2);
 }
 
-.skeleton {
-  background: linear-gradient(90deg, #131926 25%, #1c2538 50%, #131926 75%);
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
-  border-radius: 6px;
+.badge-blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+/* Subtlest background grid */
+.linear-grid {
+  background-image: radial-gradient(#27272a 1px, transparent 1px);
+  background-size: 20px 20px;
 }

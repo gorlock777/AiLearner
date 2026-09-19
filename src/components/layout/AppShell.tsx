@@ -173,7 +173,7 @@ export function AppShell() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="min-h-full"
+            className="min-h-full pb-28 md:pb-36"
           >
             <Outlet />
           </motion.div>

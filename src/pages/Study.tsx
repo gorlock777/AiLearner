@@ -201,25 +201,30 @@ export function Study() {
   }
 
   return (
-    <div className="min-h-full flex flex-col items-center px-4 sm:px-6 py-8 md:py-12 max-w-3xl mx-auto">
+    <div className="min-h-full flex flex-col items-center px-6 py-10 pb-32 max-w-4xl mx-auto w-full">
       {/* ── Editorial Header & Topic Selector ── */}
-      <header className="w-full mb-8 flex flex-col items-center text-center">
-        <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-zinc-400 font-semibold mb-2">
-          Active Recall Deck
-        </span>
+      <header className="w-full mb-10 flex flex-col items-center text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-[11px] mb-3">
+          <Layers size={12} />
+          <span>Active Recall Mode</span>
+        </div>
+
+        <h1 className="font-heading font-normal text-2xl md:text-3xl text-white tracking-tight mb-3">
+          Spaced Flashcard Synthesis
+        </h1>
 
         {/* Minimal Topic Selector Bar */}
-        <div className="flex items-center justify-center gap-1.5 flex-wrap max-w-xl mx-auto mt-1 mb-3">
+        <div className="flex items-center justify-center gap-2 flex-wrap max-w-2xl mx-auto mt-2 mb-4">
           {topics.map((t) => {
             const isSelected = t.id === selectedTopicId
             return (
               <button
                 key={t.id}
                 onClick={() => setSelectedTopicId(t.id)}
-                className={`text-xs px-3.5 py-1.5 rounded-full transition-all duration-150 cursor-pointer ${
+                className={`text-xs px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer font-sans ${
                   isSelected
-                    ? 'bg-zinc-100 text-zinc-950 font-medium shadow-md'
-                    : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                    ? 'bg-white text-zinc-950 font-medium shadow-md'
+                    : 'text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5'
                 }`}
               >
                 {t.title}
@@ -232,7 +237,7 @@ export function Study() {
           <div className="flex items-center gap-3 text-xs font-mono text-zinc-400 mt-2">
             <span>Card {currentIndex + 1} of {cards.length}</span>
             <span className="text-zinc-700">·</span>
-            <div className="w-28 h-1 rounded-full bg-zinc-850 overflow-hidden">
+            <div className="w-32 h-1.5 rounded-full bg-zinc-850 overflow-hidden">
               <div
                 className="h-full bg-emerald-400 transition-all duration-300 ease-out"
                 style={{ width: `${progressPercent}%` }}

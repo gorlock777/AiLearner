@@ -103,31 +103,29 @@ export function Feynman() {
   }
 
   return (
-    <div className="min-h-full flex flex-col items-center px-4 sm:px-6 py-8 md:py-12 max-w-3xl mx-auto">
+    <div className="min-h-full flex flex-col items-center px-6 py-10 pb-32 max-w-4xl mx-auto w-full">
 
       {/* ── Header ── */}
-      <header className="w-full mb-8 flex flex-col items-center text-center">
-        <div className="flex items-center gap-2 mb-2">
-          <Lightbulb size={14} className="text-amber-400" />
-          <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-zinc-400 font-semibold">
-            Feynman Technique
-          </span>
+      <header className="w-full mb-10 flex flex-col items-center text-center">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-300 font-mono text-[11px] mb-3">
+          <Lightbulb size={12} />
+          <span>Feynman Explanation Assessment</span>
         </div>
-        <h1 className="font-heading font-normal text-2xl md:text-3xl text-white mb-1">
-          Teach it to learn it.
+        <h1 className="font-heading font-normal text-2xl md:text-3xl text-white tracking-tight mb-2">
+          Teach it to master it.
         </h1>
-        <p className="text-xs text-zinc-400 max-w-sm leading-relaxed">
-          Explain the topic below as if you're teaching someone who's never heard of it. The AI will score your explanation and pinpoint exactly what's missing.
+        <p className="text-xs sm:text-sm text-zinc-400 max-w-lg leading-relaxed font-sans">
+          Explain the concept in simple, intuitive terms. The model evaluates clarity, detects jargon without depth, and pinpoints knowledge gaps.
         </p>
       </header>
 
       {/* ── Topic selector ── */}
-      <div className="flex items-center justify-center gap-1.5 flex-wrap max-w-xl mx-auto mb-8">
+      <div className="flex items-center justify-center gap-2 flex-wrap max-w-2xl mx-auto mb-8">
         {topics.map((t) => {
           const isSelected = t.id === selectedTopicId
           const diffColor =
             t.difficulty === 'advanced'
-              ? 'bg-rose-500'
+              ? 'bg-rose-400'
               : t.difficulty === 'intermediate'
               ? 'bg-amber-400'
               : 'bg-emerald-400'
@@ -135,10 +133,10 @@ export function Feynman() {
             <button
               key={t.id}
               onClick={() => handleTopicChange(t.id)}
-              className={`flex items-center gap-1.5 text-xs px-3.5 py-1.5 rounded-full transition-all duration-150 cursor-pointer ${
+              className={`flex items-center gap-2 text-xs px-4 py-1.5 rounded-full transition-all duration-200 cursor-pointer font-sans ${
                 isSelected
-                  ? 'bg-zinc-100 text-zinc-950 font-medium shadow-md'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                  ? 'bg-white text-zinc-950 font-medium shadow-md'
+                  : 'text-zinc-400 hover:text-white bg-white/5 hover:bg-white/10 border border-white/5'
               }`}
             >
               <span className={`w-1.5 h-1.5 rounded-full ${diffColor} flex-shrink-0`} />
@@ -157,16 +155,16 @@ export function Feynman() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
-            className="w-full flex flex-col gap-4"
+            className="w-full flex flex-col gap-6"
           >
             {/* Topic context pill */}
             {activeTopic && (
-              <div className="w-full p-4 rounded-xl bg-[#14161e] border border-white/10">
-                <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1">
-                  Topic to explain
+              <div className="w-full p-6 rounded-2xl bg-[#12141e]/70 border border-white/10 backdrop-blur-md shadow-lg">
+                <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 mb-1.5">
+                  Concept Target
                 </div>
-                <div className="text-sm font-semibold text-white">{activeTopic.title}</div>
-                <div className="text-xs text-zinc-400 mt-1 leading-relaxed">{activeTopic.summary}</div>
+                <h3 className="font-heading font-normal text-lg text-white">{activeTopic.title}</h3>
+                <div className="text-xs text-zinc-400 mt-1.5 leading-relaxed font-sans">{activeTopic.summary}</div>
               </div>
             )}
 
@@ -178,11 +176,11 @@ export function Feynman() {
                   setExplanation(e.target.value)
                   if (error) setError(null)
                 }}
-                placeholder={`Explain ${activeTopic?.title ?? 'this topic'} in your own words. Pretend you're teaching it to a curious friend who's never studied it before...`}
+                placeholder={`Explain ${activeTopic?.title ?? 'this concept'} in your own words. Pretend you're teaching it to a curious beginner...`}
                 rows={10}
-                className="w-full rounded-2xl bg-[#14161e] border border-white/10 hover:border-white/20 focus:border-white/40 focus:outline-none p-5 text-sm text-zinc-100 placeholder:text-zinc-500 leading-relaxed resize-none transition-colors font-sans shadow-md"
+                className="w-full rounded-2xl bg-[#12141e]/80 border border-white/10 hover:border-white/20 focus:border-white/30 focus:outline-none p-6 text-sm text-zinc-100 placeholder:text-zinc-500 leading-relaxed resize-none transition-colors font-sans shadow-xl backdrop-blur-md"
               />
-              <div className="absolute bottom-4 right-4 text-[11px] font-mono text-zinc-500">
+              <div className="absolute bottom-5 right-5 text-[11px] font-mono text-zinc-400 bg-zinc-900/80 px-2.5 py-1 rounded-md border border-white/5">
                 {explanation.trim().split(/\s+/).filter(Boolean).length} words
               </div>
             </div>
@@ -197,17 +195,17 @@ export function Feynman() {
             <ShimmerButton
               onClick={handleEvaluate}
               disabled={isEvaluating || explanation.trim().length < 10}
-              className="w-full py-3 text-sm font-mono"
+              className="w-full py-3.5 text-xs font-mono rounded-full"
             >
               {isEvaluating ? (
                 <>
                   <Loader2 size={15} className="animate-spin" />
-                  <span>AI is evaluating your explanation...</span>
+                  <span>Evaluating explanation clarity...</span>
                 </>
               ) : (
                 <>
                   <Lightbulb size={15} />
-                  <span>Evaluate My Understanding</span>
+                  <span>Evaluate Conceptual Mastery</span>
                   <ArrowRight size={14} />
                 </>
               )}
@@ -221,24 +219,24 @@ export function Feynman() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="w-full flex flex-col gap-5"
+            className="w-full flex flex-col gap-6"
           >
             {/* Score gauge */}
-            <div className="w-full rounded-2xl bg-[#14161e] border border-white/10 p-8 flex flex-col items-center shadow-xl">
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-6">
+            <div className="w-full rounded-3xl bg-[#12141e]/80 border border-white/10 backdrop-blur-md p-8 sm:p-10 flex flex-col items-center shadow-2xl">
+              <span className="text-[11px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-6">
                 Feynman Score — {activeTopic?.title}
               </span>
               <GaugeMeter
                 value={result.score}
-                size={150}
+                size={160}
                 strokeWidth={10}
-                label="Understanding"
+                label="Mastery"
                 sublabel={
                   result.score >= 80
-                    ? 'Excellent grasp — ready to teach with clarity'
+                    ? 'Excellent clarity — concise and accurate'
                     : result.score >= 55
-                    ? 'Solid foundation, a few key concepts to refine'
-                    : 'Review the source cards to close understanding gaps'
+                    ? 'Solid foundation, a few key points to deepen'
+                    : 'Review the source flashcards to close conceptual gaps'
                 }
                 className="mb-6"
               />
@@ -246,7 +244,7 @@ export function Feynman() {
 
             {/* Strengths */}
             {result.strengths.length > 0 && (
-              <div className="w-full rounded-2xl bg-emerald-950/40 border border-emerald-500/30 p-6">
+              <div className="w-full rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-6 backdrop-blur-md">
                 <div className="flex items-center gap-2 mb-3">
                   <CheckCircle2 size={14} className="text-emerald-400" />
                   <span className="text-xs font-mono uppercase tracking-widest text-emerald-300 font-semibold">

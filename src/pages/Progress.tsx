@@ -93,54 +93,55 @@ export function Progress() {
   }
 
   return (
-    <div className="min-h-full px-6 py-6 max-w-4xl mx-auto flex flex-col gap-5">
+    <div className="min-h-full px-6 py-10 pb-32 max-w-5xl mx-auto flex flex-col gap-8">
       {/* Editorial Header */}
-      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-zinc-800/80 pb-6">
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-white/[0.08] pb-6">
         <div>
-          <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-zinc-300 font-semibold mb-1.5 block">
-            Telemetry & Retention
-          </span>
-          <h1 className="font-heading font-normal text-2xl sm:text-3xl text-zinc-100 tracking-tight">
-            Performance Analytics
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono text-[11px] mb-3">
+            <TrendingUp size={12} />
+            <span>Mastery Intelligence</span>
+          </div>
+          <h1 className="font-heading font-normal text-3xl sm:text-4xl text-white tracking-tight">
+            Retention Analytics
           </h1>
         </div>
-        <p className="text-xs text-zinc-400 max-w-xs sm:text-right leading-relaxed font-mono">
-          Diagnostic accuracy, weak area revision priorities, and study streaks
+        <p className="text-xs text-zinc-400 max-w-xs sm:text-right leading-relaxed font-sans">
+          Diagnostic accuracy telemetry, spaced repetition retention tracking, and revision priorities.
         </p>
       </div>
 
       {/* Primary KPI Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-        <div className="p-5 rounded-xl bg-[#0e0e12] border border-zinc-800/80 shadow-md flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-zinc-300 font-mono mb-3">
-            <span className="uppercase tracking-wider text-[10px]">Knowledge Modules</span>
-            <BookOpen size={14} className="text-zinc-400" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="p-6 md:p-7 rounded-3xl bg-[#12141e]/70 border border-white/10 backdrop-blur-md shadow-xl flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-zinc-400 font-mono mb-4">
+            <span className="uppercase tracking-wider text-[11px]">Knowledge Modules</span>
+            <BookOpen size={16} className="text-zinc-400" />
           </div>
           <div>
-            <div className="font-heading text-2xl font-normal text-zinc-100 mb-0.5">{topics.length}</div>
-            <div className="text-[11px] text-zinc-400">Organized from documents</div>
+            <div className="font-heading text-3xl md:text-4xl font-normal text-white mb-1">{topics.length}</div>
+            <div className="text-xs text-zinc-400 font-sans">Organized from documents</div>
           </div>
         </div>
 
-        <div className="p-5 rounded-xl bg-[#0e0e12] border border-zinc-800/80 shadow-md flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-zinc-300 font-mono mb-3">
-            <span className="uppercase tracking-wider text-[10px]">Average Accuracy</span>
-            <TrendingUp size={14} className="text-emerald-400" />
+        <div className="p-6 md:p-7 rounded-3xl bg-[#12141e]/70 border border-white/10 backdrop-blur-md shadow-xl flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-zinc-400 font-mono mb-4">
+            <span className="uppercase tracking-wider text-[11px]">Average Accuracy</span>
+            <TrendingUp size={16} className="text-emerald-400" />
           </div>
           <div className="flex items-center justify-between">
             <div>
-              <div className="font-heading text-2xl font-normal text-zinc-100 mb-0.5">
+              <div className="font-heading text-3xl md:text-4xl font-normal text-emerald-400 mb-1">
                 {avgScore !== null ? `${avgScore}%` : '—'}
               </div>
-              <div className="text-[11px] text-zinc-400 font-mono">
+              <div className="text-xs text-zinc-400 font-mono">
                 {quizAttempts.length} attempt{quizAttempts.length !== 1 ? 's' : ''} logged
               </div>
             </div>
             {avgScore !== null && (
               <GaugeMeter
                 value={avgScore}
-                size={52}
-                strokeWidth={5}
+                size={56}
+                strokeWidth={6}
                 label=""
                 className="-my-1"
               />
@@ -148,44 +149,44 @@ export function Progress() {
           </div>
         </div>
 
-        <div className="p-5 rounded-xl bg-[#0e0e12] border border-zinc-800/80 shadow-md flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-zinc-300 font-mono mb-3">
-            <span className="uppercase tracking-wider text-[10px]">Daily Streak</span>
-            <Calendar size={14} className="text-amber-400" />
+        <div className="p-6 md:p-7 rounded-3xl bg-[#12141e]/70 border border-white/10 backdrop-blur-md shadow-xl flex flex-col justify-between">
+          <div className="flex items-center justify-between text-xs text-zinc-400 font-mono mb-4">
+            <span className="uppercase tracking-wider text-[11px]">Active Streak</span>
+            <Calendar size={16} className="text-amber-400" />
           </div>
           <div>
-            <div className="font-heading text-2xl font-normal text-zinc-100 mb-0.5">
-              {streak} <span className="text-sm font-normal text-zinc-400 font-sans">{streak === 1 ? 'day' : 'days'}</span>
+            <div className="font-heading text-3xl md:text-4xl font-normal text-amber-400 mb-1">
+              {streak} <span className="text-base font-normal text-zinc-400 font-sans">{streak === 1 ? 'day' : 'days'}</span>
             </div>
-            <div className="text-[11px] text-zinc-400">Active retention tracking</div>
+            <div className="text-xs text-zinc-400 font-sans">Daily practice consistency</div>
           </div>
         </div>
       </div>
 
       {/* Weak Topics Alert */}
       {weakTopicObjects.length > 0 && (
-        <div className="linear-card p-4 border-amber-500/20 bg-amber-950/10">
-          <div className="flex items-center gap-2 text-amber-300 font-semibold text-xs mb-1 font-mono">
-            <AlertTriangle size={14} />
-            <span>High Priority Revision ({weakTopicObjects.length})</span>
+        <div className="p-6 rounded-3xl border border-amber-500/30 bg-amber-500/10 backdrop-blur-md shadow-lg">
+          <div className="flex items-center gap-2 text-amber-300 font-semibold text-xs mb-1.5 font-mono">
+            <AlertTriangle size={15} />
+            <span>High Priority Revision ({weakTopicObjects.length} topics)</span>
           </div>
-          <p className="text-xs text-zinc-400 mb-3">
-            Topics scoring below 60% accuracy on recent diagnostic checks.
+          <p className="text-xs text-zinc-300 mb-4 font-sans leading-relaxed">
+            Topics scoring below 60% accuracy on recent diagnostic checks. Targeted flashcard study is recommended.
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2.5">
             {weakTopicObjects.map((t) => (
               <div
                 key={t.id}
-                className="flex items-center gap-2 px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-xs font-mono"
+                className="flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[#12141e] border border-white/10 text-xs font-mono"
               >
                 <span className="text-zinc-200">{t.title}</span>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => navigate('/study')}
-                  className="h-5 px-1.5 text-[10px] text-zinc-400 hover:text-white"
+                  className="h-6 px-2 text-[11px] font-mono text-emerald-400 hover:text-emerald-300 rounded-full hover:bg-white/5"
                 >
-                  Study <ArrowRight size={10} />
+                  Study <ArrowRight size={11} />
                 </Button>
               </div>
             ))}
@@ -194,56 +195,56 @@ export function Progress() {
       )}
 
       {/* Topics Breakdown */}
-      <div className="linear-card p-4">
-        <div className="flex items-center justify-between mb-3 border-b border-zinc-800/80 pb-2.5">
-          <h2 className="text-xs font-semibold text-zinc-100 font-mono uppercase tracking-wider">
+      <div className="p-6 md:p-8 rounded-3xl bg-[#12141e]/70 border border-white/10 backdrop-blur-md shadow-xl">
+        <div className="flex items-center justify-between mb-6 border-b border-white/[0.08] pb-4">
+          <h2 className="font-heading text-lg font-normal text-white">
             Module Performance Breakdown
           </h2>
-          <Badge variant="secondary">
+          <span className="px-2.5 py-0.5 rounded-full bg-white/5 text-zinc-300 border border-white/10 text-xs font-mono">
             {topics.length} topics
-          </Badge>
+          </span>
         </div>
 
         {topics.length === 0 ? (
-          <div className="text-xs text-zinc-400">No topics loaded.</div>
+          <div className="text-xs text-zinc-400 font-sans">No topics loaded.</div>
         ) : (
-          <div className="flex flex-col divide-y divide-zinc-800/80">
+          <div className="flex flex-col divide-y divide-white/[0.06]">
             {topics.map((t) => {
               const best = getBestScore(t.id)
               const attempts = getAttemptsForTopic(t.id)
               const isWeak = weakTopics.includes(t.id)
 
               return (
-                <div key={t.id} className="py-2.5 flex items-center justify-between gap-4">
+                <div key={t.id} className="py-4 flex items-center justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-0.5">
-                      <span className="text-xs font-medium text-zinc-200 truncate">
+                    <div className="flex items-center gap-2.5 mb-1">
+                      <span className="font-heading font-normal text-sm md:text-base text-zinc-100 truncate">
                         {t.title}
                       </span>
                       {isWeak && (
-                        <Badge variant="warning">Review</Badge>
+                        <Badge variant="warning" className="text-[10px] font-mono">Review Priority</Badge>
                       )}
                     </div>
-                    <div className="text-[11px] text-zinc-400 font-mono">
-                      {attempts.length} test{attempts.length !== 1 ? 's' : ''} completed
+                    <div className="text-xs text-zinc-400 font-mono">
+                      {attempts.length} diagnostic test{attempts.length !== 1 ? 's' : ''} completed
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3 flex-shrink-0">
+                  <div className="flex items-center gap-4 flex-shrink-0">
                     <div className="text-right">
-                      <div className="text-xs font-bold font-mono text-zinc-200">
+                      <div className="text-sm font-bold font-mono text-zinc-200">
                         {best !== null ? `${best}%` : 'Unranked'}
                       </div>
-                      <div className="text-[9px] text-zinc-400 uppercase tracking-wider font-mono">
+                      <div className="text-[10px] text-zinc-400 uppercase tracking-wider font-mono">
                         Best Score
                       </div>
                     </div>
 
                     <Button
-                      variant="secondary"
+                      variant="outline"
                       size="sm"
                       onClick={() => navigate('/quiz')}
-                      className="text-xs h-7 px-2.5 font-mono"
+                      className="text-xs h-8 px-3 font-mono rounded-full border-white/10 bg-white/5 hover:bg-white/10 text-zinc-200"
                     >
                       Quiz
                     </Button>

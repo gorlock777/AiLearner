@@ -9,6 +9,9 @@ import {
   Atom,
   Server,
   FileText,
+  ScanText,
+  Network,
+  GaugeCircle,
 } from 'lucide-react'
 
 import { parseFile } from '../lib/parser'
@@ -24,10 +27,10 @@ import { ExtractionDataView } from '../components/extraction/ExtractionDataView'
 import { Button } from '../components/ui/button'
 import { ShimmerButton } from '../components/ui/shimmer-button'
 import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert'
-import { BlackHoleHeroSection } from '../components/ui/blackhole-hero-section'
-import { VariableFontCursorProximity } from '../components/ui/variable-font-cursor-proximity'
 import { DropzoneUpload } from '../components/ui/dropzone-upload'
 import { LoadingStepper } from '../components/ui/loading-stepper'
+import { SpotlightCards } from '../components/ui/spotlight-cards'
+import type { SpotlightItem } from '../components/ui/spotlight-cards'
 
 const STEPS = [
   { id: 1, label: 'Parse document content & text layer' },
@@ -42,6 +45,7 @@ const SAMPLE_PRESETS = [
     filename: 'quantum_computing_101.md',
     badge: 'Physics',
     icon: Atom,
+    color: '#34d399',
     text: `# Quantum Computing Fundamentals: Superposition, Entanglement & Gates
 
 ## 1. Qubits and Quantum Superposition
@@ -66,6 +70,7 @@ Fault-tolerant quantum computing requires quantum error correction (such as surf
     filename: 'cellular_respiration.md',
     badge: 'Biology',
     icon: BookOpen,
+    color: '#60a5fa',
     text: `# Cellular Respiration and Metabolic Biochemistry
 
 ## 1. Glycolysis in the Cytosol
@@ -76,7 +81,7 @@ Glycolysis is the anaerobic breakdown of 1 glucose molecule (6 carbons) into 2 m
 
 ## 2. Pyruvate Oxidation and the Krebs Cycle
 Pyruvate is actively transported into the mitochondrial matrix and converted into Acetyl-CoA by pyruvate dehydrogenase, releasing CO₂ and generating 1 NADH.
-Acetyl-CoA joins oxaloacetate (4C) to form citrate (6C).
+Acetly-CoA joins oxaloacetate (4C) to form citrate (6C).
 Through one turn of the citric acid cycle:
 - 3 NADH, 1 FADH₂, 1 GTP/ATP, and 2 CO₂ molecules are generated.
 
@@ -92,6 +97,7 @@ Protons flow back into the matrix through the rotor subunit of ATP Synthase, dri
     filename: 'distributed_systems_raft.md',
     badge: 'CS Systems',
     icon: Server,
+    color: '#a78bfa',
     text: `# Distributed Systems: Raft Consensus Algorithm
 
 ## 1. The Consensus Problem
@@ -113,8 +119,6 @@ The leader receives client commands, appends entries to its local log, and broad
 ]
 
 export function Home() {
-  const heroContainerRef = useRef<HTMLDivElement>(null)
-
   const {
     topics,
     addDocument,
@@ -127,46 +131,46 @@ export function Home() {
 
   const [file, setFile] = useState<File | null>(null)
   const [isProcessing, setIsProcessing] = useState(false)
-  const [currentStep, setCurrentStep] = useState(0)
+  const [currentStep, setCurrentStep] = useState(1)
   const [error, setError] = useState<string | null>(null)
 
   const hasTopics = topics.length > 0
 
   const handleFile = (f: File) => {
-    const ext = f.name.split('.').pop()?.toLowerCase()
-    if (!['pdf', 'txt', 'md'].includes(ext ?? '')) {
-      setError('Unsupported file format. Please provide a PDF, TXT, or Markdown document.')
-      return
-    }
-    setError(null)
     setFile(f)
+    setError(null)
   }
 
-  const processExtractedText = async (text: string, docName: string, docSize: number) => {
+  const processExtractedText = async (
+    text: string,
+    filename: string,
+    fileSize: number
+  ) => {
     setIsProcessing(true)
     setError(null)
     setCurrentStep(1)
 
     try {
       // Step 1: Save document
-      const docId = `doc-${Date.now()}`
-      addDocument({
-        id: docId,
-        name: docName,
-        size: docSize,
-        type: 'md',
+      const doc = {
+        id: crypto.randomUUID(),
+        name: filename,
+        size: fileSize,
+        type: 'text/plain',
         text,
         uploadedAt: Date.now(),
-      })
-      setActiveDocument(docId)
+      }
+      addDocument(doc)
+      setActiveDocument(doc.id)
 
       // Step 2: Extract topics
       setCurrentStep(2)
       const topicMessages = extractTopicsPrompt(text)
       const rawTopics = await fetchCompletion(topicMessages)
       const parsedTopics = parseJSONResponse<{ topics: Topic[] }>(rawTopics)
+
       if (!parsedTopics?.topics?.length) {
-        throw new Error('No topics could be extracted. Please check the document content.')
+        throw new Error('No topics could be extracted from document.')
       }
       setTopics(parsedTopics.topics)
 
@@ -233,59 +237,39 @@ export function Home() {
 
   return (
     <div className="min-h-full flex flex-col">
-      {/* ── 21st.dev Black Hole Hero Section above upload ── */}
+      {/* ── Spacious Editorial Hero Header (Ultra Fast 60fps Atmosphere) ── */}
       {!hasTopics && !isProcessing && (
-        <section
-          ref={heroContainerRef}
-          className="relative w-full h-64 md:h-72 border-b border-zinc-800/80 overflow-hidden bg-black"
-        >
-          <BlackHoleHeroSection
-            distance={22}
-            elevation={-6}
-            roll={-18}
-            fov={38}
-            diskDensity={1.0}
-            brightness={1.1}
-            spinSpeed={0.06}
-            steps={180}
-            resolution={0.65}
-            scrim="bottom"
-            scrimStrength={0.8}
-            className="w-full h-full"
-          >
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 z-20 pointer-events-none">
-              <div className="pointer-events-auto inline-flex items-center gap-2 px-2.5 py-1 rounded bg-zinc-950/80 border border-zinc-800/80 text-[11px] font-mono text-zinc-400 mb-3 backdrop-blur-md">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span>AI Synthesis Engine · OpenRouter Free</span>
-              </div>
+        <section className="relative w-full py-12 md:py-16 border-b border-zinc-800/80 overflow-hidden bg-gradient-to-b from-zinc-950 via-[#0a0a0d] to-[#09090b]">
+          {/* Subtle radial atmosphere glow */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-24 left-1/2 -translate-x-1/2 w-[700px] h-[350px] rounded-full opacity-35 blur-[90px] bg-gradient-to-br from-emerald-500/20 via-indigo-500/15 to-transparent"
+          />
 
-              <div className="pointer-events-auto cursor-default">
-                <VariableFontCursorProximity
-                  containerRef={heroContainerRef}
-                  fromFontVariationSettings="'wght' 300"
-                  toFontVariationSettings="'wght' 800"
-                  radius={90}
-                  className="text-2xl sm:text-3xl font-heading font-semibold tracking-tight text-zinc-100"
-                >
-                  Neural Document Ingestion
-                </VariableFontCursorProximity>
-              </div>
-
-              <p className="text-xs sm:text-sm text-zinc-400 max-w-lg mx-auto mt-2 leading-relaxed">
-                Transform PDFs, lecture slides, and notes into active recall decks & diagnostic quizzes.
-              </p>
+          <div className="relative z-10 max-w-2xl mx-auto text-center px-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-[11px] font-mono text-zinc-400 mb-4 shadow-sm backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <span>AI Ingestion Engine · OpenRouter Free</span>
             </div>
-          </BlackHoleHeroSection>
+
+            <h1 className="font-heading font-normal text-3xl sm:text-4xl text-zinc-100 tracking-tight leading-tight mb-3">
+              Neural Document Ingestion
+            </h1>
+
+            <p className="text-sm text-zinc-400 max-w-lg mx-auto leading-relaxed">
+              Transform PDFs, lecture slides, and notes into active recall decks & diagnostic quizzes with editorial clarity.
+            </p>
+          </div>
         </section>
       )}
 
       {/* ── Main Workspace Content ── */}
-      <div className="px-6 py-6 max-w-4xl mx-auto w-full flex flex-col gap-5">
+      <div className="px-6 py-8 max-w-4xl mx-auto w-full flex flex-col gap-6">
         {/* Workspace Top Bar (when topics loaded) */}
         {hasTopics && !isProcessing && (
-          <div className="flex items-center justify-between border-b border-zinc-800/80 pb-3">
+          <div className="flex items-center justify-between border-b border-zinc-800/80 pb-4">
             <div>
-              <h2 className="font-heading text-sm font-semibold text-zinc-100 uppercase tracking-wider">
+              <h2 className="font-heading text-lg font-normal text-zinc-100 tracking-tight">
                 Knowledge Workspace
               </h2>
               <p className="text-xs text-zinc-400 mt-0.5">
@@ -300,7 +284,7 @@ export function Home() {
                 clearAll()
                 setFile(null)
               }}
-              className="text-xs font-mono h-7"
+              className="text-xs font-mono h-8 px-3"
             >
               <RotateCcw size={12} />
               Reset Workspace
@@ -322,19 +306,19 @@ export function Home() {
           <ExtractionDataView topics={topics} />
         ) : (
           /* Upload & Ingestion Workbench */
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             {isProcessing ? (
-              <div className="linear-card p-6 border flex flex-col items-center max-w-md mx-auto w-full">
-                <div className="text-xs font-semibold text-zinc-200 mb-1 font-mono">
-                  SYNTHESIZING KNOWLEDGE DECK
+              <div className="linear-card p-10 border flex flex-col items-center max-w-md mx-auto w-full my-8">
+                <div className="text-xs font-semibold text-zinc-200 mb-1 font-mono uppercase tracking-wider">
+                  Synthesizing Knowledge Deck
                 </div>
-                <div className="text-xs text-zinc-400 mb-4 font-mono text-center">
+                <div className="text-xs text-zinc-400 mb-6 font-mono text-center">
                   Extracting concept topology, flashcards & quiz
                 </div>
                 <LoadingStepper steps={STEPS} currentStep={currentStep} />
               </div>
             ) : (
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-8">
                 <DropzoneUpload
                   selectedFile={file}
                   onFileSelect={handleFile}
@@ -346,7 +330,7 @@ export function Home() {
                   <div className="flex justify-end">
                     <ShimmerButton
                       onClick={handleProcess}
-                      className="px-4 py-2 font-mono text-xs"
+                      className="px-5 py-2.5 font-mono text-xs"
                     >
                       <span>Synthesize Study Modules</span>
                       <ArrowRight size={13} />
@@ -354,66 +338,60 @@ export function Home() {
                   </div>
                 )}
 
-                {/* 1-Click Sample Pre-load Packs */}
-                <div className="linear-card p-4 border border-zinc-800/80">
-                  <div className="flex items-center gap-2 mb-2.5">
+                {/* 1-Click Sample Pre-load Packs with KokonutUI SpotlightCards */}
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
                     <Sparkles size={13} className="text-emerald-400" />
                     <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-300 font-semibold">
                       Or Try an Instant Sample Topic Pack
                     </span>
                   </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                    {SAMPLE_PRESETS.map((preset) => {
-                      const Icon = preset.icon
-                      return (
-                        <button
-                          key={preset.name}
-                          onClick={() => handleLoadPreset(preset)}
-                          className="text-left p-3 rounded-md bg-zinc-900/60 border border-zinc-800 hover:border-zinc-700 hover:bg-zinc-850/80 transition-all flex flex-col justify-between group cursor-pointer"
-                        >
-                          <div>
-                            <div className="flex items-center justify-between mb-1.5">
-                              <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-zinc-950 border border-zinc-800 text-zinc-400">
-                                {preset.badge}
-                              </span>
-                              <Icon size={13} className="text-zinc-500 group-hover:text-emerald-400 transition-colors" />
-                            </div>
-                            <div className="font-heading text-xs font-semibold text-zinc-200 group-hover:text-white transition-colors line-clamp-1">
-                              {preset.name}
-                            </div>
-                          </div>
-                          <div className="text-[10px] font-mono text-zinc-500 mt-2 flex items-center gap-1 group-hover:text-zinc-400">
-                            <span>1-Click Load</span>
-                            <ArrowRight size={10} />
-                          </div>
-                        </button>
-                      )
-                    })}
-                  </div>
+                  <SpotlightCards
+                    columns={3}
+                    items={SAMPLE_PRESETS.map((preset) => ({
+                      icon: preset.icon,
+                      title: preset.name,
+                      description: `1-click load · ${preset.badge}`,
+                      color: preset.color,
+                      badge: preset.badge,
+                      onClick: () => handleLoadPreset(preset),
+                      footer: (
+                        <div className="flex items-center gap-1 text-[10px] font-mono text-white/40 group-hover:text-white/70 transition-colors">
+                          <span>Load & Synthesize</span>
+                          <ArrowRight size={10} />
+                        </div>
+                      ),
+                    } satisfies SpotlightItem))}
+                  />
                 </div>
+
+                {/* Ingestion Specifications with KokonutUI SpotlightCards */}
+                <SpotlightCards
+                  eyebrow="Ingestion Specifications"
+                  columns={3}
+                  items={[
+                    {
+                      icon: ScanText,
+                      title: "Text-Layer Parser",
+                      description: "Direct in-browser PDF.js stream extraction for digital lecture slides and notes.",
+                      color: "#34d399",
+                    },
+                    {
+                      icon: Network,
+                      title: "Vision OCR Fallback",
+                      description: "Automatic frame-to-canvas rendering for scanned textbook pages and slide graphics.",
+                      color: "#60a5fa",
+                    },
+                    {
+                      icon: GaugeCircle,
+                      title: "Local Persistence",
+                      description: "Extracted topics, generated cards, and practice questions remain in browser.",
+                      color: "#a78bfa",
+                    },
+                  ] satisfies SpotlightItem[]}
+                />
               </div>
             )}
-
-            {/* Ingestion Specifications Grid */}
-            <div className="linear-card p-4">
-              <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 font-semibold mb-3">
-                Ingestion Specifications
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                <div className="p-3 rounded bg-zinc-900/40 border border-zinc-800/80">
-                  <div className="text-zinc-300 font-medium mb-1 font-heading">Text-Layer Parser</div>
-                  <div className="text-[11px] text-zinc-400">Direct in-browser PDF.js stream extraction for digital lecture slides and notes.</div>
-                </div>
-                <div className="p-3 rounded bg-zinc-900/40 border border-zinc-800/80">
-                  <div className="text-zinc-300 font-medium mb-1 font-heading">Vision OCR Fallback</div>
-                  <div className="text-[11px] text-zinc-400">Automatic frame-to-canvas rendering for scanned textbook pages and slide graphics.</div>
-                </div>
-                <div className="p-3 rounded bg-zinc-900/40 border border-zinc-800/80">
-                  <div className="text-zinc-300 font-medium mb-1 font-heading">Local Persistence</div>
-                  <div className="text-[11px] text-zinc-400">Extracted topics, generated cards, and practice questions remain in browser.</div>
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </div>

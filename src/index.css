@@ -35,10 +35,11 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Headings & Prompts: Montserrat (Clean, balanced, modern curves, no harsh serifs) */
+/* Headings & Display: Merriweather (Elegant editorial serif, warm, not sharp) */
 h1, h2, h3, .font-heading, .font-serif, .font-display {
-  font-family: "Montserrat", "Signika", sans-serif;
-  letter-spacing: -0.015em;
+  font-family: "Merriweather", Georgia, "Times New Roman", serif;
+  letter-spacing: -0.02em;
+  font-weight: 700;
 }
 
 /* Monospace: JetBrains Mono */
@@ -85,6 +86,7 @@ code, kbd, .font-mono {
 .btn-primary {
   background: #f4f4f5;
   color: #09090b;
+  font-family: "Plus Jakarta Sans", sans-serif;
   font-family: "Signika", "Oxygen", sans-serif;
   font-weight: 500;
   font-size: 12px;
@@ -117,6 +119,8 @@ code, kbd, .font-mono {
 .btn-secondary {
   background: #16161a;
   color: #d4d4d8;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-weight: 500;
   font-family: "Signika", "Oxygen", sans-serif;
   font-weight: 400;
   font-size: 12px;

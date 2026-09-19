@@ -10,6 +10,9 @@ import {
   Sparkles,
   Layers,
   CheckCircle2,
+  ScanText,
+  Network,
+  GaugeCircle,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
@@ -17,6 +20,8 @@ import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
 import { ShimmerButton } from '../components/ui/shimmer-button'
 import { BlackHoleHeroSection } from '../components/ui/blackhole-hero-section'
+import { SpotlightCards } from '../components/ui/spotlight-cards'
+import type { SpotlightItem } from '../components/ui/spotlight-cards'
 
 function GithubIcon({ size = 14 }: { size?: number }) {
   return (
@@ -146,113 +151,74 @@ export function LandingPage() {
       {/* ── 3-Step Precision Pipeline ── */}
       <section id="pipeline" className="py-20 px-6 border-t border-zinc-800/80 bg-[#0c0c0e]">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-10">
-            <span className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 font-semibold block mb-1">
-              Architecture
-            </span>
-            <h2 className="font-heading text-2xl font-normal tracking-tight text-zinc-100">
-              System Ingestion & Practice Loop
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="linear-card linear-card-highlight p-5 flex flex-col border border-zinc-800">
-              <div className="flex items-center justify-between mb-3 text-xs font-mono">
-                <span className="text-zinc-400">01 / INGESTION</span>
-                <Badge variant="secondary">Vision OCR</Badge>
-              </div>
-              <h3 className="text-sm font-semibold text-zinc-100 font-mono mb-2">
-                Multi-Format Document Parser
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Processes PDF, Markdown, and TXT. When a PDF contains scanned pages or slides, in-browser canvas rendering triggers multimodal vision OCR via free OpenRouter models.
-              </p>
-            </div>
-
-            <div className="linear-card linear-card-highlight p-5 flex flex-col border border-zinc-800">
-              <div className="flex items-center justify-between mb-3 text-xs font-mono">
-                <span className="text-zinc-400">02 / STRUCTURE</span>
-                <Badge variant="secondary">JSON Schema</Badge>
-              </div>
-              <h3 className="text-sm font-semibold text-zinc-100 font-mono mb-2">
-                Topic Extraction & Cards
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Extracts topic hierarchies and key concepts without emoji fluff. Generates two-sided 3D flashcards with spring physics and keyboard shortcuts.
-              </p>
-            </div>
-
-            <div className="linear-card linear-card-highlight p-5 flex flex-col border border-zinc-800">
-              <div className="flex items-center justify-between mb-3 text-xs font-mono">
-                <span className="text-zinc-400">03 / DIAGNOSTIC</span>
-                <Badge variant="secondary">Adaptive Quiz</Badge>
-              </div>
-              <h3 className="text-sm font-semibold text-zinc-100 font-mono mb-2">
-                Assessment & Weak Spot Tracking
-              </h3>
-              <p className="text-xs text-zinc-400 leading-relaxed">
-                Runs multiple-choice checks with instant explanations and circular gauge accuracy dials. Topics scoring below 60% are flagged for priority revision.
-              </p>
-            </div>
-          </div>
+          <SpotlightCards
+            eyebrow="Architecture"
+            heading="System Ingestion & Practice Loop"
+            columns={3}
+            items={[
+              {
+                icon: ScanText,
+                title: "Multi-Format Document Parser",
+                description: "Processes PDF, Markdown, and TXT. When a PDF contains scanned pages or slides, in-browser canvas rendering triggers multimodal vision OCR via free OpenRouter models.",
+                color: "#34d399",
+                badge: "Vision OCR",
+              },
+              {
+                icon: Network,
+                title: "Topic Extraction & Cards",
+                description: "Extracts topic hierarchies and key concepts without emoji fluff. Generates two-sided 3D flashcards with spring physics and keyboard shortcuts.",
+                color: "#60a5fa",
+                badge: "JSON Schema",
+              },
+              {
+                icon: GaugeCircle,
+                title: "Assessment & Weak Spot Tracking",
+                description: "Runs multiple-choice checks with instant explanations and circular gauge accuracy dials. Topics scoring below 60% are flagged for priority revision.",
+                color: "#a78bfa",
+                badge: "Adaptive Quiz",
+              },
+            ] satisfies SpotlightItem[]}
+          />
         </div>
       </section>
 
       {/* ── Architecture & Capabilities Grid ── */}
       <section id="features" className="py-20 px-6 border-t border-zinc-800/80 bg-[#09090b]">
         <div className="max-w-5xl mx-auto">
-          <div className="mb-10">
-            <span className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 font-semibold block mb-1">
-              Capabilities
-            </span>
-            <h2 className="font-heading text-2xl font-normal tracking-tight text-zinc-100">
-              Built for Fast, Distraction-Free Study
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="linear-card p-4 border border-zinc-800/80">
-              <div className="flex items-center gap-2 mb-2 text-zinc-300">
-                <ShieldCheck size={16} className="text-emerald-400" />
-                <h4 className="text-xs font-semibold font-mono">100% Client-Side</h4>
-              </div>
-              <p className="text-[11px] text-zinc-400 leading-relaxed">
-                Zero server databases. All uploaded documents, flashcard decks, and quiz attempts persist directly in browser localStorage.
-              </p>
-            </div>
-
-            <div className="linear-card p-4 border border-zinc-800/80">
-              <div className="flex items-center gap-2 mb-2 text-zinc-300">
-                <Keyboard size={16} className="text-zinc-300" />
-                <h4 className="text-xs font-semibold font-mono">Keyboard First</h4>
-              </div>
-              <p className="text-[11px] text-zinc-400 leading-relaxed">
-                Navigate decks with <kbd className="kbd">Space</kbd> to flip, <kbd className="kbd">1</kbd> for hard, <kbd className="kbd">2</kbd> for mastered, and arrow keys.
-              </p>
-            </div>
-
-            <div className="linear-card p-4 border border-zinc-800/80">
-              <div className="flex items-center gap-2 mb-2 text-zinc-300">
-                <Cpu size={16} className="text-emerald-400" />
-                <h4 className="text-xs font-semibold font-mono">Free LLM Router</h4>
-              </div>
-              <p className="text-[11px] text-zinc-400 leading-relaxed">
-                Integrated with OpenRouter free router models with structured JSON schema outputs and vision OCR fallbacks.
-              </p>
-            </div>
-
-            <div className="linear-card p-4 border border-zinc-800/80">
-              <div className="flex items-center gap-2 mb-2 text-zinc-300">
-                <Activity size={16} className="text-amber-400" />
-                <h4 className="text-xs font-semibold font-mono">Retention Stream</h4>
-              </div>
-              <p className="text-[11px] text-zinc-400 leading-relaxed">
-                Continuous accuracy telemetry, circular score gauges, and daily streak calculations across all practice tests.
-              </p>
-            </div>
-          </div>
+          <SpotlightCards
+            eyebrow="Capabilities"
+            heading="Built for Fast, Distraction-Free Study"
+            columns={4}
+            items={[
+              {
+                icon: ShieldCheck,
+                title: "100% Client-Side",
+                description: "Zero server databases. All uploaded documents, flashcard decks, and quiz attempts persist directly in browser localStorage.",
+                color: "#34d399",
+              },
+              {
+                icon: Keyboard,
+                title: "Keyboard First",
+                description: "Navigate decks with Space to flip, 1 for hard, 2 for mastered, and arrow keys for a fully mouse-free study flow.",
+                color: "#e4e4e7",
+              },
+              {
+                icon: Cpu,
+                title: "Free LLM Router",
+                description: "Integrated with OpenRouter free router models with structured JSON schema outputs and vision OCR fallbacks.",
+                color: "#60a5fa",
+              },
+              {
+                icon: Activity,
+                title: "Retention Stream",
+                description: "Continuous accuracy telemetry, circular score gauges, and daily streak calculations across all practice tests.",
+                color: "#f59e0b",
+              },
+            ] satisfies SpotlightItem[]}
+          />
         </div>
       </section>
+
 
       {/* ── FAQ Section ── */}
       <section id="faq" className="py-20 px-6 border-t border-zinc-800/80 bg-[#0c0c0e]">

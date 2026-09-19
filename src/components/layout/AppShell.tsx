@@ -4,8 +4,6 @@ import {
   Layers,
   CheckCircle,
   BarChart3,
-  Cpu,
-  FileText,
   Settings,
   Trash2,
   KeyRound,
@@ -94,8 +92,7 @@ function SidebarNavItem({
 }
 
 export function AppShell() {
-  const { topics, documents, clearAll } = useAppStore()
-  const activeDoc = documents[0]
+  const { topics, clearAll } = useAppStore()
   const location = useLocation()
 
   const [settingsOpen, setSettingsOpen] = useState(false)
@@ -114,17 +111,9 @@ export function AppShell() {
     setTimeout(() => setSavedKeyMsg(false), 2000)
   }
 
-  const getPageTitle = () => {
-    if (location.pathname === '/app') return 'Document Workspace'
-    if (location.pathname.startsWith('/study')) return 'Flashcard Deck'
-    if (location.pathname.startsWith('/quiz')) return 'Adaptive Quiz'
-    if (location.pathname.startsWith('/progress')) return 'Performance Analytics'
-    return 'AiLearner'
-  }
-
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#09090b] text-zinc-100 linear-grid">
-      {/* ── Linear Sidebar ── */}
+      {/* ── Sleek Minimal Sidebar ── */}
       <aside className="relative z-20 flex flex-col items-center py-4 flex-shrink-0 w-16 bg-[#0c0c0e] border-r border-zinc-800/80">
         {/* Logo */}
         <Link
@@ -173,48 +162,15 @@ export function AppShell() {
         </div>
       </aside>
 
-      {/* ── Main View Area ── */}
+      {/* ── Main View Area (Spacious & Clean — No Top Bar) ── */}
       <div className="flex flex-col flex-1 h-full overflow-hidden">
-        {/* Topbar */}
-        <header className="h-12 border-b border-zinc-800/80 bg-[#0c0c0e]/80 backdrop-blur-md px-6 flex items-center justify-between flex-shrink-0 z-10">
-          <div className="flex items-center gap-3">
-            <span className="text-xs font-medium text-zinc-400">AiLearner</span>
-            <span className="text-zinc-600">/</span>
-            <span className="text-xs font-medium text-zinc-200">{getPageTitle()}</span>
-
-            {activeDoc && (
-              <span className="hidden md:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-zinc-900 border border-zinc-800 text-[11px] text-zinc-400 font-mono">
-                <FileText size={11} />
-                {activeDoc.name}
-              </span>
-            )}
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-[11px] text-zinc-400 font-mono">
-              <Cpu size={12} className="text-emerald-400" />
-              openrouter/free
-            </div>
-
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setSettingsOpen(true)}
-              className="text-[11px] font-mono h-7 px-2"
-            >
-              Settings
-            </Button>
-          </div>
-        </header>
-
-        {/* Content View with Smooth Page Transition */}
-        <main className="relative z-10 flex-1 overflow-y-auto">
+        <main className="relative z-10 flex-1 overflow-y-auto" data-scroll-area>
           <motion.div
             key={location.pathname}
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
+            transition={{ duration: 0.18, ease: 'easeOut' }}
             className="min-h-full"
           >
             <Outlet />
@@ -234,7 +190,7 @@ export function AppShell() {
 
           <div className="flex flex-col gap-4 py-2">
             <div>
-              <label className="text-xs font-medium text-zinc-300 block mb-1.5 flex items-center justify-between">
+              <label className="text-xs font-medium text-zinc-300 mb-1.5 flex items-center justify-between">
                 <span className="flex items-center gap-1.5">
                   <KeyRound size={13} className="text-zinc-400" />
                   Custom OpenRouter API Key (Optional)
@@ -243,69 +199,71 @@ export function AppShell() {
                   href="https://openrouter.ai/keys"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-[11px] text-zinc-400 hover:text-zinc-200 inline-flex items-center gap-1"
+                  className="text-emerald-400 hover:underline inline-flex items-center gap-1 text-[11px]"
                 >
-                  Get Key <ExternalLink size={10} />
+                  Get free key <ExternalLink size={10} />
                 </a>
               </label>
-              <Input
-                type="password"
-                placeholder="sk-or-v1-..."
-                value={apiKeyInput}
-                onChange={(e) => setApiKeyInput(e.target.value)}
-                className="font-mono text-xs"
-              />
-              <p className="text-[11px] text-zinc-400 mt-1.5">
-                Leave blank to use the default configured free router key from environment.
-              </p>
+              <div className="flex gap-2">
+                <Input
+                  type="password"
+                  value={apiKeyInput}
+                  onChange={(e) => setApiKeyInput(e.target.value)}
+                  placeholder="sk-or-v1-..."
+                  className="font-mono text-xs flex-1"
+                />
+                <Button size="sm" onClick={handleSaveApiKey}>
+                  Save
+                </Button>
+              </div>
+              {savedKeyMsg && (
+                <div className="text-[11px] text-emerald-400 font-mono mt-1">
+                  API Key updated in localStorage.
+                </div>
+              )}
             </div>
 
-            <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-3 text-xs flex flex-col gap-1.5">
-              <div className="flex items-center justify-between">
-                <span className="text-zinc-400">Current LLM Endpoint</span>
-                <Badge variant="secondary" className="font-mono text-[10px]">
-                  openrouter/free
+            <div className="pt-2 border-t border-zinc-800">
+              <div className="text-xs font-medium text-zinc-300 mb-1">
+                Active Inference Endpoint
+              </div>
+              <div className="flex items-center justify-between text-xs text-zinc-400 font-mono bg-zinc-900/60 p-2.5 rounded border border-zinc-800">
+                <span>Model Router</span>
+                <Badge variant="outline" className="text-[10px]">
+                  openrouter/free (auto)
                 </Badge>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-zinc-400">Storage Persistence</span>
-                <span className="text-zinc-300 font-mono text-[11px]">Browser localStorage</span>
-              </div>
             </div>
 
-            <div className="pt-2 border-t border-zinc-800/80">
+            <div className="pt-2 border-t border-zinc-800">
+              <div className="text-xs font-medium text-rose-400 mb-1 flex items-center gap-1.5">
+                <Trash2 size={13} />
+                Clear Local Data
+              </div>
+              <p className="text-[11px] text-zinc-400 mb-3">
+                Wipes all stored documents, extracted topic nodes, flashcard sets, and quiz logs from browser memory.
+              </p>
               <Button
                 variant="destructive"
                 size="sm"
                 onClick={() => {
-                  if (confirm('Are you sure you want to clear all topics, cards, and quizzes?')) {
-                    clearAll()
-                    setSettingsOpen(false)
-                  }
+                  clearAll()
+                  setSettingsOpen(false)
                 }}
-                className="w-full justify-center text-xs"
+                className="w-full text-xs font-mono"
               >
-                <Trash2 size={13} />
-                Clear Workspace Cache & Data
+                Clear Entire Workspace Data
               </Button>
             </div>
           </div>
 
           <DialogFooter>
-            {savedKeyMsg && (
-              <span className="text-xs text-emerald-400 self-center font-mono mr-auto">
-                Saved!
-              </span>
-            )}
             <Button
-              variant="secondary"
+              variant="outline"
               size="sm"
               onClick={() => setSettingsOpen(false)}
             >
               Close
-            </Button>
-            <Button size="sm" onClick={handleSaveApiKey}>
-              Save Key
             </Button>
           </DialogFooter>
         </DialogContent>

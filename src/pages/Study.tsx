@@ -12,13 +12,14 @@ import {
   AlertCircle,
   Sparkles,
 } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
 import { fetchCompletion, parseJSONResponse } from '../lib/openrouter'
 import { generateFlashcardsPrompt } from '../lib/prompts'
 import type { Flashcard } from '../store/useAppStore'
 import { Button } from '../components/ui/button'
 import { Alert, AlertDescription } from '../components/ui/alert'
+import { CardFlip } from '../components/ui/card-flip'
 import { GaugeMeter } from '../components/ui/gauge-meter'
 import { ShimmerButton } from '../components/ui/shimmer-button'
 
@@ -127,7 +128,7 @@ export function Study() {
       )
       setTimeout(() => {
         goNext()
-      }, 100)
+      }, 120)
     },
     [currentIndex, goNext]
   )
@@ -207,9 +208,9 @@ export function Study() {
               <button
                 key={t.id}
                 onClick={() => setSelectedTopicId(t.id)}
-                className={`text-xs px-3 py-1 rounded-full transition-all duration-150 cursor-pointer ${
+                className={`text-xs px-3.5 py-1.5 rounded-full transition-all duration-150 cursor-pointer ${
                   isSelected
-                    ? 'bg-zinc-100 text-zinc-950 font-medium shadow-sm'
+                    ? 'bg-zinc-100 text-zinc-950 font-medium shadow-md'
                     : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-850/60'
                 }`}
               >
@@ -220,10 +221,10 @@ export function Study() {
         </div>
 
         {cards.length > 0 && !sessionComplete && (
-          <div className="flex items-center gap-3 text-xs font-mono text-zinc-300 mt-1">
+          <div className="flex items-center gap-3 text-xs font-mono text-zinc-300 mt-2">
             <span>Card {currentIndex + 1} of {cards.length}</span>
             <span className="text-zinc-700">·</span>
-            <div className="w-24 h-1 rounded-full bg-zinc-800 overflow-hidden">
+            <div className="w-28 h-1 rounded-full bg-zinc-850 overflow-hidden">
               <div
                 className="h-full bg-emerald-400 transition-all duration-300 ease-out"
                 style={{ width: `${progressPercent}%` }}
@@ -246,7 +247,7 @@ export function Study() {
             </p>
           </div>
         ) : cards.length === 0 ? (
-          <div className="w-full max-w-md p-10 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 text-center flex flex-col items-center">
+          <div className="w-full max-w-md p-10 rounded-2xl bg-zinc-900/40 border border-zinc-800/80 text-center flex flex-col items-center shadow-lg">
             <div className="w-10 h-10 rounded-xl bg-zinc-850 border border-zinc-750 flex items-center justify-center text-zinc-400 mb-3">
               <Sparkles size={18} className="text-emerald-400" />
             </div>
@@ -321,65 +322,81 @@ export function Study() {
             </div>
           </motion.div>
         ) : currentCard ? (
-          /* ── Spacious Editorial Flashcard ── */
+          /* ── Spacious Editorial 3D Flashcard ── */
           <div className="w-full flex flex-col items-center">
-            {/* The Flashcard Surface */}
-            <div
-              onClick={handleFlip}
-              className="group relative w-full min-h-[340px] md:min-h-[380px] rounded-2xl bg-[#0e0e12] border border-zinc-800/90 p-8 sm:p-12 md:p-16 flex flex-col justify-between shadow-2xl transition-all duration-300 hover:border-zinc-700 cursor-pointer select-none"
-            >
-              {/* Subtle top label */}
-              <div className="flex items-center justify-between text-xs font-mono text-zinc-300">
-                <span className="uppercase tracking-widest text-[10px]">
-                  {isFlipped ? 'Answer / Insight' : 'Prompt / Concept'}
-                </span>
-                <span className="flex items-center gap-1 text-[11px] text-zinc-400 group-hover:text-zinc-300 transition-colors">
-                  <RotateCw size={11} className="group-hover:rotate-180 transition-transform duration-500" />
-                  <span>Click or <kbd className="kbd">Space</kbd> to flip</span>
-                </span>
-              </div>
+            <CardFlip
+              isFlipped={isFlipped}
+              onFlip={handleFlip}
+              className="w-full min-h-[350px] md:min-h-[390px]"
+              front={
+                <div className="w-full h-full min-h-[350px] md:min-h-[390px] rounded-2xl bg-[#0e0e12] border border-zinc-800/90 hover:border-zinc-700/90 p-8 sm:p-12 md:p-14 flex flex-col justify-between shadow-2xl transition-all duration-300">
+                  {/* Subtle top label */}
+                  <div className="flex items-center justify-between text-xs font-mono text-zinc-300">
+                    <span className="uppercase tracking-widest text-[10px] text-zinc-400">
+                      Prompt / Concept
+                    </span>
+                    <span className="flex items-center gap-1.5 text-[11px] text-zinc-400">
+                      <RotateCw size={11} className="transition-transform duration-500" />
+                      <span>Click or <kbd className="kbd">Space</kbd> to flip</span>
+                    </span>
+                  </div>
 
-              {/* Centered Editorial Typography */}
-              <div className="my-auto py-8 text-center">
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={isFlipped ? 'back' : 'front'}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.18 }}
-                    className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-zinc-100 leading-relaxed max-w-xl mx-auto"
-                  >
-                    {isFlipped ? currentCard.card.back : currentCard.card.front}
-                  </motion.div>
-                </AnimatePresence>
+                  {/* Centered Editorial Typography */}
+                  <div className="my-auto py-8 text-center">
+                    <div className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-zinc-100 leading-relaxed max-w-xl mx-auto">
+                      {currentCard.card.front}
+                    </div>
+                  </div>
 
-                {isFlipped && currentCard.card.hint && (
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.1 }}
-                    className="mt-6 text-xs text-zinc-400 font-mono max-w-md mx-auto"
-                  >
-                    Context: {currentCard.card.hint}
-                  </motion.div>
-                )}
-              </div>
+                  {/* Bottom Card Footer */}
+                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 pt-3 border-t border-zinc-850/70">
+                    <span>{activeTopic?.title}</span>
+                    <span className="text-zinc-400">{currentIndex + 1} / {cards.length}</span>
+                  </div>
+                </div>
+              }
+              back={
+                <div className="w-full h-full min-h-[350px] md:min-h-[390px] rounded-2xl bg-[#0d0d12] border border-emerald-500/30 p-8 sm:p-12 md:p-14 flex flex-col justify-between shadow-2xl">
+                  {/* Subtle top label */}
+                  <div className="flex items-center justify-between text-xs font-mono text-zinc-300">
+                    <span className="uppercase tracking-widest text-[10px] text-emerald-400">
+                      Answer / Key Insight
+                    </span>
+                    <span className="flex items-center gap-1.5 text-[11px] text-zinc-400">
+                      <RotateCw size={11} />
+                      <span>Click to flip back</span>
+                    </span>
+                  </div>
 
-              {/* Bottom Card Footer */}
-              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 pt-3 border-t border-zinc-850/70">
-                <span>{activeTopic?.title}</span>
-                <span className="text-zinc-400">{currentIndex + 1} / {cards.length}</span>
-              </div>
-            </div>
+                  {/* Centered Editorial Typography */}
+                  <div className="my-auto py-8 text-center">
+                    <div className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-zinc-100 leading-relaxed max-w-xl mx-auto">
+                      {currentCard.card.back}
+                    </div>
 
-            {/* ── Tactical Response Controls ── */}
+                    {currentCard.card.hint && (
+                      <div className="mt-5 text-xs text-zinc-400 font-mono max-w-md mx-auto">
+                        Context: {currentCard.card.hint}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Bottom Card Footer */}
+                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 pt-3 border-t border-zinc-850/70">
+                    <span className="text-emerald-400/80">{activeTopic?.title}</span>
+                    <span className="text-zinc-400">{currentIndex + 1} / {cards.length}</span>
+                  </div>
+                </div>
+              }
+            />
+
+            {/* ── Tactical Recall Response Controls ── */}
             <div className="w-full mt-6 flex flex-col items-center gap-3">
               {isFlipped ? (
-                <div className="grid grid-cols-2 gap-3 w-full max-w-md">
+                <div className="grid grid-cols-2 gap-3.5 w-full max-w-md">
                   <button
                     onClick={() => handleResult('review')}
-                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all font-mono text-xs font-medium cursor-pointer"
+                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all font-mono text-xs font-medium cursor-pointer shadow-sm"
                   >
                     <span>Needs Review</span>
                     <kbd className="kbd text-amber-300 border-amber-500/30 bg-amber-950/40">1</kbd>
@@ -387,7 +404,7 @@ export function Study() {
 
                   <button
                     onClick={() => handleResult('known')}
-                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 transition-all font-mono text-xs font-medium cursor-pointer"
+                    className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 transition-all font-mono text-xs font-medium cursor-pointer shadow-sm"
                   >
                     <Check size={14} />
                     <span>Mastered</span>

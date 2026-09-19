@@ -121,8 +121,8 @@ export function AppShell() {
           className="mb-6 flex items-center justify-center group"
           title="Back to Landing Page"
         >
-          <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-700/80 text-white shadow-inner font-bold text-xs group-hover:border-zinc-500 transition-colors">
-            AL
+          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-500/20 to-indigo-500/20 border border-white/10 text-white shadow-inner font-bold text-xs group-hover:border-white/20 transition-colors">
+            EU
           </div>
         </Link>
 

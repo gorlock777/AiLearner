@@ -8,6 +8,7 @@ import {
   Trash2,
   KeyRound,
   ExternalLink,
+  Lightbulb,
 } from 'lucide-react'
 import { useState } from 'react'
 import { motion } from 'framer-motion'
@@ -28,6 +29,7 @@ const navItems = [
   { to: '/app', icon: UploadCloud, label: 'Upload Notes' },
   { to: '/study', icon: Layers, label: 'Flashcards' },
   { to: '/quiz', icon: CheckCircle, label: 'Practice Quiz' },
+  { to: '/feynman', icon: Lightbulb, label: 'Feynman Mode' },
   { to: '/progress', icon: BarChart3, label: 'Analytics' },
 ]
 
@@ -182,7 +184,7 @@ export function AppShell() {
       <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>AiLearner Workspace Settings</DialogTitle>
+            <DialogTitle>Eureka Workspace Settings</DialogTitle>
             <DialogDescription>
               Configure OpenRouter API parameters or reset cached browser storage.
             </DialogDescription>

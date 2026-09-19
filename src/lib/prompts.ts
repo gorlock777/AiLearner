@@ -119,3 +119,31 @@ Schema:
   ]
 }
 
+// ─── Feynman Evaluation ────────────────────────────────────────────────────
+
+export function feynmanEvalPrompt(
+  topicTitle: string,
+  topicSummary: string,
+  userExplanation: string
+): Message[] {
+  return [
+    {
+      role: 'system',
+      content: `${JSON_SYSTEM_PROMPT}
+
+Schema:
+{
+  "score": number (0-100, how well the explanation demonstrates understanding),
+  "strengths": ["string", "..."] (2-4 specific things the explanation got right),
+  "gaps": ["string", "..."] (2-4 specific concepts that were missing, wrong, or vague),
+  "modelExplanation": "string (a clear, concise 3-5 sentence explanation of the topic written for a curious non-expert)"
+}
+
+Be honest but encouraging. Score strictly — a score above 80 should require a genuinely solid explanation.`,
+    },
+    {
+      role: 'user',
+      content: `Topic: ${topicTitle}\n\nTopic summary (for reference): ${topicSummary}\n\nStudent's explanation:\n"${userExplanation}"\n\nEvaluate this explanation and return your assessment as JSON.`,
+    },
+  ]
+}

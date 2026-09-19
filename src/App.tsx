@@ -5,6 +5,7 @@ import { Home } from './pages/Home'
 import { Study } from './pages/Study'
 import { Quiz } from './pages/Quiz'
 import { Progress } from './pages/Progress'
+import { Feynman } from './pages/Feynman'
 import { SmoothScrollProvider } from './components/layout/SmoothScroll'
 
 export default function App() {
@@ -20,6 +21,7 @@ export default function App() {
             <Route path="/app" element={<Home />} />
             <Route path="/study" element={<Study />} />
             <Route path="/quiz" element={<Quiz />} />
+            <Route path="/feynman" element={<Feynman />} />
             <Route path="/progress" element={<Progress />} />
           </Route>
         </Routes>

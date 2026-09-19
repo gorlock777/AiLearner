@@ -1,8 +1,6 @@
 /**
- * SpotlightCards — adapted from KokonutUI
- * @author dorianbaffier — https://kokonutui.com
+ * SpotlightCards — adapted from KokonutUI (Alabaster Edition)
  * @license MIT
- * Adapted for Vite + React (removed "use client", uses framer-motion, always dark)
  */
 
 import type { LucideIcon } from "lucide-react";
@@ -12,7 +10,7 @@ import { cn } from "@/lib/utils";
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
-const TILT_MAX = 9;
+const TILT_MAX = 7;
 const TILT_SPRING = { stiffness: 300, damping: 28 } as const;
 const GLOW_SPRING = { stiffness: 180, damping: 22 } as const;
 
@@ -78,14 +76,14 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
   return (
     <motion.div
       animate={{
-        scale: dimmed ? 0.96 : 1,
-        opacity: dimmed ? 0.45 : 1,
+        scale: dimmed ? 0.97 : 1,
+        opacity: dimmed ? 0.55 : 1,
       }}
       className={cn(
         "group relative flex flex-col gap-4 overflow-hidden rounded-xl border p-5",
-        "border-white/6 bg-white/3 shadow-none",
-        "transition-[border-color] duration-300",
-        "hover:border-white/14",
+        "border-stone-200/90 bg-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.04)]",
+        "transition-[border-color,box-shadow] duration-300",
+        "hover:border-stone-400 hover:shadow-[0_8px_24px_rgba(0,0,0,0.07)]",
         item.onClick && "cursor-pointer"
       )}
       onMouseEnter={handleMouseEnter}
@@ -105,7 +103,7 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 rounded-xl"
         style={{
-          background: `radial-gradient(ellipse at 20% 20%, ${item.color}14, transparent 65%)`,
+          background: `radial-gradient(ellipse at 20% 20%, ${item.color}0a, transparent 65%)`,
         }}
       />
 
@@ -115,35 +113,20 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
         className="pointer-events-none absolute inset-0 rounded-xl"
         style={{
           opacity: glowOpacity,
-          background: `radial-gradient(ellipse at 20% 20%, ${item.color}2e, transparent 65%)`,
+          background: `radial-gradient(ellipse at 20% 20%, ${item.color}18, transparent 65%)`,
         }}
-      />
-
-      {/* Shimmer sweep */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 left-0 w-[55%] -translate-x-full -skew-x-12 bg-gradient-to-r from-transparent via-white/[0.045] to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[280%]"
       />
 
       {/* Icon badge + optional top badge */}
       <div className="relative z-10 flex items-start justify-between">
         <div
-          className="flex h-9 w-9 items-center justify-center rounded-lg"
-          style={{
-            background: `${item.color}18`,
-            boxShadow: `inset 0 0 0 1px ${item.color}30`,
-          }}
+          className="flex h-9 w-9 items-center justify-center rounded-lg bg-stone-100 border border-stone-200"
         >
           <Icon size={16} strokeWidth={1.9} style={{ color: item.color }} />
         </div>
         {item.badge && (
           <span
-            className="text-[10px] font-mono px-1.5 py-0.5 rounded border"
-            style={{
-              color: item.color,
-              borderColor: `${item.color}40`,
-              background: `${item.color}10`,
-            }}
+            className="text-[10px] font-mono px-2 py-0.5 rounded border border-stone-200 bg-stone-50 text-stone-600 font-medium"
           >
             {item.badge}
           </span>
@@ -152,17 +135,17 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
 
       {/* Text */}
       <div className="relative z-10 flex flex-col gap-1.5">
-        <h3 className="font-semibold text-[13px] text-white tracking-tight leading-snug" style={{ fontFamily: "'Merriweather', serif" }}>
+        <h3 className="font-semibold text-[14px] text-stone-900 tracking-tight leading-snug font-heading">
           {item.title}
         </h3>
-        <p className="text-[12px] text-white/40 leading-relaxed">
+        <p className="text-[12px] text-stone-600 leading-relaxed font-sans">
           {item.description}
         </p>
       </div>
 
       {/* Optional footer slot */}
       {item.footer && (
-        <div className="relative z-10 mt-auto pt-2 border-t border-white/6">
+        <div className="relative z-10 mt-auto pt-2 border-t border-stone-200/80">
           {item.footer}
         </div>
       )}
@@ -172,7 +155,7 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
         aria-hidden="true"
         className="absolute bottom-0 left-0 h-[2px] w-0 rounded-full transition-all duration-500 group-hover:w-full"
         style={{
-          background: `linear-gradient(to right, ${item.color}80, transparent)`,
+          background: `linear-gradient(to right, ${item.color}, transparent)`,
         }}
       />
     </motion.div>
@@ -211,19 +194,19 @@ export function SpotlightCards({
       {(eyebrow || heading) && (
         <div className="mb-6 flex flex-col gap-1">
           {eyebrow && (
-            <p className="font-semibold text-[10px] text-zinc-400 uppercase tracking-[0.22em] font-mono">
+            <p className="font-semibold text-[10px] text-stone-500 uppercase tracking-[0.22em] font-mono">
               {eyebrow}
             </p>
           )}
           {heading && (
-            <h2 className="font-heading text-xl text-white tracking-tight">
+            <h2 className="font-heading text-2xl text-stone-900 tracking-tight">
               {heading}
             </h2>
           )}
         </div>
       )}
 
-      <div className={cn("grid gap-3", colClass)}>
+      <div className={cn("grid gap-4", colClass)}>
         {items.map((item) => (
           <SpotlightCard
             dimmed={hoveredTitle !== null && hoveredTitle !== item.title}
@@ -238,3 +221,4 @@ export function SpotlightCards({
   );
 }
 
+export default SpotlightCards;

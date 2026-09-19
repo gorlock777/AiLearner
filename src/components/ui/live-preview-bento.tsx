@@ -2,14 +2,10 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FileText,
-  Sparkles,
-  Layers,
   CheckCircle2,
-  Cpu,
   ArrowRight,
-  Brain,
   Check,
-  Zap,
+  RotateCw,
 } from 'lucide-react'
 import { ShimmerButton } from './shimmer-button'
 import { Badge } from './badge'
@@ -18,7 +14,7 @@ const PREVIEW_MODULES = [
   {
     title: 'Quantum Superposition',
     badge: 'Physics',
-    color: '#34d399',
+    color: '#059669',
     prompt: 'How does a qubit differ fundamentally from a classical bit?',
     answer: 'A classical bit exists deterministically as 0 or 1. A qubit exists in a linear superposition |ψ⟩ = α|0⟩ + β|1⟩ until measured.',
     quiz: 'What is the net probability constraint for complex amplitudes α and β?',
@@ -28,7 +24,7 @@ const PREVIEW_MODULES = [
   {
     title: 'Cellular Respiration',
     badge: 'Biology',
-    color: '#60a5fa',
+    color: '#2563eb',
     prompt: 'What is the net ATP & NADH yield of Glycolysis per glucose?',
     answer: 'Glycolysis consumes 2 ATP and produces 4 ATP and 2 NADH, yielding a net 2 ATP and 2 NADH in the cytosol.',
     quiz: 'Where does pyruvate oxidation occur in eukaryotic cells?',
@@ -38,7 +34,7 @@ const PREVIEW_MODULES = [
   {
     title: 'Raft Consensus',
     badge: 'CS Systems',
-    color: '#e4e4e7',
+    color: '#7c3aed',
     prompt: 'How does Raft avoid split votes during leader election?',
     answer: 'Followers use randomized election timeouts (150ms-300ms) to ensure one candidate initiates voting before others.',
     quiz: 'What constitutes a quorum in an N-node Raft cluster?',
@@ -55,20 +51,15 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
   const mod = PREVIEW_MODULES[activeTab]
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-      className="w-full max-w-4xl mx-auto mt-12 rounded-2xl bg-zinc-950/80 border border-white/10 p-5 sm:p-7 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.7)] text-left"
-    >
+    <div className="w-full max-w-4xl mx-auto rounded-2xl bg-white/95 border border-stone-200/90 p-5 sm:p-7 shadow-[0_12px_40px_rgba(0,0,0,0.06)] text-left">
       {/* Top Bar with Live Indicator and Tabs */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-white/[0.08]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-stone-200/80">
         <div className="flex items-center gap-2.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-xs font-mono font-medium text-zinc-200">
+          <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-pulse" />
+          <span className="text-xs font-mono font-medium text-stone-800">
             Interactive Ingestion Pipeline Simulator
           </span>
-          <Badge variant="outline" className="text-[10px] text-emerald-400 border-emerald-500/30">
+          <Badge variant="outline" className="text-[10px] text-emerald-700 border-emerald-600/30 bg-emerald-50">
             Live Preview
           </Badge>
         </div>
@@ -85,8 +76,8 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
               }}
               className={`text-xs font-mono px-3 py-1.5 rounded-lg transition-all cursor-pointer ${
                 activeTab === idx
-                  ? 'bg-white/10 text-white font-medium border border-white/15 shadow-sm'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-white/5'
+                  ? 'bg-stone-900 text-white font-medium shadow-sm'
+                  : 'text-stone-500 hover:text-stone-900 hover:bg-stone-100'
               }`}
             >
               {item.title}
@@ -100,21 +91,22 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
         {/* Left: 3D Flashcard Preview */}
         <div
           onClick={() => setFlipped(!flipped)}
-          className="group relative min-h-[240px] rounded-xl bg-[#0c0c10] border border-white/[0.08] hover:border-white/20 p-5 flex flex-col justify-between cursor-pointer transition-all duration-300 shadow-md"
+          className="group relative min-h-[240px] rounded-xl bg-stone-50/80 border border-stone-200/80 hover:border-stone-400 p-5 flex flex-col justify-between cursor-pointer transition-all duration-300 shadow-sm"
         >
-          <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
+          <div className="flex items-center justify-between text-[11px] font-mono text-stone-500">
             <span
               className="px-2 py-0.5 rounded border text-[10px]"
               style={{
                 color: mod.color,
-                borderColor: `${mod.color}40`,
-                background: `${mod.color}10`,
+                borderColor: `${mod.color}30`,
+                background: `${mod.color}0a`,
               }}
             >
               {flipped ? 'Key Answer' : 'Prompt / Concept'}
             </span>
-            <span className="text-[10px] text-zinc-500 group-hover:text-zinc-300 transition-colors">
-              Click to {flipped ? 'flip back' : 'reveal'} ↻
+            <span className="text-[10px] text-stone-500 group-hover:text-stone-900 transition-colors flex items-center gap-1">
+              <RotateCw size={10} />
+              <span>Click to {flipped ? 'flip back' : 'reveal'}</span>
             </span>
           </div>
 
@@ -126,28 +118,28 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.15 }}
-                className="font-heading font-normal text-base sm:text-lg text-zinc-100 leading-relaxed"
+                className="font-heading font-normal text-base sm:text-lg text-stone-900 leading-relaxed"
               >
                 {flipped ? mod.answer : mod.prompt}
               </motion.div>
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-2 border-t border-white/[0.06]">
+          <div className="flex items-center justify-between text-[10px] font-mono text-stone-500 pt-2 border-t border-stone-200/60">
             <span>3D Flashcard Deck</span>
-            <span>Space / Click</span>
+            <span>Click / Tap</span>
           </div>
         </div>
 
         {/* Right: Adaptive Diagnostic Quiz Preview */}
-        <div className="rounded-xl bg-[#0c0c10] border border-white/[0.08] p-5 flex flex-col justify-between shadow-md">
+        <div className="rounded-xl bg-stone-50/80 border border-stone-200/80 p-5 flex flex-col justify-between shadow-sm">
           <div>
-            <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 mb-2">
-              <span className="text-zinc-300">Diagnostic Practice Question</span>
-              <span className="text-emerald-400">1 of 1</span>
+            <div className="flex items-center justify-between text-[11px] font-mono text-stone-500 mb-2">
+              <span className="text-stone-700">Diagnostic Practice Question</span>
+              <span className="text-emerald-600 font-semibold">1 of 1</span>
             </div>
 
-            <p className="font-heading font-normal text-sm text-zinc-100 mb-3 leading-snug">
+            <p className="font-heading font-normal text-sm text-stone-900 mb-3 leading-snug">
               {mod.quiz}
             </p>
 
@@ -156,22 +148,29 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
                 const isSelected = selectedOption === optIdx
                 const isCorrect = optIdx === mod.correctIdx
 
-                let btnBg = 'bg-white/[0.03] border-white/[0.08] text-zinc-300 hover:bg-white/[0.06]'
+                let btnBg = 'bg-white border-stone-200 text-stone-700 hover:bg-stone-100/80'
                 if (selectedOption !== null) {
-                  if (isCorrect) btnBg = 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300 font-medium'
-                  else if (isSelected) btnBg = 'bg-rose-500/15 border-rose-500/40 text-rose-300'
-                  else btnBg = 'bg-white/[0.01] border-white/[0.04] text-zinc-600 opacity-50'
+                  if (isSelected && isCorrect) {
+                    btnBg = 'bg-emerald-50 border-emerald-500 text-emerald-800'
+                  } else if (isSelected && !isCorrect) {
+                    btnBg = 'bg-rose-50 border-rose-500 text-rose-800'
+                  } else if (isCorrect) {
+                    btnBg = 'bg-emerald-50/60 border-emerald-500/50 text-emerald-700'
+                  }
                 }
 
                 return (
                   <button
                     key={opt}
-                    onClick={() => setSelectedOption(optIdx)}
-                    className={`text-left p-2.5 rounded-lg border text-xs font-sans transition-all flex items-center justify-between cursor-pointer ${btnBg}`}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setSelectedOption(optIdx)
+                    }}
+                    className={`w-full text-left text-xs font-mono px-3 py-2 rounded-lg border transition-all flex items-center justify-between cursor-pointer ${btnBg}`}
                   >
                     <span>{opt}</span>
                     {selectedOption !== null && isCorrect && (
-                      <Check size={13} className="text-emerald-400 flex-shrink-0" />
+                      <Check size={13} className="text-emerald-600" />
                     )}
                   </button>
                 )
@@ -179,28 +178,30 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-[10px] font-mono text-zinc-500 pt-2.5 mt-3 border-t border-white/[0.06]">
-            <span>Real-Time Evaluation</span>
-            <span className="text-emerald-400/80">Structured Schema</span>
+          <div className="flex items-center justify-between text-[10px] font-mono text-stone-500 pt-2 border-t border-stone-200/60 mt-3">
+            <span>Adaptive Quiz</span>
+            <span>Instant Evaluation</span>
           </div>
         </div>
       </div>
 
-      {/* Bottom CTA Strip */}
-      <div className="mt-5 pt-4 border-t border-white/[0.08] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-xs font-mono text-zinc-400">
-          <Brain size={14} className="text-emerald-400" />
-          <span>Upload your own lecture slides or notes in the full workspace.</span>
+      {/* Bottom Callout & Launch Action */}
+      <div className="mt-5 pt-4 border-t border-stone-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="flex items-center gap-2 text-xs text-stone-600 font-mono">
+          <FileText size={14} className="text-stone-500" />
+          <span>Synthesizes PDF slides & textbooks into active retention decks</span>
         </div>
 
-        <ShimmerButton onClick={onLaunch} className="h-8 px-4 text-xs font-mono rounded-full">
-          <span>Open Eureka Workspace</span>
+        <ShimmerButton
+          onClick={onLaunch}
+          className="text-xs font-mono h-8 px-4 self-end sm:self-auto bg-stone-900 text-white hover:bg-stone-800"
+        >
+          <span>Open Full Workspace</span>
           <ArrowRight size={12} />
         </ShimmerButton>
       </div>
-    </motion.div>
+    </div>
   )
 }
 
 export default LivePreviewBento
-

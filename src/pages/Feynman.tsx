@@ -87,14 +87,14 @@ export function Feynman() {
   if (topics.length === 0) {
     return (
       <div className="min-h-[80vh] flex flex-col items-center justify-center p-8 text-center max-w-lg mx-auto">
-        <div className="w-12 h-12 rounded-2xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mb-4">
+        <div className="w-12 h-12 rounded-2xl bg-stone-100 border border-stone-200 flex items-center justify-center text-stone-600 mb-4">
           <Layers size={22} strokeWidth={1.5} />
         </div>
-        <h2 className="font-heading text-xl font-normal text-zinc-100 mb-2">No topics loaded yet</h2>
-        <p className="text-sm text-zinc-400 mb-6 leading-relaxed max-w-sm">
+        <h2 className="font-heading text-xl font-normal text-stone-900 mb-2">No topics loaded yet</h2>
+        <p className="text-sm text-stone-600 mb-6 leading-relaxed max-w-sm">
           Upload your notes first. Feynman Mode works best after you've studied the flashcards at least once.
         </p>
-        <ShimmerButton onClick={() => navigate('/app')} className="px-5 py-2.5">
+        <ShimmerButton onClick={() => navigate('/app')} className="px-5 py-2.5 bg-stone-900 text-white hover:bg-stone-800">
           <span>Go to Workspace</span>
           <ArrowRight size={14} />
         </ShimmerButton>
@@ -108,15 +108,15 @@ export function Feynman() {
       {/* ── Header ── */}
       <header className="w-full mb-8 flex flex-col items-center text-center">
         <div className="flex items-center gap-2 mb-2">
-          <Lightbulb size={14} className="text-amber-400" />
-          <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-zinc-300 font-semibold">
+          <Lightbulb size={14} className="text-amber-600" />
+          <span className="text-[10px] font-mono tracking-[0.2em] uppercase text-stone-500 font-semibold">
             Feynman Technique
           </span>
         </div>
-        <h1 className="font-heading font-normal text-2xl md:text-3xl text-zinc-100 mb-1">
+        <h1 className="font-heading font-normal text-2xl md:text-3xl text-stone-900 mb-1">
           Teach it to learn it.
         </h1>
-        <p className="text-xs text-zinc-400 max-w-sm leading-relaxed">
+        <p className="text-xs text-stone-600 max-w-sm leading-relaxed">
           Explain the topic below as if you're teaching someone who's never heard of it. The AI will score your explanation and pinpoint exactly what's missing.
         </p>
       </header>
@@ -129,16 +129,16 @@ export function Feynman() {
             t.difficulty === 'advanced'
               ? 'bg-rose-500'
               : t.difficulty === 'intermediate'
-              ? 'bg-amber-400'
-              : 'bg-emerald-400'
+              ? 'bg-amber-500'
+              : 'bg-emerald-600'
           return (
             <button
               key={t.id}
               onClick={() => handleTopicChange(t.id)}
               className={`flex items-center gap-1.5 text-xs px-3.5 py-1.5 rounded-full transition-all duration-150 cursor-pointer ${
                 isSelected
-                  ? 'bg-zinc-100 text-zinc-950 font-medium shadow-md'
-                  : 'text-zinc-400 hover:text-zinc-200 hover:bg-zinc-900'
+                  ? 'bg-stone-900 text-white font-medium shadow-sm'
+                  : 'text-stone-600 hover:text-stone-900 hover:bg-stone-100'
               }`}
             >
               <span className={`w-1.5 h-1.5 rounded-full ${diffColor} flex-shrink-0`} />
@@ -161,12 +161,12 @@ export function Feynman() {
           >
             {/* Topic context pill */}
             {activeTopic && (
-              <div className="w-full p-4 rounded-xl bg-zinc-900/50 border border-zinc-800/80">
-                <div className="text-[10px] font-mono uppercase tracking-widest text-zinc-500 mb-1">
+              <div className="w-full p-4 rounded-xl bg-stone-50 border border-stone-200">
+                <div className="text-[10px] font-mono uppercase tracking-widest text-stone-500 mb-1">
                   Topic to explain
                 </div>
-                <div className="text-sm font-semibold text-zinc-100">{activeTopic.title}</div>
-                <div className="text-xs text-zinc-400 mt-1 leading-relaxed">{activeTopic.summary}</div>
+                <div className="text-sm font-semibold text-stone-900">{activeTopic.title}</div>
+                <div className="text-xs text-stone-600 mt-1 leading-relaxed">{activeTopic.summary}</div>
               </div>
             )}
 
@@ -180,9 +180,9 @@ export function Feynman() {
                 }}
                 placeholder={`Explain ${activeTopic?.title ?? 'this topic'} in your own words. Pretend you're teaching it to a curious friend who's never studied it before...`}
                 rows={10}
-                className="w-full rounded-2xl bg-[#0e0e12] border border-zinc-800 hover:border-zinc-700 focus:border-zinc-600 focus:outline-none p-5 text-sm text-zinc-100 placeholder:text-zinc-600 leading-relaxed resize-none transition-colors font-sans"
+                className="w-full rounded-2xl bg-white border border-stone-200 hover:border-stone-300 focus:border-stone-500 focus:outline-none p-5 text-sm text-stone-900 placeholder:text-stone-400 leading-relaxed resize-none transition-colors font-sans shadow-xs"
               />
-              <div className="absolute bottom-4 right-4 text-[11px] font-mono text-zinc-600">
+              <div className="absolute bottom-4 right-4 text-[11px] font-mono text-stone-400">
                 {explanation.trim().split(/\s+/).filter(Boolean).length} words
               </div>
             </div>
@@ -197,7 +197,7 @@ export function Feynman() {
             <ShimmerButton
               onClick={handleEvaluate}
               disabled={isEvaluating || explanation.trim().length < 10}
-              className="w-full py-3 text-sm font-mono"
+              className="w-full py-3 text-sm font-mono bg-stone-900 text-white hover:bg-stone-800"
             >
               {isEvaluating ? (
                 <>
@@ -224,8 +224,8 @@ export function Feynman() {
             className="w-full flex flex-col gap-5"
           >
             {/* Score gauge */}
-            <div className="w-full rounded-2xl bg-[#0d0d10] border border-zinc-800 p-8 flex flex-col items-center shadow-2xl">
-              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-400 mb-6">
+            <div className="w-full rounded-2xl bg-white border border-stone-200 p-8 flex flex-col items-center shadow-xl">
+              <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-stone-500 mb-6">
                 Feynman Score — {activeTopic?.title}
               </span>
               <GaugeMeter
@@ -235,10 +235,10 @@ export function Feynman() {
                 label="Understanding"
                 sublabel={
                   result.score >= 80
-                    ? 'Excellent grasp — nearly ready to teach for real'
+                    ? 'Excellent grasp — ready to teach with clarity'
                     : result.score >= 55
-                    ? 'Solid foundation, some gaps to address'
-                    : 'Keep studying — the gaps will narrow fast'
+                    ? 'Solid foundation, a few key concepts to refine'
+                    : 'Review the source cards to close understanding gaps'
                 }
                 className="mb-6"
               />
@@ -246,17 +246,17 @@ export function Feynman() {
 
             {/* Strengths */}
             {result.strengths.length > 0 && (
-              <div className="w-full rounded-2xl bg-emerald-950/30 border border-emerald-500/20 p-6">
+              <div className="w-full rounded-2xl bg-emerald-50/70 border border-emerald-200 p-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <CheckCircle2 size={14} className="text-emerald-400" />
-                  <span className="text-xs font-mono uppercase tracking-widest text-emerald-400">
+                  <CheckCircle2 size={14} className="text-emerald-700" />
+                  <span className="text-xs font-mono uppercase tracking-widest text-emerald-800 font-semibold">
                     What you got right
                   </span>
                 </div>
                 <ul className="flex flex-col gap-2">
                   {result.strengths.map((s, i) => (
-                    <li key={i} className="text-sm text-zinc-200 leading-relaxed flex gap-2">
-                      <span className="text-emerald-500 mt-0.5 flex-shrink-0">·</span>
+                    <li key={i} className="text-sm text-emerald-950 leading-relaxed flex gap-2">
+                      <span className="text-emerald-600 mt-0.5 flex-shrink-0">·</span>
                       {s}
                     </li>
                   ))}
@@ -266,17 +266,17 @@ export function Feynman() {
 
             {/* Gaps */}
             {result.gaps.length > 0 && (
-              <div className="w-full rounded-2xl bg-amber-950/30 border border-amber-500/20 p-6">
+              <div className="w-full rounded-2xl bg-amber-50/70 border border-amber-200 p-6">
                 <div className="flex items-center gap-2 mb-3">
-                  <XCircle size={14} className="text-amber-400" />
-                  <span className="text-xs font-mono uppercase tracking-widest text-amber-400">
+                  <XCircle size={14} className="text-amber-700" />
+                  <span className="text-xs font-mono uppercase tracking-widest text-amber-800 font-semibold">
                     Gaps & misconceptions
                   </span>
                 </div>
                 <ul className="flex flex-col gap-2">
                   {result.gaps.map((g, i) => (
-                    <li key={i} className="text-sm text-zinc-200 leading-relaxed flex gap-2">
-                      <span className="text-amber-500 mt-0.5 flex-shrink-0">·</span>
+                    <li key={i} className="text-sm text-amber-950 leading-relaxed flex gap-2">
+                      <span className="text-amber-600 mt-0.5 flex-shrink-0">·</span>
                       {g}
                     </li>
                   ))}
@@ -285,13 +285,13 @@ export function Feynman() {
             )}
 
             {/* Model explanation — collapsible */}
-            <div className="w-full rounded-2xl bg-zinc-900/50 border border-zinc-800 overflow-hidden">
+            <div className="w-full rounded-2xl bg-white border border-stone-200 overflow-hidden shadow-xs">
               <button
                 onClick={() => setShowModel((v) => !v)}
-                className="w-full flex items-center justify-between p-5 text-sm font-mono text-zinc-300 hover:text-zinc-100 transition-colors cursor-pointer"
+                className="w-full flex items-center justify-between p-5 text-sm font-mono text-stone-800 hover:text-stone-900 transition-colors cursor-pointer"
               >
                 <span className="flex items-center gap-2">
-                  <Lightbulb size={13} className="text-amber-400" />
+                  <Lightbulb size={13} className="text-amber-600" />
                   Model explanation
                 </span>
                 {showModel ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
@@ -305,8 +305,8 @@ export function Feynman() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-5 pb-6 pt-1 border-t border-zinc-800">
-                      <p className="text-sm text-zinc-300 leading-relaxed font-sans">
+                    <div className="px-5 pb-6 pt-1 border-t border-stone-200">
+                      <p className="text-sm text-stone-700 leading-relaxed font-sans">
                         {result.modelExplanation}
                       </p>
                     </div>
@@ -321,14 +321,14 @@ export function Feynman() {
                 variant="outline"
                 size="sm"
                 onClick={handleReset}
-                className="font-mono text-xs h-9 px-4"
+                className="font-mono text-xs h-9 px-4 border-stone-200 text-stone-700 hover:bg-stone-100"
               >
                 <RotateCcw size={13} />
                 Try Again
               </Button>
               <ShimmerButton
                 onClick={() => navigate('/study')}
-                className="text-xs h-9 px-4"
+                className="text-xs h-9 px-4 bg-stone-900 text-white hover:bg-stone-800"
               >
                 <span>Back to Flashcards</span>
                 <ArrowRight size={13} />
@@ -342,4 +342,3 @@ export function Feynman() {
 }
 
 export default Feynman
-

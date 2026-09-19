@@ -1,14 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --bg-app: #070709;
-  --bg-surface: #0e0e12;
-  --bg-surface-raised: #14141a;
-  --bg-surface-hover: #1c1c24;
-  --border-app: rgba(255, 255, 255, 0.08);
-  --border-subtle: rgba(255, 255, 255, 0.05);
-  --text-primary: #f4f4f6;
-  --text-secondary: #a1a1aa;
+  --bg-app: #fbfbfa;
+  --bg-surface: #ffffff;
+  --bg-surface-raised: #f5f5f3;
+  --bg-surface-hover: #ecece8;
+  --border-app: rgba(0, 0, 0, 0.08);
+  --border-subtle: rgba(0, 0, 0, 0.05);
+  --text-primary: #18181b;
+  --text-secondary: #52525b;
   --text-muted: #71717a;
 }
 
@@ -34,10 +34,10 @@ html.lenis, html.lenis body {
 }
 
 html {
-  color-scheme: dark;
+  color-scheme: light;
 }
 
-/* Base Body: Warm, readable modern sans font (Signika / Oxygen / Inter) */
+/* Base Body: Warm, readable modern sans font (Signika / Oxygen / Inter) on Alabaster paper */
 body {
   margin: 0;
   padding: 0;
@@ -71,56 +71,57 @@ code, kbd, .font-mono {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(0, 0, 0, 0.15);
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(0, 0, 0, 0.25);
 }
 
-/* ── Luxury Soft Gradient Card Surfaces (Replaces sharp/harsh solid borders) ── */
+/* ── Luxury Soft Alabaster Card Surfaces (Replaces sharp/harsh solid borders) ── */
 .luxury-card {
   position: relative;
-  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.035), transparent 75%), #0d0d12;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 16px;
-  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.06);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.8);
   transition: all 0.25s ease;
 }
 
 .luxury-card:hover {
-  border-color: rgba(255, 255, 255, 0.16);
-  box-shadow: 0 8px 32px -2px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  border-color: rgba(0, 0, 0, 0.14);
+  box-shadow: 0 8px 30px -4px rgba(0, 0, 0, 0.08);
 }
 
 .luxury-card-glow {
-  background: radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.06), transparent 70%), #0d0d12;
-  border: 1px solid rgba(52, 211, 153, 0.2);
+  background: #ffffff;
+  border: 1px solid rgba(5, 150, 105, 0.25);
+  box-shadow: 0 4px 20px -2px rgba(5, 150, 105, 0.08);
 }
 
 /* Precision Panel & Card Surfaces */
 .linear-card {
   position: relative;
-  background: #0d0d11;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
   transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .linear-card:hover {
-  border-color: rgba(255, 255, 255, 0.14);
+  border-color: rgba(0, 0, 0, 0.15);
 }
 
 .linear-card-highlight {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: #101015;
+  border-color: rgba(0, 0, 0, 0.12);
+  background: #fdfdfc;
 }
 
 /* Precision Action Buttons */
 .btn-primary {
-  background: #f4f4f5;
-  color: #09090b;
+  background: #18181b;
+  color: #ffffff;
   font-family: "Signika", "Oxygen", sans-serif;
   font-weight: 500;
   font-size: 12px;
@@ -130,20 +131,20 @@ code, kbd, .font-mono {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: all 0.15s ease;
 }
 
 .btn-primary:hover {
-  background: #ffffff;
+  background: #27272a;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
 }
 
 .btn-primary:active {
-  background: #d4d4d8;
+  background: #09090b;
   transform: translateY(0);
 }
 
@@ -153,8 +154,8 @@ code, kbd, .font-mono {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  color: #d4d4d8;
+  background: #f4f4f2;
+  color: #3f3f46;
   font-family: "Signika", "Oxygen", sans-serif;
   font-weight: 400;
   font-size: 12px;
@@ -164,16 +165,15 @@ code, kbd, .font-mono {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(0, 0, 0, 0.08);
   cursor: pointer;
   transition: all 0.15s ease;
-  backdrop-filter: blur(8px);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.18);
-  color: #ffffff;
+  background: #ebebe7;
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #18181b;
 }
 
 .btn-secondary:disabled {
@@ -190,9 +190,9 @@ code, kbd, .font-mono {
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 10px;
   font-weight: 500;
-  color: #a1a1aa;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #52525b;
+  background: #f4f4f2;
+  border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 5px;
 }
 
@@ -209,39 +209,33 @@ code, kbd, .font-mono {
 }
 
 .badge-default {
-  background: rgba(255, 255, 255, 0.06);
-  color: #a1a1aa;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #f4f4f2;
+  color: #52525b;
+  border: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 .badge-success {
-  background: rgba(16, 185, 129, 0.1);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(5, 150, 105, 0.08);
+  color: #059669;
+  border: 1px solid rgba(5, 150, 105, 0.2);
 }
 
 .badge-warning {
-  background: rgba(245, 158, 11, 0.1);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.25);
+  background: rgba(217, 119, 6, 0.08);
+  color: #d97706;
+  border: 1px solid rgba(217, 119, 6, 0.2);
 }
 
 .badge-danger {
-  background: rgba(244, 63, 94, 0.1);
-  color: #fb7185;
-  border: 1px solid rgba(244, 63, 94, 0.25);
+  background: rgba(225, 29, 72, 0.08);
+  color: #e11d48;
+  border: 1px solid rgba(225, 29, 72, 0.2);
 }
 
-.badge-blue {
-  background: rgba(59, 130, 246, 0.1);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.25);
-}
-
-/* Precision dot grid */
+/* Precision dot grid on Alabaster paper */
 .linear-grid {
-  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 /* GPU-composite optimized scrollable regions */

@@ -9,6 +9,7 @@ import {
   ScanText,
   Network,
   GaugeCircle,
+  ChevronDown,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
@@ -25,10 +26,10 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#070709] text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white linear-grid overflow-x-hidden">
-      {/* ── Luxury Floating Dynamic Island Navigation ── */}
+      {/* ── Floating Dynamic Island Navigation ── */}
       <FloatingNavbar hasTopics={topics.length > 0} />
 
-      {/* ── Luminous Cosmic Aurora Hero Section (Zero Black Spot, Rich Atmospheric Glow) ── */}
+      {/* ── Hero Section ── */}
       <CosmicAuroraHero>
         {/* Subtle Top Badge */}
         <motion.div
@@ -52,13 +53,15 @@ export function LandingPage() {
           into effortless recall.
         </motion.h1>
 
+        {/* Subheadline */}
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15 }}
           className="max-w-2xl text-sm sm:text-base md:text-lg text-zinc-300 leading-relaxed font-sans mb-8"
         >
-          Eureka transforms complex lecture notes and textbooks into 3D active flashcards, spaced memory intervals, and diagnostic test insights — completely in-browser.
+          Eureka transforms complex lecture notes and textbooks into 3D active flashcards,
+          spaced memory intervals, and diagnostic test insights — completely in-browser.
         </motion.p>
 
         {/* Hero Action Buttons */}
@@ -66,7 +69,7 @@ export function LandingPage() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap items-center justify-center gap-4 mb-4"
+          className="flex flex-wrap items-center justify-center gap-4 mb-12"
         >
           <ShimmerButton
             onClick={() => navigate('/app')}
@@ -85,11 +88,22 @@ export function LandingPage() {
           </a>
         </motion.div>
 
-        {/* ── Live Interactive Simulator Bento Box for Judges ── */}
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.8 }}
+          className="flex flex-col items-center gap-1.5 text-zinc-400 font-mono text-[10px] uppercase tracking-widest"
+        >
+          <span>Scroll to explore</span>
+          <ChevronDown size={14} className="animate-bounce text-emerald-400" />
+        </motion.div>
+
+        {/* Live Interactive Demo */}
         <LivePreviewBento onLaunch={() => navigate('/app')} />
       </CosmicAuroraHero>
 
-      {/* ── 3-Step Precision Pipeline with Soft Gradient SpotlightCards ── */}
+      {/* ── 3-Step Precision Pipeline ── */}
       <section id="pipeline" className="py-24 px-6 border-t border-white/[0.06] bg-[#09090d] relative z-10">
         <div className="max-w-5xl mx-auto">
           <SpotlightCards
@@ -123,7 +137,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Architecture & Capabilities Grid with Soft Gradient SpotlightCards ── */}
+      {/* ── Capabilities Grid ── */}
       <section id="features" className="py-24 px-6 border-t border-white/[0.06] bg-[#070709] relative z-10">
         <div className="max-w-5xl mx-auto">
           <SpotlightCards
@@ -160,7 +174,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── FAQ Section with Luxury Card Style ── */}
+      {/* ── FAQ Section ── */}
       <section id="faq" className="py-24 px-6 border-t border-white/[0.06] bg-[#09090d] relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-10 text-center">
@@ -203,7 +217,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Clean Footer ── */}
+      {/* ── Footer ── */}
       <footer className="py-12 border-t border-white/[0.06] bg-[#070709] text-center text-xs font-mono text-zinc-500 relative z-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">

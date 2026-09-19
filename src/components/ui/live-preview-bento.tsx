@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FileText,
-  CheckCircle2,
   ArrowRight,
   Check,
   RotateCw,
@@ -51,7 +50,7 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
   const mod = PREVIEW_MODULES[activeTab]
 
   return (
-    <div className="w-full max-w-4xl mx-auto rounded-2xl bg-[#13151c]/90 border border-white/10 p-5 sm:p-6 shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-xl text-left">
+    <div className="w-full rounded-2xl bg-[#12141c]/70 border border-white/10 p-5 sm:p-6 shadow-[0_20px_50px_rgba(0,0,0,0.5)] backdrop-blur-2xl text-left pointer-events-auto">
       {/* Top Bar with Live Indicator and Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3.5 border-b border-white/[0.08]">
         <div className="flex items-center gap-2.5">
@@ -59,7 +58,7 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
           <span className="text-xs font-mono font-medium text-zinc-200">
             Interactive Ingestion Pipeline Simulator
           </span>
-          <Badge variant="outline" className="text-[10px] text-emerald-400 border-emerald-500/30 bg-emerald-950/40">
+          <Badge variant="outline" className="text-[10px] text-emerald-400 border-emerald-500/30 bg-emerald-950/30">
             Live Preview
           </Badge>
         </div>
@@ -91,7 +90,7 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
         {/* Left: 3D Flashcard Preview */}
         <div
           onClick={() => setFlipped(!flipped)}
-          className="group relative min-h-[220px] rounded-xl bg-[#181b24] border border-white/10 hover:border-white/20 p-5 flex flex-col justify-between cursor-pointer transition-all duration-300 shadow-md"
+          className="group relative min-h-[220px] rounded-xl bg-gradient-to-b from-[#171a23] to-[#101218] border border-white/10 hover:border-white/20 p-5 flex flex-col justify-between cursor-pointer transition-all duration-300 shadow-md"
         >
           <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400">
             <span
@@ -132,7 +131,7 @@ export function LivePreviewBento({ onLaunch }: { onLaunch: () => void }) {
         </div>
 
         {/* Right: Adaptive Diagnostic Quiz Preview */}
-        <div className="rounded-xl bg-[#181b24] border border-white/10 p-5 flex flex-col justify-between shadow-md">
+        <div className="rounded-xl bg-gradient-to-b from-[#171a23] to-[#101218] border border-white/10 p-5 flex flex-col justify-between shadow-md">
           <div>
             <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 mb-2">
               <span className="text-zinc-300">Diagnostic Practice Question</span>

@@ -6,10 +6,16 @@ import {
   Cpu,
   Keyboard,
   ShieldCheck,
+  Zap,
+  Sparkles,
+  Layers,
+  CheckCircle2,
 } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
 import { Badge } from '../components/ui/badge'
 import { Button } from '../components/ui/button'
+import { ShimmerButton } from '../components/ui/shimmer-button'
 import { BlackHoleHeroSection } from '../components/ui/blackhole-hero-section'
 
 function GithubIcon({ size = 14 }: { size?: number }) {
@@ -29,37 +35,34 @@ export function LandingPage() {
   const { topics } = useAppStore()
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] text-[#1A1A1A] flex flex-col selection:bg-[rgba(0,0,0,0.08)] selection:text-white linear-grid">
+    <div className="min-h-screen bg-[#09090b] text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white linear-grid">
       {/* ── Top Navigation Bar ── */}
-      <header className="sticky top-0 z-50 w-full border-b border-[rgba(0,0,0,0.08)] bg-[#FAFAF8]/90 backdrop-blur-md">
+      <header className="sticky top-0 z-50 w-full border-b border-zinc-800/80 bg-[#09090b]/85 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 h-12 flex items-center justify-between">
           <div className="flex items-center gap-6">
             <Link to="/" className="flex items-center gap-2 group">
-              <div className="w-6 h-6 rounded border border-[rgba(0,0,0,0.1)] flex items-center justify-center font-bold text-[11px] text-[#1A1A1A]">
+              <div className="w-6 h-6 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center font-bold text-[11px] text-zinc-100 group-hover:border-zinc-500 transition-colors">
                 AL
               </div>
-              <span className="text-xs font-semibold tracking-tight text-[#1A1A1A] group-hover:text-black font-mono">
+              <span className="text-xs font-semibold tracking-tight text-zinc-100 group-hover:text-white font-mono">
                 AiLearner
               </span>
             </Link>
 
-            <nav className="hidden md:flex items-center gap-4 text-xs text-[rgba(0,0,0,0.4)]">
-              <a href="#pipeline" className="hover:text-[rgba(0,0,0,0.6)] transition-colors">
+            <nav className="hidden md:flex items-center gap-5 text-xs text-zinc-400">
+              <a href="#pipeline" className="hover:text-zinc-200 transition-colors">
                 Pipeline
               </a>
-              <a href="#features" className="hover:text-[rgba(0,0,0,0.6)] transition-colors">
+              <a href="#features" className="hover:text-zinc-200 transition-colors">
                 Architecture
               </a>
-              <a href="#telemetry" className="hover:text-[rgba(0,0,0,0.6)] transition-colors">
-                Telemetry
-              </a>
-              <a href="#faq" className="hover:text-[rgba(0,0,0,0.6)] transition-colors">
+              <a href="#faq" className="hover:text-zinc-200 transition-colors">
                 FAQ
               </a>
             </nav>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
             <a
               href="https://github.com/gorlock777/AiLearner"
               target="_blank"
@@ -70,20 +73,19 @@ export function LandingPage() {
               <span className="hidden sm:inline font-mono text-[11px]">gorlock777/AiLearner</span>
             </a>
 
-            <Button
-              size="sm"
+            <ShimmerButton
               onClick={() => navigate(topics.length > 0 ? '/study' : '/app')}
-              className="h-7 text-xs"
+              className="h-7 px-3 text-xs"
             >
-              {topics.length > 0 ? 'Resume Study' : 'Launch Workspace'}
+              <span>{topics.length > 0 ? 'Resume Study' : 'Launch Workspace'}</span>
               <ArrowRight size={11} />
-            </Button>
+            </ShimmerButton>
           </div>
         </div>
       </header>
 
-      {/* ── Hero Section ── */}
-      <section className="relative min-h-[92svh] w-full md:min-h-[720px] overflow-hidden">
+      {/* ── Hero Section with Schwarzschild WebGL Canvas ── */}
+      <section className="relative min-h-[92svh] w-full md:min-h-[720px] overflow-hidden bg-black">
         <BlackHoleHeroSection
           distance={24}
           elevation={-5.5}
@@ -95,146 +97,157 @@ export function LandingPage() {
           scrimStrength={0.9}
         >
           <div className="flex h-full min-h-[92svh] items-start px-6 pt-14 sm:px-10 md:min-h-[720px] md:items-center md:pt-0 lg:px-20">
-            <div className="max-w-[34rem]">
-              <h1 className="text-[2.5rem] font-light leading-[1.05] tracking-[-0.03em] text-[#1A1A1A] sm:text-6xl lg:text-[4.25rem]">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              className="max-w-[36rem]"
+            >
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded bg-zinc-950/80 border border-zinc-800 text-[11px] font-mono text-zinc-400 mb-5 backdrop-blur-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span>OpenRouter Neural Synthesis · 100% Client Side</span>
+              </div>
+
+              <h1 className="font-serif text-[2.5rem] font-normal leading-[1.08] tracking-tight text-zinc-100 sm:text-6xl lg:text-[4.25rem]">
                 Turn dense notes
                 <br />
                 into mastery
               </h1>
 
-              <p className="mt-6 max-w-md text-[0.95rem] leading-relaxed text-[rgba(0,0,0,0.6)] md:mt-7">
-                AiLearner transforms your study notes into active recall, spaced repetition, and adaptive diagnostic practice — 100% in your browser.
+              <p className="mt-6 max-w-md text-[0.95rem] leading-relaxed text-zinc-400 md:mt-7">
+                AiLearner transforms complex study notes into active recall decks, spaced repetition, and adaptive diagnostic practice — with zero database dependencies.
               </p>
 
               <div className="mt-8 flex flex-wrap items-center gap-3 md:mt-10">
-                <Button
-                  size="lg"
+                <ShimmerButton
                   onClick={() => navigate('/app')}
-                  className="px-6 py-3 text-sm font-medium text-black"
+                  className="px-6 py-2.5 text-xs font-mono"
                 >
-                  <FileText size={14} />
-                  Import Document
-                </Button>
+                  <FileText size={13} />
+                  <span>Launch Workspace</span>
+                  <ArrowRight size={12} />
+                </ShimmerButton>
+
                 <a
                   href="https://github.com/gorlock777/AiLearner"
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-md border border-[rgba(0,0,0,0.1)] px-6 py-3 text-sm text-[rgba(0,0,0,0.6)] transition hover:border-[rgba(0,0,0,0.2)] hover:text-[rgba(0,0,0,0.8)]"
+                  className="inline-flex items-center gap-2 rounded-md border border-zinc-800 bg-zinc-900/60 px-5 py-2.5 text-xs font-medium text-zinc-300 transition hover:border-zinc-700 hover:text-white"
                 >
                   <GithubIcon size={13} />
-                  Source on GitHub
+                  <span>GitHub Repository</span>
                 </a>
               </div>
-            </div>
+            </motion.div>
           </div>
         </BlackHoleHeroSection>
       </section>
 
       {/* ── 3-Step Precision Pipeline ── */}
-      <section id="pipeline" className="py-16 px-6 border-t border-[rgba(0,0,0,0.08)] bg-[#F0EFEB]">
+      <section id="pipeline" className="py-20 px-6 border-t border-zinc-800/80 bg-[#0c0c0e]">
         <div className="max-w-5xl mx-auto">
           <div className="mb-10">
-            <span className="text-[10px] uppercase tracking-wider font-mono text-[rgba(0,0,0,0.4)] font-semibold block mb-1">
+            <span className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 font-semibold block mb-1">
               Architecture
             </span>
-            <h2 className="text-xl font-semibold tracking-tight text-[#1A1A1A]">
+            <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-100">
               System Ingestion & Practice Loop
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="linear-card p-5 flex flex-col">
+            <div className="linear-card linear-card-highlight p-5 flex flex-col border border-zinc-800">
               <div className="flex items-center justify-between mb-3 text-xs font-mono">
-                <span className="text-[rgba(0,0,0,0.4)]">01 / INGESTION</span>
+                <span className="text-zinc-400">01 / INGESTION</span>
                 <Badge variant="secondary">Vision OCR</Badge>
               </div>
-              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-1.5">
+              <h3 className="text-sm font-semibold text-zinc-100 font-mono mb-2">
                 Multi-Format Document Parser
               </h3>
-              <p className="text-xs text-[rgba(0,0,0,0.4)] leading-relaxed">
-                Processes PDF, Markdown, and TXT. If a PDF contains image-only slides or scanned textbook pages, dynamic canvas rendering runs multimodal vision OCR via free OpenRouter models.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Processes PDF, Markdown, and TXT. When a PDF contains scanned pages or slides, in-browser canvas rendering triggers multimodal vision OCR via free OpenRouter models.
               </p>
             </div>
 
-            <div className="linear-card p-5 flex flex-col">
+            <div className="linear-card linear-card-highlight p-5 flex flex-col border border-zinc-800">
               <div className="flex items-center justify-between mb-3 text-xs font-mono">
-                <span className="text-[rgba(0,0,0,0.4)]">02 / STRUCTURE</span>
+                <span className="text-zinc-400">02 / STRUCTURE</span>
                 <Badge variant="secondary">JSON Schema</Badge>
               </div>
-              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-1.5">
+              <h3 className="text-sm font-semibold text-zinc-100 font-mono mb-2">
                 Topic Extraction & Cards
               </h3>
-              <p className="text-xs text-[rgba(0,0,0,0.4)] leading-relaxed">
-                Extracts topic hierarchies and key concepts without emoji fluff. Generates two-sided flashcards equipped with hint metadata for active recall.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Extracts topic hierarchies and key concepts without emoji fluff. Generates two-sided 3D flashcards with spring physics and keyboard shortcuts.
               </p>
             </div>
 
-            <div className="linear-card p-5 flex flex-col">
+            <div className="linear-card linear-card-highlight p-5 flex flex-col border border-zinc-800">
               <div className="flex items-center justify-between mb-3 text-xs font-mono">
-                <span className="text-[rgba(0,0,0,0.4)]">03 / DIAGNOSTIC</span>
+                <span className="text-zinc-400">03 / DIAGNOSTIC</span>
                 <Badge variant="secondary">Adaptive Quiz</Badge>
               </div>
-              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-1.5">
+              <h3 className="text-sm font-semibold text-zinc-100 font-mono mb-2">
                 Assessment & Weak Spot Tracking
               </h3>
-              <p className="text-xs text-[rgba(0,0,0,0.4)] leading-relaxed">
-                Runs multiple-choice checks with instant explanations. Topics scoring below 60% are flagged as high-priority revision targets in your analytics stream.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                Runs multiple-choice checks with instant explanations and circular gauge accuracy dials. Topics scoring below 60% are flagged for priority revision.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── Architecture & Features Grid ── */}
-      <section id="features" className="py-16 px-6 border-t border-[rgba(0,0,0,0.08)]">
+      {/* ── Architecture & Capabilities Grid ── */}
+      <section id="features" className="py-20 px-6 border-t border-zinc-800/80 bg-[#09090b]">
         <div className="max-w-5xl mx-auto">
           <div className="mb-10">
-            <span className="text-[10px] uppercase tracking-wider font-mono text-[rgba(0,0,0,0.4)] font-semibold block mb-1">
+            <span className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 font-semibold block mb-1">
               Capabilities
             </span>
-            <h2 className="text-xl font-semibold tracking-tight text-[#1A1A1A]">
+            <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-100">
               Built for Fast, Distraction-Free Study
             </h2>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-            <div className="linear-card p-4">
-              <div className="flex items-center gap-2 mb-2 text-[rgba(0,0,0,0.3)]">
-                <ShieldCheck size={15} />
-                <h4 className="text-xs font-semibold">100% Client-Side</h4>
+            <div className="linear-card p-4 border border-zinc-800/80">
+              <div className="flex items-center gap-2 mb-2 text-zinc-300">
+                <ShieldCheck size={16} className="text-emerald-400" />
+                <h4 className="text-xs font-semibold font-mono">100% Client-Side</h4>
               </div>
-              <p className="text-[11px] text-[rgba(0,0,0,0.4)] leading-relaxed">
-                Zero database dependencies. All uploaded documents, flashcards, and test attempts remain in your browser’s localStorage.
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Zero server databases. All uploaded documents, flashcard decks, and quiz attempts persist directly in browser localStorage.
               </p>
             </div>
 
-            <div className="linear-card p-4">
-              <div className="flex items-center gap-2 mb-2 text-[rgba(0,0,0,0.3)]">
-                <Keyboard size={15} />
-                <h4 className="text-xs font-semibold">Keyboard First</h4>
+            <div className="linear-card p-4 border border-zinc-800/80">
+              <div className="flex items-center gap-2 mb-2 text-zinc-300">
+                <Keyboard size={16} className="text-zinc-300" />
+                <h4 className="text-xs font-semibold font-mono">Keyboard First</h4>
               </div>
-              <p className="text-[11px] text-[rgba(0,0,0,0.4)] leading-relaxed">
-                Navigate decks with Space to flip, 1 for needs review, 2 for mastered, and arrow keys for traversal.
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Navigate decks with <kbd className="kbd">Space</kbd> to flip, <kbd className="kbd">1</kbd> for hard, <kbd className="kbd">2</kbd> for mastered, and arrow keys.
               </p>
             </div>
 
-            <div className="linear-card p-4">
-              <div className="flex items-center gap-2 mb-2 text-[rgba(0,0,0,0.3)]">
-                <Cpu size={15} />
-                <h4 className="text-xs font-semibold">Free LLM Router</h4>
+            <div className="linear-card p-4 border border-zinc-800/80">
+              <div className="flex items-center gap-2 mb-2 text-zinc-300">
+                <Cpu size={16} className="text-emerald-400" />
+                <h4 className="text-xs font-semibold font-mono">Free LLM Router</h4>
               </div>
-              <p className="text-[11px] text-[rgba(0,0,0,0.4)] leading-relaxed">
-                Powered by OpenRouter free router models with structured JSON schema outputs and vision support.
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Integrated with OpenRouter free router models with structured JSON schema outputs and vision OCR fallbacks.
               </p>
             </div>
 
-            <div className="linear-card p-4">
-              <div className="flex items-center gap-2 mb-2 text-[rgba(0,0,0,0.3)]">
-                <Activity size={15} />
-                <h4 className="text-xs font-semibold">Retention Stream</h4>
+            <div className="linear-card p-4 border border-zinc-800/80">
+              <div className="flex items-center gap-2 mb-2 text-zinc-300">
+                <Activity size={16} className="text-amber-400" />
+                <h4 className="text-xs font-semibold font-mono">Retention Stream</h4>
               </div>
-              <p className="text-[11px] text-[rgba(0,0,0,0.4)] leading-relaxed">
-                Continuous accuracy telemetry and daily consecutive streak calculation across all quiz attempts.
+              <p className="text-[11px] text-zinc-400 leading-relaxed">
+                Continuous accuracy telemetry, circular score gauges, and daily streak calculations across all practice tests.
               </p>
             </div>
           </div>
@@ -242,42 +255,42 @@ export function LandingPage() {
       </section>
 
       {/* ── FAQ Section ── */}
-      <section id="faq" className="py-16 px-6 border-t border-[rgba(0,0,0,0.08)] bg-[#F0EFEB]">
+      <section id="faq" className="py-20 px-6 border-t border-zinc-800/80 bg-[#0c0c0e]">
         <div className="max-w-4xl mx-auto">
           <div className="mb-8">
-            <span className="text-[10px] uppercase tracking-wider font-mono text-[rgba(0,0,0,0.4)] font-semibold block mb-1">
+            <span className="text-[10px] uppercase tracking-wider font-mono text-zinc-400 font-semibold block mb-1">
               Reference
             </span>
-            <h2 className="text-xl font-semibold tracking-tight text-[#1A1A1A]">
+            <h2 className="font-serif text-2xl font-normal tracking-tight text-zinc-100">
               Frequently Asked Questions
             </h2>
           </div>
 
-          <div className="flex flex-col divide-y divide-[rgba(0,0,0,0.08)] border border-[rgba(0,0,0,0.08)] rounded bg-[rgba(0,0,0,0.02)]">
+          <div className="flex flex-col divide-y divide-zinc-800 border border-zinc-800 rounded bg-zinc-900/40">
             <div className="p-4">
-              <h3 className="text-xs font-medium text-[rgba(0,0,0,0.2)] mb-1">
+              <h3 className="text-xs font-medium text-zinc-200 mb-1 font-mono">
                 Which LLM models does AiLearner use?
               </h3>
-              <p className="text-xs text-[rgba(0,0,0,0.4)] leading-relaxed font-mono text-[11px]">
-                AiLearner connects to the openrouter/free endpoint, routing requests to high-speed models with structured output and multimodal vision capabilities.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                AiLearner connects to the <code className="text-zinc-300 font-mono">openrouter/free</code> endpoint, automatically routing extraction prompts to high-performance models with structured JSON schema output support.
               </p>
             </div>
 
             <div className="p-4">
-              <h3 className="text-xs font-medium text-[rgba(0,0,0,0.2)] mb-1">
+              <h3 className="text-xs font-medium text-zinc-200 mb-1 font-mono">
                 How are scanned PDFs or slide screenshots handled?
               </h3>
-              <p className="text-xs text-[rgba(0,0,0,0.4)] leading-relaxed">
-                When a PDF lacks a selectable text layer, the in-browser parser renders each page onto a canvas and triggers vision OCR to transcribe the slide frames into text.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                When a PDF lacks an embedded text layer, the in-browser parser renders each page onto an HTML5 canvas and triggers multimodal vision OCR to transcribe the slide frames into clean text.
               </p>
             </div>
 
             <div className="p-4">
-              <h3 className="text-xs font-medium text-[rgba(0,0,0,0.2)] mb-1">
+              <h3 className="text-xs font-medium text-zinc-200 mb-1 font-mono">
                 Where is study data stored?
               </h3>
-              <p className="text-xs text-[rgba(0,0,0,0.4)] leading-relaxed">
-                All data is stored directly in your browser’s localStorage via Zustand. No account creation or server database required.
+              <p className="text-xs text-zinc-400 leading-relaxed">
+                All data is stored directly in your browser's localStorage via Zustand. No account creation, login, or remote database is required.
               </p>
             </div>
           </div>
@@ -285,26 +298,25 @@ export function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="mt-auto border-t border-[rgba(0,0,0,0.08)] py-8 px-6 bg-[#FAFAF8]">
+      <footer className="mt-auto border-t border-zinc-800/80 py-8 px-6 bg-[#09090b]">
         <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2.5">
-            <div className="w-5 h-5 rounded border border-[rgba(0,0,0,0.08)] flex items-center justify-center font-bold text-[10px] text-[#1A1A1A]">
+            <div className="w-5 h-5 rounded border border-zinc-700 bg-zinc-900 flex items-center justify-center font-bold text-[10px] text-zinc-100">
               AL
             </div>
-            <span className="text-xs text-[rgba(0,0,0,0.4)] font-mono">
+            <span className="text-xs text-zinc-400 font-mono">
               AiLearner · E2 Hackathon 2026 · gorlock777
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <Button
-              size="sm"
+            <ShimmerButton
               onClick={() => navigate('/app')}
-              className="text-xs"
+              className="text-xs px-3 py-1.5"
             >
-              Open Workspace
+              <span>Launch Workspace</span>
               <ArrowRight size={12} />
-            </Button>
+            </ShimmerButton>
           </div>
         </div>
       </footer>

@@ -95,3 +95,4 @@ export function CosmicAuroraHero({ children, className, ...props }: CosmicAurora
 }
 
 export default CosmicAuroraHero
+

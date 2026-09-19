@@ -9,8 +9,6 @@ import {
   ScanText,
   Network,
   GaugeCircle,
-  Sparkles,
-  Zap,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'

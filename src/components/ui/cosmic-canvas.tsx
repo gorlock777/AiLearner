@@ -1,6 +1,15 @@
 import { useEffect, useRef } from 'react'
 
-interface Satellite {
+interface WarpStar {
+  x: number
+  y: number
+  z: number
+  pz: number
+  size: number
+  color: string
+}
+
+interface SatelliteNode {
   angle: number
   radiusX: number
   radiusY: number
@@ -9,17 +18,6 @@ interface Satellite {
   size: number
   color: string
   label: string
-  spriteType: 'emerald' | 'white' | 'amber'
-}
-
-interface AccretionParticle {
-  angle: number
-  radius: number
-  tilt: number
-  speed: number
-  size: number
-  alpha: number
-  color: string
 }
 
 export function CosmicCanvas({ className }: { className?: string }) {
@@ -34,18 +32,22 @@ export function CosmicCanvas({ className }: { className?: string }) {
     let animationFrameId: number
     const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
 
-    let width = (canvas.width = Math.floor(canvas.offsetWidth * dpr))
-    let height = (canvas.height = Math.floor(canvas.offsetHeight * dpr))
+    let width = 0
+    let height = 0
 
-    const handleResize = () => {
+    const updateDimensions = () => {
       if (!canvas) return
-      width = canvas.width = Math.floor(canvas.offsetWidth * dpr)
-      height = canvas.height = Math.floor(canvas.offsetHeight * dpr)
+      const rect = canvas.getBoundingClientRect()
+      const w = rect.width || window.innerWidth
+      const h = rect.height || window.innerHeight
+      width = canvas.width = Math.floor(w * dpr)
+      height = canvas.height = Math.floor(h * dpr)
     }
 
-    window.addEventListener('resize', handleResize)
+    updateDimensions()
+    window.addEventListener('resize', updateDimensions)
 
-    // ── 1. Create Pre-rendered Offscreen Glow Sprites (High Performance BitBLT) ──
+    // ── 1. Create Pre-rendered High-Performance Sprites (Offscreen BitBLT) ──
     const createGlowSprite = (color: string, radius: number) => {
       const sprite = document.createElement('canvas')
       const size = radius * 2
@@ -55,8 +57,8 @@ export function CosmicCanvas({ className }: { className?: string }) {
       if (sCtx) {
         const grad = sCtx.createRadialGradient(radius, radius, 0, radius, radius, radius)
         grad.addColorStop(0, color)
-        grad.addColorStop(0.35, color.replace('1)', '0.35)').replace('0.8)', '0.28)'))
-        grad.addColorStop(0.7, color.replace('1)', '0.08)').replace('0.8)', '0.06)'))
+        grad.addColorStop(0.3, color.replace('1)', '0.4)').replace('0.9)', '0.35)'))
+        grad.addColorStop(0.7, color.replace('1)', '0.08)').replace('0.9)', '0.05)'))
         grad.addColorStop(1, 'transparent')
         sCtx.fillStyle = grad
         sCtx.beginPath()
@@ -66,81 +68,71 @@ export function CosmicCanvas({ className }: { className?: string }) {
       return sprite
     }
 
-    const spriteEmerald = createGlowSprite('rgba(52, 211, 153, 0.8)', 28 * dpr)
-    const spriteWhite = createGlowSprite('rgba(255, 255, 255, 0.7)', 24 * dpr)
-    const spriteAmber = createGlowSprite('rgba(251, 191, 36, 0.8)', 28 * dpr)
-    const spriteCore = createGlowSprite('rgba(52, 211, 153, 0.5)', 90 * dpr)
+    const spriteEmerald = createGlowSprite('rgba(52, 211, 153, 0.9)', 30 * dpr)
+    const spriteWhite = createGlowSprite('rgba(255, 255, 255, 0.85)', 24 * dpr)
+    const spriteAmber = createGlowSprite('rgba(251, 191, 36, 0.9)', 30 * dpr)
+    const spriteWarpCore = createGlowSprite('rgba(52, 211, 153, 0.75)', 110 * dpr)
+    const spriteBlastFlare = createGlowSprite('rgba(147, 197, 253, 0.8)', 130 * dpr)
 
-    // ── 2. Quantum Node Satellites (Keplerian Epicycles) ──
-    const satellites: Satellite[] = [
+    // ── 2. Warp Drive Hyperspace Starfield (3D Radial Vector Projection) ──
+    const starCount = 90
+    const warpStars: WarpStar[] = Array.from({ length: starCount }, () => {
+      const initialZ = Math.random() * 1000 + 50
+      return {
+        x: (Math.random() - 0.5) * 2000,
+        y: (Math.random() - 0.5) * 2000,
+        z: initialZ,
+        pz: initialZ,
+        size: Math.random() * 1.5 + 0.8,
+        color: Math.random() > 0.3 ? '#34d399' : '#e4e4e7',
+      }
+    })
+
+    // ── 3. Quantum Satellites (Containment Coil Nodes) ──
+    const satellites: SatelliteNode[] = [
       {
         angle: 0.8,
-        radiusX: 210,
-        radiusY: 105,
-        tilt: -0.42,
-        speed: 0.008,
-        size: 5,
+        radiusX: 230,
+        radiusY: 115,
+        tilt: -0.38,
+        speed: 0.007,
+        size: 5.5,
         color: '#34d399',
         label: '|ψ⟩ QUBIT STATE',
-        spriteType: 'emerald',
       },
       {
-        angle: 2.7,
-        radiusX: 290,
-        radiusY: 140,
-        tilt: 0.32,
-        speed: -0.006,
+        angle: 2.6,
+        radiusX: 310,
+        radiusY: 150,
+        tilt: 0.3,
+        speed: -0.005,
         size: 4.5,
         color: '#f4f4f5',
         label: 'ħ = 1.054×10⁻³⁴ J·s',
-        spriteType: 'white',
       },
       {
-        angle: 4.3,
-        radiusX: 360,
-        radiusY: 175,
-        tilt: -0.22,
-        speed: 0.005,
-        size: 5,
+        angle: 4.2,
+        radiusX: 390,
+        radiusY: 185,
+        tilt: -0.2,
+        speed: 0.0045,
+        size: 5.5,
         color: '#fbbf24',
         label: 'ΔS ≥ 0 RECALL',
-        spriteType: 'amber',
       },
       {
-        angle: 5.4,
-        radiusX: 430,
-        radiusY: 205,
-        tilt: 0.46,
-        speed: -0.004,
+        angle: 5.5,
+        radiusX: 470,
+        radiusY: 220,
+        tilt: 0.42,
+        speed: -0.0035,
         size: 4.5,
         color: '#34d399',
         label: 'Ω QUORUM NODE',
-        spriteType: 'emerald',
       },
     ]
 
-    // ── 3. Accretion Disk Relativistic Dust Stream ──
-    const accretionParticles: AccretionParticle[] = Array.from({ length: 48 }, (_, i) => ({
-      angle: (i / 48) * Math.PI * 2,
-      radius: 120 + Math.random() * 320,
-      tilt: -0.3 + (Math.random() - 0.5) * 0.15,
-      speed: (0.006 + Math.random() * 0.008) * (Math.random() > 0.3 ? 1 : -1),
-      size: (Math.random() * 1.6 + 0.6) * dpr,
-      alpha: Math.random() * 0.5 + 0.25,
-      color: Math.random() > 0.4 ? '#34d399' : '#e4e4e7',
-    }))
-
-    // ── 4. Deep Space Distant Starfield ──
-    const starCount = 50
-    const stars = Array.from({ length: starCount }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      size: (Math.random() * 1.2 + 0.4) * dpr,
-      alpha: Math.random() * 0.5 + 0.2,
-      twinkleSpeed: Math.random() * 0.03 + 0.01,
-    }))
-
-    // ── 5. Butter-smooth RAF Scroll Lerp State ──
+    // ── 4. Scroll Tracking with Dampened RAF Lerp ──
     let targetScroll = 0
     let currentScroll = 0
     let baseRotation = 0
@@ -151,51 +143,98 @@ export function CosmicCanvas({ className }: { className?: string }) {
     window.addEventListener('scroll', handleScroll, { passive: true })
 
     const render = () => {
-      // Smooth linear interpolation (Dampened Lerp)
+      // Butter-smooth lerp (Eliminates scroll wheel jank)
       currentScroll += (targetScroll - currentScroll) * 0.08
-      baseRotation += 0.0012
+      baseRotation += 0.0015
 
       ctx.clearRect(0, 0, width, height)
 
+      // Center the warp engine directly in the hero zone
       const cx = width / 2
-      // Singularity center point moves subtly with depth
-      const cy = (height / 2) * 0.82 + (currentScroll * 0.12 * dpr)
+      // Anchor center relative to viewport height so it is visibly centered in hero
+      const heroZoneY = Math.min(height * 0.35, 420 * dpr)
+      const cy = heroZoneY + (currentScroll * 0.15 * dpr)
 
-      // Scroll expansion & orbit pop factors
-      const scrollProgress = Math.min(Math.max(currentScroll / 600, 0), 2.5)
-      const scaleFactor = 1 + scrollProgress * 0.32
-      const orbitPopBrightness = Math.min(1.4, 1 + scrollProgress * 0.45)
-      const rotationSpeedFactor = 1 + scrollProgress * 0.3
+      // Warp drive ignition calculations
+      const scrollRatio = Math.min(Math.max(currentScroll / 380, 0), 3)
+      
+      // Stage 1 -> Stage 2 -> Stage 3 Warp Intensity
+      const isWarping = scrollRatio > 0.05
+      const warpSpeed = 1 + Math.pow(scrollRatio, 2.2) * 18
+      const blastScale = 1 + scrollRatio * 0.65
+      const blastOpacity = Math.max(0, 1 - (scrollRatio - 1.8) * 0.8)
 
-      // ── A. Render Distant Starfield ──
-      for (let i = 0; i < stars.length; i++) {
-        const star = stars[i]
-        const currentAlpha = Math.max(0.1, Math.min(0.8, star.alpha + Math.sin(baseRotation * 20 + i) * 0.15))
-        ctx.fillStyle = `rgba(255, 255, 255, ${currentAlpha * 0.4})`
-        ctx.beginPath()
-        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2)
-        ctx.fill()
+      // ── A. 3D Hyperspace Warp Stars (Radial Streak Projection) ──
+      for (let i = 0; i < warpStars.length; i++) {
+        const star = warpStars[i]
+        star.pz = star.z
+        star.z -= warpSpeed
+
+        if (star.z <= 10) {
+          star.z = 1000
+          star.pz = 1000
+          star.x = (Math.random() - 0.5) * 2000
+          star.y = (Math.random() - 0.5) * 2000
+        }
+
+        const k = 400 / star.z
+        const px = cx + star.x * k * dpr
+        const py = cy + star.y * k * dpr
+
+        const pk = 400 / star.pz
+        const prevX = cx + star.x * pk * dpr
+        const prevY = cy + star.y * pk * dpr
+
+        // Out of viewport check
+        if (px < 0 || px > width || py < 0 || py > height) {
+          star.z = 1000
+          star.pz = 1000
+          continue
+        }
+
+        const starAlpha = Math.min(1, (1 - star.z / 1000) * (isWarping ? 0.9 : 0.45))
+
+        if (scrollRatio > 0.1) {
+          // Warp light streaks when scrolling
+          ctx.beginPath()
+          ctx.moveTo(prevX, prevY)
+          ctx.lineTo(px, py)
+          ctx.strokeStyle = star.color === '#34d399'
+            ? `rgba(52, 211, 153, ${starAlpha})`
+            : `rgba(255, 255, 255, ${starAlpha})`
+          ctx.lineWidth = Math.max(1, star.size * dpr * (scrollRatio * 0.8))
+          ctx.stroke()
+        } else {
+          // Calm idling stardust points when idle
+          ctx.fillStyle = star.color === '#34d399'
+            ? `rgba(52, 211, 153, ${starAlpha})`
+            : `rgba(255, 255, 255, ${starAlpha})`
+          ctx.beginPath()
+          ctx.arc(px, py, star.size * dpr, 0, Math.PI * 2)
+          ctx.fill()
+        }
       }
 
-      // ── B. Accretion Disk Glowing Orbits & Gravitational Lensing ──
+      // ── B. Warp Containment Rings (Blast & Spin Up) ──
       const rings = [
-        { r: 130, color: `rgba(52, 211, 153, ${0.35 * orbitPopBrightness})`, dash: [2 * dpr, 6 * dpr], tilt: -0.3 },
-        { r: 210, color: `rgba(52, 211, 153, ${0.28 * orbitPopBrightness})`, dash: [], tilt: -0.35 },
-        { r: 290, color: `rgba(255, 255, 255, ${0.12 * orbitPopBrightness})`, dash: [4 * dpr, 8 * dpr], tilt: 0.28 },
-        { r: 360, color: `rgba(251, 191, 36, ${0.22 * orbitPopBrightness})`, dash: [6 * dpr, 10 * dpr], tilt: -0.2 },
-        { r: 430, color: `rgba(52, 211, 153, ${0.15 * orbitPopBrightness})`, dash: [], tilt: 0.4 },
+        { r: 150, color: 'rgba(52, 211, 153, 0.45)', dash: [3 * dpr, 6 * dpr], tilt: -0.32, spinSpeed: 0.6 },
+        { r: 230, color: 'rgba(52, 211, 153, 0.35)', dash: [], tilt: -0.38, spinSpeed: 0.4 },
+        { r: 310, color: 'rgba(255, 255, 255, 0.22)', dash: [5 * dpr, 10 * dpr], tilt: 0.3, spinSpeed: -0.35 },
+        { r: 390, color: 'rgba(251, 191, 36, 0.32)', dash: [6 * dpr, 12 * dpr], tilt: -0.2, spinSpeed: 0.3 },
+        { r: 470, color: 'rgba(52, 211, 153, 0.2)', dash: [], tilt: 0.42, spinSpeed: -0.25 },
       ]
 
       for (const ring of rings) {
         ctx.save()
         ctx.translate(cx, cy)
-        ctx.scale(scaleFactor, scaleFactor)
-        ctx.rotate(baseRotation * 0.25 * rotationSpeedFactor)
+        ctx.scale(blastScale, blastScale)
+        // Rings spin faster as warp drive powers up
+        ctx.rotate(baseRotation * ring.spinSpeed * (1 + scrollRatio * 2.5))
 
         ctx.beginPath()
         ctx.ellipse(0, 0, ring.r * dpr, ring.r * 0.52 * dpr, ring.tilt, 0, Math.PI * 2)
         ctx.strokeStyle = ring.color
-        ctx.lineWidth = 1 * dpr
+        ctx.lineWidth = (1 + scrollRatio * 0.4) * dpr
         if (ring.dash.length > 0) {
           ctx.setLineDash(ring.dash)
         }
@@ -203,45 +242,28 @@ export function CosmicCanvas({ className }: { className?: string }) {
         ctx.restore()
       }
 
-      // ── C. Central Singularity Pulsar Core (Blitted from Sprite) ──
+      // ── C. Warp Core Reactor Singularity (Ignition Blast) ──
       ctx.save()
       ctx.translate(cx, cy)
-      const coreSize = 90 * dpr * scaleFactor
-      ctx.drawImage(spriteCore, -coreSize, -coreSize, coreSize * 2, coreSize * 2)
+      const coreSize = 100 * dpr * blastScale
+      ctx.drawImage(spriteWarpCore, -coreSize, -coreSize, coreSize * 2, coreSize * 2)
 
-      // Solid Core Singularity Node
-      ctx.fillStyle = '#34d399'
+      // Extra Blast Flare when scrolling past 50%
+      if (scrollRatio > 0.4) {
+        const flareSize = 130 * dpr * blastScale * (scrollRatio * 0.7)
+        ctx.drawImage(spriteBlastFlare, -flareSize, -flareSize, flareSize * 2, flareSize * 2)
+      }
+
+      // Solid Core Node
+      ctx.fillStyle = scrollRatio > 0.5 ? '#ffffff' : '#34d399'
       ctx.beginPath()
-      ctx.arc(0, 0, 4.5 * dpr, 0, Math.PI * 2)
+      ctx.arc(0, 0, (5 + scrollRatio * 2) * dpr, 0, Math.PI * 2)
       ctx.fill()
       ctx.restore()
 
-      // ── D. Relativistic Accretion Particle Stream ──
-      for (const p of accretionParticles) {
-        p.angle += p.speed * rotationSpeedFactor
-        const cosA = Math.cos(p.angle)
-        const sinA = Math.sin(p.angle)
-        const cosT = Math.cos(p.tilt)
-        const sinT = Math.sin(p.tilt)
-
-        const rawX = p.radius * cosA * dpr
-        const rawY = (p.radius * 0.52) * sinA * dpr
-
-        const px = cx + (rawX * cosT - rawY * sinT) * scaleFactor
-        const py = cy + (rawX * sinT + rawY * cosT) * scaleFactor
-
-        ctx.fillStyle = p.color === '#34d399' 
-          ? `rgba(52, 211, 153, ${p.alpha * orbitPopBrightness})` 
-          : `rgba(255, 255, 255, ${p.alpha * 0.6 * orbitPopBrightness})`
-
-        ctx.beginPath()
-        ctx.arc(px, py, p.size, 0, Math.PI * 2)
-        ctx.fill()
-      }
-
-      // ── E. Quantum Planetary Satellites with Sprite Glow & Badge Labels ──
+      // ── D. Quantum Satellite Beacons with Dynamic Orbits & Labels ──
       for (const sat of satellites) {
-        sat.angle += sat.speed * rotationSpeedFactor
+        sat.angle += sat.speed * (1 + scrollRatio * 2)
 
         const cosAngle = Math.cos(sat.angle)
         const sinAngle = Math.sin(sat.angle)
@@ -251,38 +273,37 @@ export function CosmicCanvas({ className }: { className?: string }) {
         const rawX = sat.radiusX * cosAngle * dpr
         const rawY = sat.radiusY * sinAngle * dpr
 
-        const px = cx + (rawX * cosTilt - rawY * sinTilt) * scaleFactor
-        const py = cy + (rawX * sinTilt + rawY * cosTilt) * scaleFactor
+        const px = cx + (rawX * cosTilt - rawY * sinTilt) * blastScale
+        const py = cy + (rawX * sinTilt + rawY * cosTilt) * blastScale
 
-        // 1. Draw Glow Sprite (Zero CPU math overhead)
-        const sprite = sat.spriteType === 'emerald' 
-          ? spriteEmerald 
-          : sat.spriteType === 'amber' 
+        // Draw Glow Sprite
+        const sprite = sat.color === '#fbbf24' 
           ? spriteAmber 
-          : spriteWhite
+          : sat.color === '#f4f4f5' 
+          ? spriteWhite 
+          : spriteEmerald
         
-        const glowRadius = 26 * dpr
-        ctx.drawImage(sprite, px - glowRadius, py - glowRadius, glowRadius * 2, glowRadius * 2)
+        const glowR = (28 + scrollRatio * 8) * dpr
+        ctx.drawImage(sprite, px - glowR, py - glowR, glowR * 2, glowR * 2)
 
-        // 2. Solid Planet Center
+        // Solid Satellite Planet
         ctx.fillStyle = sat.color
         ctx.beginPath()
         ctx.arc(px, py, sat.size * dpr, 0, Math.PI * 2)
         ctx.fill()
 
-        // 3. Technical Label with Semi-Translucent Badge Pill
-        const fontSize = Math.round(9.5 * dpr)
+        // Crisp Tech Badge Pill
+        const fontSize = Math.round(10 * dpr)
         ctx.font = `${fontSize}px "JetBrains Mono", monospace`
         const textMetrics = ctx.measureText(sat.label)
         const textWidth = textMetrics.width
-        const pillHeight = fontSize + 6 * dpr
-        const pillPadding = 6 * dpr
+        const pillHeight = fontSize + 7 * dpr
+        const pillPadding = 7 * dpr
         const pillX = px + 10 * dpr
         const pillY = py - (pillHeight / 2)
 
-        // Subtle dark pill background for crisp readability
-        ctx.fillStyle = 'rgba(13, 14, 18, 0.75)'
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)'
+        ctx.fillStyle = 'rgba(13, 14, 18, 0.85)'
+        ctx.strokeStyle = sat.color === '#34d399' ? 'rgba(52, 211, 153, 0.35)' : 'rgba(255, 255, 255, 0.18)'
         ctx.lineWidth = 1 * dpr
         ctx.setLineDash([])
         ctx.beginPath()
@@ -290,8 +311,7 @@ export function CosmicCanvas({ className }: { className?: string }) {
         ctx.fill()
         ctx.stroke()
 
-        // Badge Text
-        ctx.fillStyle = '#e4e4e7'
+        ctx.fillStyle = '#ffffff'
         ctx.fillText(sat.label, pillX + pillPadding, pillY + fontSize + 0.5 * dpr)
       }
 
@@ -302,7 +322,7 @@ export function CosmicCanvas({ className }: { className?: string }) {
 
     return () => {
       cancelAnimationFrame(animationFrameId)
-      window.removeEventListener('resize', handleResize)
+      window.removeEventListener('resize', updateDimensions)
       window.removeEventListener('scroll', handleScroll)
     }
   }, [])

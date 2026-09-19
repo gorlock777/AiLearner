@@ -19,6 +19,7 @@ import { SpotlightCards } from '../components/ui/spotlight-cards'
 import type { SpotlightItem } from '../components/ui/spotlight-cards'
 import { FloatingNavbar } from '../components/ui/floating-navbar'
 import { ShimmerButton } from '../components/ui/shimmer-button'
+import { lenisGlobal } from '../components/layout/SmoothScroll'
 
 export function LandingPage() {
   const navigate = useNavigate()
@@ -96,7 +97,11 @@ export function LandingPage() {
 
             <a
               href="#pipeline"
-              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-xs font-mono text-zinc-300 hover:text-white hover:border-white/20 transition-all backdrop-blur-md"
+              onClick={(e) => {
+                e.preventDefault()
+                lenisGlobal.scrollTo('#pipeline', { offset: -60, duration: 1.2 })
+              }}
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-xs font-mono text-zinc-300 hover:text-white hover:border-white/20 transition-all backdrop-blur-md cursor-pointer"
             >
               <span>Explore Architecture</span>
             </a>

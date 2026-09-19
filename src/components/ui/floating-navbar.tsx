@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { ShimmerButton } from './shimmer-button'
+import { lenisGlobal } from '../layout/SmoothScroll'
 
 function GithubIcon({ size = 14 }: { size?: number }) {
   return (
@@ -17,6 +18,11 @@ function GithubIcon({ size = 14 }: { size?: number }) {
 
 export function FloatingNavbar({ hasTopics }: { hasTopics: boolean }) {
   const navigate = useNavigate()
+
+  const handleSmoothNav = (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+    e.preventDefault()
+    lenisGlobal.scrollTo(targetId, { offset: -60, duration: 1.2 })
+  }
 
   return (
     <motion.header
@@ -38,13 +44,25 @@ export function FloatingNavbar({ hasTopics }: { hasTopics: boolean }) {
 
         {/* Center Nav Links */}
         <nav className="hidden md:flex items-center gap-6 text-xs text-zinc-400">
-          <a href="#pipeline" className="hover:text-zinc-200 transition-colors font-mono">
+          <a
+            href="#pipeline"
+            onClick={(e) => handleSmoothNav(e, '#pipeline')}
+            className="hover:text-zinc-200 transition-colors font-mono cursor-pointer"
+          >
             Pipeline
           </a>
-          <a href="#features" className="hover:text-zinc-200 transition-colors font-mono">
+          <a
+            href="#features"
+            onClick={(e) => handleSmoothNav(e, '#features')}
+            className="hover:text-zinc-200 transition-colors font-mono cursor-pointer"
+          >
             Architecture
           </a>
-          <a href="#faq" className="hover:text-zinc-200 transition-colors font-mono">
+          <a
+            href="#faq"
+            onClick={(e) => handleSmoothNav(e, '#faq')}
+            className="hover:text-zinc-200 transition-colors font-mono cursor-pointer"
+          >
             FAQ
           </a>
         </nav>

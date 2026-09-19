@@ -264,7 +264,7 @@ export function Home() {
       )}
 
       {/* ── Main Workspace Content ── */}
-      <div className="px-6 py-10 max-w-5xl mx-auto w-full flex flex-col gap-8">
+      <div className="px-6 py-10 pb-36 max-w-5xl mx-auto w-full flex flex-col gap-8">
         {/* Workspace Top Bar (when topics loaded) */}
         {hasTopics && !isProcessing && (
           <div className="flex items-center justify-between border-b border-white/[0.08] pb-6">

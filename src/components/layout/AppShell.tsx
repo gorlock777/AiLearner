@@ -113,9 +113,9 @@ export function AppShell() {
   }
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#0d0e12] text-zinc-100 linear-grid">
+    <div className="flex h-screen w-screen overflow-hidden bg-[#0d0e12] text-zinc-100 linear-grid" data-lenis-prevent>
       {/* ── Sleek Minimal Sidebar ── */}
-      <aside className="relative z-20 flex flex-col items-center py-4 flex-shrink-0 w-16 bg-[#111319] border-r border-white/10">
+      <aside className="relative z-20 flex flex-col items-center py-4 flex-shrink-0 w-16 bg-[#111319] border-r border-white/10" data-lenis-prevent>
         {/* Logo */}
         <Link
           to="/"
@@ -164,15 +164,19 @@ export function AppShell() {
       </aside>
 
       {/* ── Main View Area ── */}
-      <div className="flex flex-col flex-1 h-full overflow-hidden">
-        <main className="relative z-10 flex-1 overflow-y-auto bg-[#0d0e12]" data-scroll-area>
+      <div className="flex flex-col flex-1 h-full overflow-hidden" data-lenis-prevent>
+        <main
+          className="relative z-10 flex-1 overflow-y-auto overflow-x-hidden bg-[#0d0e12] focus:outline-none"
+          data-lenis-prevent
+          style={{ overscrollBehavior: 'contain', WebkitOverflowScrolling: 'touch' }}
+        >
           <motion.div
             key={location.pathname}
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -6 }}
             transition={{ duration: 0.18, ease: 'easeOut' }}
-            className="min-h-full pb-28 md:pb-36"
+            className="min-h-full pb-36 md:pb-48"
           >
             <Outlet />
           </motion.div>

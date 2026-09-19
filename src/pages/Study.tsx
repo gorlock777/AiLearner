@@ -335,101 +335,123 @@ export function Study() {
             </div>
           </motion.div>
         ) : currentCard ? (
-          /* ── Spacious Editorial 3D Flashcard ── */
+          /* ── Zen Focus Chamber: Dynamic Backlit Flashcard ── */
           <div className="w-full flex flex-col items-center">
-            <CardFlip
-              isFlipped={isFlipped}
-              onFlip={handleFlip}
-              className="w-full min-h-[350px] md:min-h-[390px]"
-              front={
-                <div className="w-full h-full min-h-[350px] md:min-h-[390px] rounded-2xl bg-[#14161e] border border-white/10 hover:border-white/20 p-8 sm:p-12 md:p-14 flex flex-col justify-between shadow-2xl transition-all duration-300">
-                  {/* Subtle top label */}
-                  <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
-                    <span className="uppercase tracking-widest text-[10px] text-zinc-500">
-                      Prompt / Concept
-                    </span>
-                    <span className="flex items-center gap-1.5 text-[11px] text-zinc-400">
-                      <RotateCw size={11} className="transition-transform duration-500" />
-                      <span>Click or <kbd className="kbd">Space</kbd> to flip</span>
-                    </span>
-                  </div>
+            {/* Dynamic backglow — shifts colour based on last result */}
+            <div className="relative w-full flex flex-col items-center">
+              {/* Ambient backglow layer */}
+              <div
+                className="pointer-events-none absolute inset-0 -z-10 transition-all duration-700 ease-out"
+                style={{
+                  background: cards[currentIndex]?.result === 'known'
+                    ? 'radial-gradient(ellipse at 50% 60%, rgba(52,211,153,0.13) 0%, transparent 65%)'
+                    : cards[currentIndex]?.result === 'review'
+                    ? 'radial-gradient(ellipse at 50% 60%, rgba(251,191,36,0.10) 0%, transparent 65%)'
+                    : 'radial-gradient(ellipse at 50% 60%, rgba(99,102,241,0.07) 0%, transparent 60%)',
+                }}
+              />
 
-                  {/* Centered Editorial Typography */}
-                  <div className="my-auto py-8 text-center">
-                    <div className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-white leading-relaxed max-w-xl mx-auto">
-                      {currentCard.card.front}
-                    </div>
-                  </div>
-
-                  {/* Bottom Card Footer */}
-                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 pt-3 border-t border-white/[0.08]">
-                    <span>{activeTopic?.title}</span>
-                    <span className="text-zinc-500">{currentIndex + 1} / {cards.length}</span>
-                  </div>
-                </div>
-              }
-              back={
-                <div className="w-full h-full min-h-[350px] md:min-h-[390px] rounded-2xl bg-[#14161e] border border-emerald-500/30 p-8 sm:p-10 md:p-12 flex flex-col justify-between shadow-2xl">
-                  {/* Top label */}
-                  <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
-                    <span className="uppercase tracking-widest text-[10px] text-emerald-400 font-semibold">
-                      Answer / Key Insight
-                    </span>
-                    <span className="flex items-center gap-1.5 text-[11px] text-zinc-400">
-                      <RotateCw size={11} />
-                      <span>Click to flip back</span>
-                    </span>
-                  </div>
-
-                  {/* Answer text */}
-                  <div className="my-auto py-6 text-center">
-                    <div className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-white leading-relaxed max-w-xl mx-auto">
-                      {currentCard.card.back}
+              <CardFlip
+                isFlipped={isFlipped}
+                onFlip={handleFlip}
+                className="w-full min-h-[350px] md:min-h-[390px]"
+                front={
+                  <div className="w-full h-full min-h-[350px] md:min-h-[390px] rounded-2xl bg-[#14161e] border border-white/10 hover:border-white/20 p-8 sm:p-12 md:p-14 flex flex-col justify-between shadow-2xl transition-all duration-300">
+                    {/* Subtle top label */}
+                    <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
+                      <span className="uppercase tracking-widest text-[10px] text-zinc-500">
+                        Prompt / Concept
+                      </span>
+                      <span className="flex items-center gap-1.5 text-[11px] text-zinc-400">
+                        <RotateCw size={11} className="transition-transform duration-500" />
+                        <span>Click or <kbd className="kbd">Space</kbd> to flip</span>
+                      </span>
                     </div>
 
-                    {currentCard.card.hint && (
-                      <div className="mt-5 text-xs text-zinc-400 font-mono max-w-md mx-auto bg-zinc-900/80 px-3 py-1.5 rounded-lg border border-white/10">
-                        Context: {currentCard.card.hint}
+                    {/* Centered Editorial Typography */}
+                    <div className="my-auto py-8 text-center">
+                      <div className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-white leading-relaxed max-w-xl mx-auto">
+                        {currentCard.card.front}
                       </div>
-                    )}
+                    </div>
 
-                    {/* ── Source Quote Reveal ── */}
-                    {currentCard.card.sourceQuote && (
-                      <div className="mt-6 max-w-lg mx-auto" onClick={(e) => e.stopPropagation()}>
-                        <button
-                          onClick={() => setShowSource((s) => !s)}
-                          className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-400 hover:text-emerald-300 transition-colors cursor-pointer group"
-                        >
-                          <Quote size={11} className="text-emerald-400 group-hover:text-emerald-300 transition-colors" />
-                          {showSource ? 'Hide source' : 'Show source passage'}
-                        </button>
+                    {/* Bottom Card Footer */}
+                    <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 pt-3 border-t border-white/[0.08]">
+                      <span>{activeTopic?.title}</span>
+                      <span className="text-zinc-500">{currentIndex + 1} / {cards.length}</span>
+                    </div>
+                  </div>
+                }
+                back={
+                  <div
+                    className="w-full h-full min-h-[350px] md:min-h-[390px] rounded-2xl border p-8 sm:p-10 md:p-12 flex flex-col justify-between shadow-2xl transition-all duration-500"
+                    style={{
+                      background: '#14161e',
+                      borderColor: 'rgba(52,211,153,0.30)',
+                      boxShadow: '0 0 40px rgba(52,211,153,0.06)',
+                    }}
+                  >
+                    {/* Top label */}
+                    <div className="flex items-center justify-between text-xs font-mono text-zinc-400">
+                      <span className="uppercase tracking-widest text-[10px] text-emerald-400 font-semibold">
+                        Answer / Key Insight
+                      </span>
+                      <span className="flex items-center gap-1.5 text-[11px] text-zinc-400">
+                        <RotateCw size={11} />
+                        <span>Click to flip back</span>
+                      </span>
+                    </div>
 
-                        {showSource && (
-                          <motion.div
-                            initial={{ opacity: 0, y: -6 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.18 }}
-                            className="mt-3 text-left border-l-2 border-emerald-400 pl-4 py-1 bg-emerald-950/30 rounded-r-lg"
+                    {/* Answer text */}
+                    <div className="my-auto py-6 text-center">
+                      <div className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-white leading-relaxed max-w-xl mx-auto">
+                        {currentCard.card.back}
+                      </div>
+
+                      {currentCard.card.hint && (
+                        <div className="mt-5 text-xs text-zinc-400 font-mono max-w-md mx-auto bg-zinc-900/80 px-3 py-1.5 rounded-lg border border-white/10">
+                          Context: {currentCard.card.hint}
+                        </div>
+                      )}
+
+                      {/* ── Source Quote Reveal ── */}
+                      {currentCard.card.sourceQuote && (
+                        <div className="mt-6 max-w-lg mx-auto" onClick={(e) => e.stopPropagation()}>
+                          <button
+                            onClick={() => setShowSource((s) => !s)}
+                            className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-400 hover:text-emerald-300 transition-colors cursor-pointer group"
                           >
-                            <p className="text-[12px] text-zinc-300 leading-relaxed font-sans italic">
-                              "{currentCard.card.sourceQuote}"
-                            </p>
-                          </motion.div>
-                        )}
-                      </div>
-                    )}
-                  </div>
+                            <Quote size={11} className="text-emerald-400 group-hover:text-emerald-300 transition-colors" />
+                            {showSource ? 'Hide source' : 'Show source passage'}
+                          </button>
 
-                  {/* Bottom footer */}
-                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 pt-3 border-t border-white/[0.08]">
-                    <span className="text-emerald-400 font-medium">{activeTopic?.title}</span>
-                    <span className="text-zinc-500">{currentIndex + 1} / {cards.length}</span>
-                  </div>
-                </div>
-              }
-            />
+                          {showSource && (
+                            <motion.div
+                              initial={{ opacity: 0, y: -6 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.18 }}
+                              className="mt-3 text-left border-l-2 border-emerald-400 pl-4 py-1 bg-emerald-950/30 rounded-r-lg"
+                            >
+                              <p className="text-[12px] text-zinc-300 leading-relaxed font-sans italic">
+                                "{currentCard.card.sourceQuote}"
+                              </p>
+                            </motion.div>
+                          )}
+                        </div>
+                      )}
+                    </div>
 
-            {/* ── Tactical Recall Response Controls ── */}
+                    {/* Bottom footer */}
+                    <div className="flex items-center justify-between text-[11px] font-mono text-zinc-500 pt-3 border-t border-white/[0.08]">
+                      <span className="text-emerald-400 font-medium">{activeTopic?.title}</span>
+                      <span className="text-zinc-500">{currentIndex + 1} / {cards.length}</span>
+                    </div>
+                  </div>
+                }
+              />
+            </div>
+
+            {/* ── Recall Response Controls ── */}
             <div className="w-full mt-6 flex flex-col items-center gap-3">
               {isFlipped ? (
                 <div className="grid grid-cols-2 gap-3.5 w-full max-w-md">
@@ -478,6 +500,14 @@ export function Study() {
                   </button>
                 </div>
               )}
+
+              {/* Pinned keyboard dock */}
+              <div className="flex items-center gap-4 mt-2 text-[10px] font-mono text-zinc-600">
+                <span><kbd className="kbd text-[9px]">Space</kbd> Flip</span>
+                <span><kbd className="kbd text-[9px]">1</kbd> Review</span>
+                <span><kbd className="kbd text-[9px]">2</kbd> Mastered</span>
+                <span><kbd className="kbd text-[9px]">← →</kbd> Navigate</span>
+              </div>
             </div>
           </div>
         ) : null}

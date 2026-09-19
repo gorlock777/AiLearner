@@ -12,6 +12,8 @@ import {
   ScanText,
   Network,
   GaugeCircle,
+  Clock,
+  RotateCw,
 } from 'lucide-react'
 
 import { parseFile } from '../lib/parser'
@@ -121,6 +123,7 @@ The leader receives client commands, appends entries to its local log, and broad
 export function Home() {
   const {
     topics,
+    documents,
     addDocument,
     setActiveDocument,
     setTopics,
@@ -323,6 +326,7 @@ export function Home() {
                   isProcessing={isProcessing}
                 />
 
+                {/* G: Synthesize button (shown when file selected) */}
                 {file && (
                   <div className="flex justify-end">
                     <ShimmerButton
@@ -335,33 +339,65 @@ export function Home() {
                   </div>
                 )}
 
-                {/* 1-Click Sample Pre-load Packs with KokonutUI SpotlightCards */}
-                {/* 1-Click Sample Pre-load Packs */}
+                {/* D: Recent file history — last 3 docs from localStorage */}
+                {documents.length > 0 && !file && (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex items-center gap-2">
+                      <Clock size={12} className="text-zinc-500" />
+                      <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-500 font-medium">
+                        Recent Documents
+                      </span>
+                    </div>
+                    <div className="flex flex-col gap-1.5">
+                      {[...documents]
+                        .sort((a, b) => b.uploadedAt - a.uploadedAt)
+                        .slice(0, 3)
+                        .map((doc) => {
+                          const ext = doc.name.split('.').pop()?.toLowerCase() ?? ''
+                          const color = ext === 'pdf' ? '#f87171' : ext === 'md' ? '#a78bfa' : '#60a5fa'
+                          const relTime = (() => {
+                            const diff = Date.now() - doc.uploadedAt
+                            if (diff < 60_000) return 'Just now'
+                            if (diff < 3_600_000) return `${Math.floor(diff / 60_000)}m ago`
+                            if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h ago`
+                            return `${Math.floor(diff / 86_400_000)}d ago`
+                          })()
+                          return (
+                            <button
+                              key={doc.id}
+                              onClick={() => processExtractedText(doc.text, doc.name, doc.size)}
+                              className="group flex items-center justify-between gap-3 px-4 py-2.5 rounded-xl bg-zinc-950/60 border border-white/[0.06] hover:border-white/15 hover:bg-zinc-900/60 transition-all duration-200 text-left cursor-pointer"
+                            >
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <span
+                                  className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded-md border uppercase flex-shrink-0"
+                                  style={{ color, borderColor: `${color}40`, background: `${color}12` }}
+                                >
+                                  {ext.toUpperCase() || 'TXT'}
+                                </span>
+                                <span className="text-xs font-mono text-zinc-300 truncate group-hover:text-white transition-colors">
+                                  {doc.name}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-2 flex-shrink-0">
+                                <span className="text-[10px] font-mono text-zinc-600">{relTime}</span>
+                                <RotateCw size={11} className="text-zinc-600 group-hover:text-emerald-400 transition-colors" />
+                              </div>
+                            </button>
+                          )
+                        })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Sample packs */}
                 <div className="flex flex-col gap-3">
                   <div className="flex items-center gap-2">
                     <Sparkles size={13} className="text-emerald-400" />
                     <span className="text-[11px] font-mono uppercase tracking-wider text-zinc-300 font-semibold">
-                      Or Try an Instant Sample Topic Pack
                       Try an Instant Sample Topic Pack
                     </span>
                   </div>
-                  <SpotlightCards
-                    columns={3}
-                    items={SAMPLE_PRESETS.map((preset) => ({
-                      icon: preset.icon,
-                      title: preset.name,
-                      description: `1-click load · ${preset.badge}`,
-                      color: preset.color,
-                      badge: preset.badge,
-                      onClick: () => handleLoadPreset(preset),
-                      footer: (
-                        <div className="flex items-center gap-1 text-[10px] font-mono text-white/40 group-hover:text-white/70 transition-colors">
-                          <span>Load & Synthesize</span>
-                          <ArrowRight size={10} />
-                        </div>
-                      ),
-                    } satisfies SpotlightItem))}
-                  />
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     {SAMPLE_PRESETS.map((preset) => {
                       const Icon = preset.icon
@@ -371,13 +407,11 @@ export function Home() {
                           onClick={() => handleLoadPreset(preset)}
                           className="group relative text-left p-5 rounded-2xl bg-[#12141e]/80 border border-white/[0.08] hover:border-white/20 transition-all duration-300 backdrop-blur-md overflow-hidden cursor-pointer shadow-md hover:shadow-xl"
                         >
-                          {/* Card glow on hover */}
                           <div
                             className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
                             style={{ background: `radial-gradient(ellipse at 30% 30%, ${preset.color}15 0%, transparent 65%)` }}
                           />
                           <div className="relative z-10">
-                            {/* Icon + badge row */}
                             <div className="flex items-start justify-between mb-3">
                               <div
                                 className="w-9 h-9 rounded-xl flex items-center justify-center text-white flex-shrink-0"
@@ -392,13 +426,9 @@ export function Home() {
                                 {preset.badge}
                               </span>
                             </div>
-
-                            {/* Title */}
                             <h3 className="font-heading font-normal text-sm text-white mb-1.5 group-hover:text-zinc-100 transition-colors leading-snug">
                               {preset.name}
                             </h3>
-
-                            {/* Yield pills */}
                             <div className="flex items-center gap-1.5 flex-wrap mb-3">
                               <span className="inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400">
                                 ≈ 12 Flashcards
@@ -407,10 +437,8 @@ export function Home() {
                                 6 Questions
                               </span>
                             </div>
-
-                            {/* CTA row */}
                             <div className="flex items-center gap-1 text-[10px] font-mono text-zinc-500 group-hover:text-zinc-300 transition-colors">
-                              <span>Load & Synthesize</span>
+                              <span>Load {'&'} Synthesize</span>
                               <ArrowRight size={10} />
                             </div>
                           </div>
@@ -420,7 +448,7 @@ export function Home() {
                   </div>
                 </div>
 
-                {/* Ingestion Specifications with KokonutUI SpotlightCards */}
+                {/* Ingestion Specifications */}
                 <SpotlightCards
                   eyebrow="Ingestion Specifications"
                   columns={3}

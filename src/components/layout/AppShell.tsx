@@ -122,8 +122,8 @@ export function AppShell() {
           className="mb-6 flex items-center justify-center group"
           title="Back to Landing Page"
         >
-          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-zinc-900 border border-white/10 text-white shadow-sm font-bold font-mono text-xs group-hover:border-white/25 transition-colors">
-            EU
+          <div className="flex items-center justify-center w-9 h-9 rounded-xl bg-zinc-900/90 border border-white/10 group-hover:border-emerald-500/40 transition-colors overflow-hidden p-1.5 shadow-sm">
+            <img src="/favicon-dark.png" alt="Eureka" className="w-full h-full object-contain" />
           </div>
         </Link>
 

@@ -149,20 +149,18 @@ export function CosmicCanvas({ className }: { className?: string }) {
 
       ctx.clearRect(0, 0, width, height)
 
-      // Center the warp engine directly in the hero zone
+      // Center the warp engine directly in the viewport
       const cx = width / 2
-      // Anchor center relative to viewport height so it is visibly centered in hero
-      const heroZoneY = Math.min(height * 0.35, 420 * dpr)
-      const cy = heroZoneY + (currentScroll * 0.15 * dpr)
+      const cy = height * 0.44
 
       // Warp drive ignition calculations
-      const scrollRatio = Math.min(Math.max(currentScroll / 380, 0), 3)
+      const scrollRatio = Math.min(Math.max(currentScroll / 300, 0), 4)
       
       // Stage 1 -> Stage 2 -> Stage 3 Warp Intensity
-      const isWarping = scrollRatio > 0.05
-      const warpSpeed = 1 + Math.pow(scrollRatio, 2.2) * 18
-      const blastScale = 1 + scrollRatio * 0.65
-      const blastOpacity = Math.max(0, 1 - (scrollRatio - 1.8) * 0.8)
+      const isWarping = scrollRatio > 0.04
+      const warpSpeed = 1.2 + Math.pow(scrollRatio, 1.8) * 14
+      const blastScale = 1 + scrollRatio * 0.35
+      const brightnessBoost = Math.min(1.5, 1 + scrollRatio * 0.3)
 
       // ── A. 3D Hyperspace Warp Stars (Radial Streak Projection) ──
       for (let i = 0; i < warpStars.length; i++) {
@@ -192,9 +190,9 @@ export function CosmicCanvas({ className }: { className?: string }) {
           continue
         }
 
-        const starAlpha = Math.min(1, (1 - star.z / 1000) * (isWarping ? 0.9 : 0.45))
+        const starAlpha = Math.min(1, (1 - star.z / 1000) * (isWarping ? 0.95 : 0.5))
 
-        if (scrollRatio > 0.1) {
+        if (scrollRatio > 0.08) {
           // Warp light streaks when scrolling
           ctx.beginPath()
           ctx.moveTo(prevX, prevY)
@@ -202,7 +200,7 @@ export function CosmicCanvas({ className }: { className?: string }) {
           ctx.strokeStyle = star.color === '#34d399'
             ? `rgba(52, 211, 153, ${starAlpha})`
             : `rgba(255, 255, 255, ${starAlpha})`
-          ctx.lineWidth = Math.max(1, star.size * dpr * (scrollRatio * 0.8))
+          ctx.lineWidth = Math.max(1, star.size * dpr * (0.8 + scrollRatio * 0.6))
           ctx.stroke()
         } else {
           // Calm idling stardust points when idle
@@ -215,26 +213,25 @@ export function CosmicCanvas({ className }: { className?: string }) {
         }
       }
 
-      // ── B. Warp Containment Rings (Blast & Spin Up) ──
+      // ── B. Warp Containment Rings (Always Luminous & Active) ──
       const rings = [
-        { r: 150, color: 'rgba(52, 211, 153, 0.45)', dash: [3 * dpr, 6 * dpr], tilt: -0.32, spinSpeed: 0.6 },
-        { r: 230, color: 'rgba(52, 211, 153, 0.35)', dash: [], tilt: -0.38, spinSpeed: 0.4 },
-        { r: 310, color: 'rgba(255, 255, 255, 0.22)', dash: [5 * dpr, 10 * dpr], tilt: 0.3, spinSpeed: -0.35 },
-        { r: 390, color: 'rgba(251, 191, 36, 0.32)', dash: [6 * dpr, 12 * dpr], tilt: -0.2, spinSpeed: 0.3 },
-        { r: 470, color: 'rgba(52, 211, 153, 0.2)', dash: [], tilt: 0.42, spinSpeed: -0.25 },
+        { r: 150, color: `rgba(52, 211, 153, ${0.45 * brightnessBoost})`, dash: [3 * dpr, 6 * dpr], tilt: -0.32, spinSpeed: 0.6 },
+        { r: 230, color: `rgba(52, 211, 153, ${0.35 * brightnessBoost})`, dash: [], tilt: -0.38, spinSpeed: 0.4 },
+        { r: 310, color: `rgba(255, 255, 255, ${0.25 * brightnessBoost})`, dash: [5 * dpr, 10 * dpr], tilt: 0.3, spinSpeed: -0.35 },
+        { r: 390, color: `rgba(251, 191, 36, ${0.35 * brightnessBoost})`, dash: [6 * dpr, 12 * dpr], tilt: -0.2, spinSpeed: 0.3 },
+        { r: 470, color: `rgba(52, 211, 153, ${0.25 * brightnessBoost})`, dash: [], tilt: 0.42, spinSpeed: -0.25 },
       ]
 
       for (const ring of rings) {
         ctx.save()
         ctx.translate(cx, cy)
         ctx.scale(blastScale, blastScale)
-        // Rings spin faster as warp drive powers up
-        ctx.rotate(baseRotation * ring.spinSpeed * (1 + scrollRatio * 2.5))
+        ctx.rotate(baseRotation * ring.spinSpeed * (1 + scrollRatio * 1.8))
 
         ctx.beginPath()
         ctx.ellipse(0, 0, ring.r * dpr, ring.r * 0.52 * dpr, ring.tilt, 0, Math.PI * 2)
         ctx.strokeStyle = ring.color
-        ctx.lineWidth = (1 + scrollRatio * 0.4) * dpr
+        ctx.lineWidth = (1 + scrollRatio * 0.3) * dpr
         if (ring.dash.length > 0) {
           ctx.setLineDash(ring.dash)
         }
@@ -242,22 +239,22 @@ export function CosmicCanvas({ className }: { className?: string }) {
         ctx.restore()
       }
 
-      // ── C. Warp Core Reactor Singularity (Ignition Blast) ──
+      // ── C. Warp Core Reactor Singularity (Persistent Blast Core) ──
       ctx.save()
       ctx.translate(cx, cy)
       const coreSize = 100 * dpr * blastScale
       ctx.drawImage(spriteWarpCore, -coreSize, -coreSize, coreSize * 2, coreSize * 2)
 
-      // Extra Blast Flare when scrolling past 50%
-      if (scrollRatio > 0.4) {
-        const flareSize = 130 * dpr * blastScale * (scrollRatio * 0.7)
+      // Extra Blast Flare when scrolling
+      if (scrollRatio > 0.2) {
+        const flareSize = 120 * dpr * blastScale * (scrollRatio * 0.5)
         ctx.drawImage(spriteBlastFlare, -flareSize, -flareSize, flareSize * 2, flareSize * 2)
       }
 
       // Solid Core Node
-      ctx.fillStyle = scrollRatio > 0.5 ? '#ffffff' : '#34d399'
+      ctx.fillStyle = scrollRatio > 0.3 ? '#ffffff' : '#34d399'
       ctx.beginPath()
-      ctx.arc(0, 0, (5 + scrollRatio * 2) * dpr, 0, Math.PI * 2)
+      ctx.arc(0, 0, (5 + scrollRatio * 1.5) * dpr, 0, Math.PI * 2)
       ctx.fill()
       ctx.restore()
 

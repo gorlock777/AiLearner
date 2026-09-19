@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import {
+  ArrowRight,
+  FileText,
   ScanText,
   Network,
   GaugeCircle,
@@ -7,13 +9,16 @@ import {
   Keyboard,
   Cpu,
   Activity,
+  ChevronDown,
 } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
-import { ExpandingUniverse } from '../components/ui/expanding-universe'
+import { CosmicHero } from '../components/ui/cosmic-hero'
 import { LivePreviewBento } from '../components/ui/live-preview-bento'
 import { SpotlightCards } from '../components/ui/spotlight-cards'
 import type { SpotlightItem } from '../components/ui/spotlight-cards'
 import { FloatingNavbar } from '../components/ui/floating-navbar'
+import { ShimmerButton } from '../components/ui/shimmer-button'
 
 export function LandingPage() {
   const navigate = useNavigate()
@@ -24,10 +29,79 @@ export function LandingPage() {
       {/* ── Luminous Floating Dynamic Island Navigation ── */}
       <FloatingNavbar hasTopics={topics.length > 0} />
 
-      {/* ── Expanding Universe Sciency Scroll Engine (Scales from 1.0 to 2.4 into Workspace) ── */}
-      <ExpandingUniverse>
+      {/* ── Big Centered Hero with Celestial Astrolabe Orbits ── */}
+      <CosmicHero>
+        {/* Ambient Top Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-mono text-zinc-300 mb-6 backdrop-blur-md shadow-sm"
+        >
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span>Eureka · Neural Active Recall Engine · OpenRouter Free</span>
+        </motion.div>
+
+        {/* Big Grand Merriweather Headline */}
+        <motion.h1
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="font-heading font-normal text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] leading-[1.05] tracking-tight text-white mb-6 drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
+        >
+          Turn dense notes <br className="hidden sm:inline" />
+          into effortless recall.
+        </motion.h1>
+
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15 }}
+          className="max-w-2xl text-sm sm:text-base md:text-lg text-zinc-300 leading-relaxed font-sans mb-8"
+        >
+          Eureka transforms complex lecture notes and textbooks into 3D active flashcards,
+          spaced memory intervals, and diagnostic test insights — completely in-browser.
+        </motion.p>
+
+        {/* Hero Action Buttons */}
+        <motion.div
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex flex-wrap items-center justify-center gap-4 mb-10"
+        >
+          <ShimmerButton
+            onClick={() => navigate('/app')}
+            className="px-7 py-3 text-xs font-mono rounded-full"
+          >
+            <FileText size={14} />
+            <span>Launch Eureka Workspace</span>
+            <ArrowRight size={13} />
+          </ShimmerButton>
+
+          <a
+            href="#pipeline"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-xs font-mono text-zinc-300 hover:text-white hover:border-white/20 transition-all backdrop-blur-md"
+          >
+            <span>Explore Architecture</span>
+          </a>
+        </motion.div>
+
+        {/* Scroll Indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.4 }}
+          className="flex flex-col items-center gap-1.5 text-zinc-400 font-mono text-[10px] uppercase tracking-widest mb-12"
+        >
+          <span>Scroll to explore</span>
+          <ChevronDown size={14} className="animate-bounce text-emerald-400" />
+        </motion.div>
+
+        {/* Live Interactive Ingestion Simulator (Clean Normal Flow) */}
         <LivePreviewBento onLaunch={() => navigate('/app')} />
-      </ExpandingUniverse>
+      </CosmicHero>
 
       {/* ── 3-Step Precision Pipeline ── */}
       <section id="pipeline" className="py-24 px-6 border-t border-white/[0.08] bg-[#111319] relative z-10">
@@ -100,7 +174,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── FAQ Section with Luxury Titanium Card Style ── */}
+      {/* ── FAQ Section ── */}
       <section id="faq" className="py-24 px-6 border-t border-white/[0.08] bg-[#111319] relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-10 text-center">
@@ -143,7 +217,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Lunar Space Editorial Footer ── */}
+      {/* ── Footer ── */}
       <footer className="py-12 border-t border-white/[0.08] bg-[#0d0e12] text-center text-xs font-mono text-zinc-500 relative z-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">

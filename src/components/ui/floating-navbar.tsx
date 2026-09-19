@@ -28,7 +28,7 @@ export function FloatingNavbar({ hasTopics }: { hasTopics: boolean }) {
       <div className="pointer-events-auto flex items-center justify-between gap-4 sm:gap-8 px-4 sm:px-6 py-2.5 rounded-full bg-zinc-950/80 border border-white/10 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
         {/* Brand Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-6 h-6 rounded-full bg-gradient-to-tr from-emerald-400 to-indigo-500 flex items-center justify-center font-bold text-[10px] text-white shadow-md">
+          <div className="w-6 h-6 rounded-lg bg-zinc-100 text-zinc-950 flex items-center justify-center font-bold text-[10px] font-mono shadow-sm">
             EU
           </div>
           <span className="text-sm font-semibold tracking-tight text-zinc-100 group-hover:text-white font-mono">

@@ -95,21 +95,21 @@ export function LandingPage() {
                 icon: ScanText,
                 title: "Multi-Format Document Parser",
                 description: "Processes PDF, Markdown, and TXT. When a PDF contains scanned pages or slides, in-browser canvas rendering triggers multimodal vision OCR via free OpenRouter models.",
-                color: "#34d399",
+                color: "#e4e4e7",
                 badge: "Vision OCR",
               },
               {
                 icon: Network,
                 title: "Topic Extraction & Cards",
                 description: "Extracts topic hierarchies and key concepts. Generates two-sided 3D flashcards with spring physics and keyboard shortcuts.",
-                color: "#60a5fa",
+                color: "#34d399",
                 badge: "JSON Schema",
               },
               {
                 icon: GaugeCircle,
                 title: "Assessment & Weak Spot Tracking",
                 description: "Runs multiple-choice checks with instant explanations and circular gauge accuracy dials. Topics scoring below 60% are flagged for priority revision.",
-                color: "#a78bfa",
+                color: "#e4e4e7",
                 badge: "Adaptive Quiz",
               },
             ] satisfies SpotlightItem[]}
@@ -140,13 +140,13 @@ export function LandingPage() {
                 icon: Cpu,
                 title: "Free LLM Router",
                 description: "Integrated with OpenRouter free router models with structured JSON schema outputs and vision OCR fallbacks.",
-                color: "#60a5fa",
+                color: "#e4e4e7",
               },
               {
                 icon: Activity,
                 title: "Retention Stream",
                 description: "Continuous accuracy telemetry, circular score gauges, and daily streak calculations across all practice tests.",
-                color: "#f59e0b",
+                color: "#34d399",
               },
             ] satisfies SpotlightItem[]}
           />
@@ -198,7 +198,7 @@ export function LandingPage() {
       <footer className="py-12 border-t border-white/[0.06] bg-[#070709] text-center text-xs font-mono text-zinc-500 relative z-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-full bg-gradient-to-tr from-emerald-400 to-indigo-500 flex items-center justify-center font-bold text-[9px] text-white">
+            <div className="w-5 h-5 rounded-md bg-zinc-900 border border-zinc-800 flex items-center justify-center font-bold text-[9px] font-mono text-zinc-300">
               EU
             </div>
             <span>Eureka — OpenRouter Free Ingestion Engine</span>

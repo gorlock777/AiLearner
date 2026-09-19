@@ -38,7 +38,7 @@ const PREVIEW_MODULES = [
   {
     title: 'Raft Consensus',
     badge: 'CS Systems',
-    color: '#a78bfa',
+    color: '#e4e4e7',
     prompt: 'How does Raft avoid split votes during leader election?',
     answer: 'Followers use randomized election timeouts (150ms-300ms) to ensure one candidate initiates voting before others.',
     quiz: 'What constitutes a quorum in an N-node Raft cluster?',

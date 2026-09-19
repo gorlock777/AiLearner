@@ -22,6 +22,7 @@ import {
 } from '../lib/prompts'
 import { useAppStore } from '../store/useAppStore'
 import type { Topic, FlashcardSet, QuizSet } from '../store/useAppStore'
+import { ExtractionDataView } from '../components/extraction/ExtractionDataView'
 
 const STEPS = [
   { id: 1, label: 'Reading document text' },
@@ -183,54 +184,21 @@ export function Home() {
         </div>
       )}
 
-      {/* Active Topics Present State */}
+      {/* Active Topics Present State: Render Shadcn Extraction Data View */}
       {hasTopics && !isProcessing ? (
-        <div className="w-full max-w-xl ui-card p-6 mb-8 text-center">
-          <div className="flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 mx-auto mb-3">
-            <CheckCircle2 size={20} />
-          </div>
-          <h2 className="text-base font-semibold text-slate-100 mb-1">
-            Notes loaded and organized
-          </h2>
-          <p className="text-xs text-slate-400 mb-4">
-            {topics.length} topics ready for review
-          </p>
-
-          <div className="flex flex-wrap gap-2 justify-center mb-6">
-            {topics.map((t) => (
-              <span
-                key={t.id}
-                className="badge badge-default"
-              >
-                {t.title}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-center gap-3">
-            <button
-              onClick={() => navigate('/study')}
-              className="btn-primary"
-            >
-              <BookOpen size={15} />
-              Study Flashcards
-            </button>
-            <button
-              onClick={() => navigate('/quiz')}
-              className="btn-secondary"
-            >
-              <CheckSquare size={15} />
-              Take Quiz
-            </button>
+        <div className="w-full flex flex-col items-center mb-8">
+          <ExtractionDataView topics={topics} />
+          
+          <div className="mt-4 flex items-center gap-3">
             <button
               onClick={() => {
                 clearAll()
                 setFile(null)
               }}
-              className="btn-secondary text-slate-400 hover:text-slate-200"
-              title="Clear all"
+              className="text-xs text-slate-400 hover:text-slate-200 inline-flex items-center gap-1.5 transition-colors"
             >
-              <RotateCcw size={14} />
+              <RotateCcw size={13} />
+              Reset and Upload New Document
             </button>
           </div>
         </div>

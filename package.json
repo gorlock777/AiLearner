@@ -1,8 +1,6 @@
 {
-  "name": "ailearnertemp",
   "name": "ailearner",
   "private": true,
-  "version": "0.0.0",
   "version": "1.0.0",
   "description": "AI-powered study companion that transforms notes into active learning",
   "homepage": "https://ailearner.vercel.app",

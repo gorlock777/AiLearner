@@ -5,9 +5,13 @@ const OPENROUTER_API_URL = 'https://openrouter.ai/api/v1/chat/completions'
 const SITE_URL = 'https://ailearner.vercel.app'
 const SITE_NAME = 'AiLearner'
 
+export type ContentPart =
+  | { type: 'text'; text: string }
+  | { type: 'image_url'; image_url: { url: string } }
+
 export interface Message {
   role: 'system' | 'user' | 'assistant'
-  content: string
+  content: string | ContentPart[]
 }
 
 export interface OpenRouterOptions {
@@ -54,73 +58,78 @@ export async function fetchCompletion(
   return data.choices?.[0]?.message?.content ?? ''
 }
 
-export async function fetchCompletionStream(
-  messages: Message[],
-  onChunk: (chunk: string) => void,
-  options: OpenRouterOptions = {}
+export async function transcribeScannedImages(
+  imageDataUrls: string[]
 ): Promise<string> {
   const apiKey = import.meta.env.VITE_OPENROUTER_API_KEY
   if (!apiKey || apiKey === 'your-openrouter-api-key-here') {
-    throw new Error('OpenRouter API key not configured.')
+    throw new Error('OpenRouter API key not configured. Please set VITE_OPENROUTER_API_KEY in your .env file.')
   }
 
-  const response = await fetch(OPENROUTER_API_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': SITE_URL,
-      'X-Title': SITE_NAME,
+  const contentParts: ContentPart[] = [
+    {
+      type: 'text',
+      text: 'You are an OCR and document transcription expert. Transcribe and summarize all the text, lecture slide contents, formulas, terms, and explanations from these scanned page images into clear, highly structured markdown study notes.',
     },
-    body: JSON.stringify({
-      model: options.model ?? 'openrouter/free',
-      messages,
-      temperature: options.temperature ?? 0.3,
-      max_tokens: options.maxTokens ?? 4096,
-      stream: true,
-    }),
-  })
+  ]
 
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ error: { message: response.statusText } }))
-    throw new Error(`OpenRouter error (${response.status}): ${error?.error?.message ?? response.statusText}`)
+  for (const url of imageDataUrls) {
+    contentParts.push({
+      type: 'image_url',
+      image_url: { url },
+    })
   }
 
-  const reader = response.body?.getReader()
-  const decoder = new TextDecoder()
-  let fullText = ''
+  const messages: Message[] = [
+    {
+      role: 'user',
+      content: contentParts,
+    },
+  ]
 
-  if (!reader) throw new Error('No response body')
+  // Try free multimodal models in order
+  const visionModels = [
+    'google/gemini-2.0-flash-exp:free',
+    'google/gemini-flash-1.5-8b:free',
+    'meta-llama/llama-3.2-11b-vision-instruct:free',
+    'openrouter/free',
+  ]
 
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
+  for (const model of visionModels) {
+    try {
+      const response = await fetch(OPENROUTER_API_URL, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+          'HTTP-Referer': SITE_URL,
+          'X-Title': SITE_NAME,
+        },
+        body: JSON.stringify({
+          model,
+          messages,
+          temperature: 0.2,
+          max_tokens: 4096,
+        }),
+      })
 
-    const chunk = decoder.decode(value)
-    const lines = chunk.split('\n').filter(line => line.startsWith('data: '))
-
-    for (const line of lines) {
-      const data = line.slice(6)
-      if (data === '[DONE]') continue
-      try {
-        const parsed = JSON.parse(data)
-        const content = parsed.choices?.[0]?.delta?.content ?? ''
-        if (content) {
-          fullText += content
-          onChunk(content)
+      if (response.ok) {
+        const data = await response.json()
+        const text = data.choices?.[0]?.message?.content ?? ''
+        if (text && text.trim().length > 30) {
+          return text.trim()
         }
-      } catch {
-        // skip malformed SSE chunks
       }
+    } catch {
+      // Try next vision fallback
     }
   }
 
-  return fullText
+  throw new Error('Unable to transcribe scanned PDF images. Please ensure the PDF is legible.')
 }
 
 /** Parse a JSON string from an LLM response, stripping markdown fences if present */
 export function parseJSONResponse<T>(raw: string): T {
-  // Strip markdown code fences
   const cleaned = raw
     .replace(/^```(?:json)?\s*/im, '')
     .replace(/\s*```\s*$/im, '')
@@ -128,4 +137,3 @@ export function parseJSONResponse<T>(raw: string): T {
 
   return JSON.parse(cleaned) as T
 }
-

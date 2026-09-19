@@ -32,13 +32,50 @@ export function LandingPage() {
   const heroTextOpacity = useTransform(scrollY, [0, 400], [1, 0.25])
   const heroTextScale = useTransform(scrollY, [0, 500], [1, 0.95])
 
+  const leftTelemetryY = useTransform(scrollY, [0, 500], [0, -140])
+  const rightTelemetryY = useTransform(scrollY, [0, 500], [0, -90])
+
   const bentoY = useTransform(scrollY, [0, 500], [50, -30])
   const bentoScale = useTransform(scrollY, [0, 450], [0.94, 1])
 
   return (
-    <div className="min-h-screen bg-[#0d0e12] text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white linear-grid overflow-x-hidden relative">
-      {/* ── Fixed Full-Screen Hyperspace Warp Canvas (Persistent Across Scroll) ── */}
+    <div className="min-h-screen bg-[#0d0e12] text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white linear-grid overflow-x-hidden">
+      {/* ── Luminous Floating Dynamic Island Navigation ── */}
+      <FloatingNavbar hasTopics={topics.length > 0} />
+
+      {/* ── Big Centered Hero with Celestial Astrolabe Orbits & Parallax Depth ── */}
       <CosmicHero>
+        {/* Floating Sci-Fi Parallax Telemetry Beacons (Desktop Only) */}
+        <motion.div
+          style={{ y: leftTelemetryY }}
+          className="hidden xl:flex absolute left-8 top-44 pointer-events-none z-10 flex-col gap-2 p-3.5 rounded-2xl bg-zinc-900/60 border border-white/10 backdrop-blur-md shadow-2xl text-left"
+        >
+          <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-400">
+            <Radio size={12} className="animate-pulse" />
+            <span className="font-semibold tracking-wider uppercase">Telemetry Stream</span>
+          </div>
+          <div className="text-[11px] font-mono text-zinc-400 space-y-0.5">
+            <div>ORBIT: <span className="text-zinc-200">GEO-STATIONARY</span></div>
+            <div>WARP COIL: <span className="text-emerald-400">ENGAGED</span></div>
+            <div>RETENTION: <span className="text-amber-400">98.4% RECALL</span></div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          style={{ y: rightTelemetryY }}
+          className="hidden xl:flex absolute right-8 top-56 pointer-events-none z-10 flex-col gap-2 p-3.5 rounded-2xl bg-zinc-900/60 border border-white/10 backdrop-blur-md shadow-2xl text-left"
+        >
+          <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-300">
+            <Terminal size={12} className="text-emerald-400" />
+            <span className="font-semibold tracking-wider uppercase">OpenRouter Router</span>
+          </div>
+          <div className="text-[11px] font-mono text-zinc-400 space-y-0.5">
+            <div>ENGINE: <span className="text-zinc-200">CLIENT-SIDE</span></div>
+            <div>LATENCY: <span className="text-emerald-400">{'< 12ms SYNC'}</span></div>
+            <div>DECK DB: <span className="text-blue-400">LOCALSTORAGE</span></div>
+          </div>
+        </motion.div>
+
         {/* Parallax Hero Headline & CTA Block */}
         <motion.div
           style={{ y: heroTextY, opacity: heroTextOpacity, scale: heroTextScale }}
@@ -52,7 +89,7 @@ export function LandingPage() {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-mono text-zinc-300 mb-6 backdrop-blur-md shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Eureka · Neural Active Recall Engine</span>
+            <span>Eureka · Neural Active Recall Engine · OpenRouter Free</span>
           </motion.div>
 
           {/* Big Grand Merriweather Headline */}
@@ -123,7 +160,7 @@ export function LandingPage() {
       </CosmicHero>
 
       {/* ── 3-Step Precision Pipeline ── */}
-      <section id="pipeline" className="py-24 px-6 border-t border-white/[0.08] bg-[#111319] relative z-10">
+      <section id="pipeline" className="py-24 px-6 border-t border-white/[0.06] bg-[#0d0e12]/30 relative z-10">
         <div className="max-w-5xl mx-auto">
           <SpotlightCards
             eyebrow="Architecture"
@@ -157,7 +194,7 @@ export function LandingPage() {
       </section>
 
       {/* ── Capabilities Grid ── */}
-      <section id="features" className="py-24 px-6 border-t border-white/[0.08] bg-[#0d0e12] relative z-10">
+      <section id="features" className="py-24 px-6 border-t border-white/[0.06] bg-transparent relative z-10">
         <div className="max-w-5xl mx-auto">
           <SpotlightCards
             eyebrow="Capabilities"
@@ -194,7 +231,7 @@ export function LandingPage() {
       </section>
 
       {/* ── FAQ Section ── */}
-      <section id="faq" className="py-24 px-6 border-t border-white/[0.08] bg-[#111319] relative z-10">
+      <section id="faq" className="py-24 px-6 border-t border-white/[0.06] bg-[#0d0e12]/30 relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-10 text-center">
             <span className="text-[10px] uppercase tracking-[0.2em] font-mono text-zinc-400 font-semibold block mb-2">
@@ -205,7 +242,7 @@ export function LandingPage() {
             </h2>
           </div>
 
-          <div className="flex flex-col divide-y divide-white/[0.08] luxury-card overflow-hidden">
+          <div className="flex flex-col divide-y divide-white/[0.08] rounded-2xl bg-[#12141e]/50 backdrop-blur-sm border border-white/[0.1] shadow-2xl overflow-hidden">
             <div className="p-6 md:p-8">
               <h3 className="text-sm font-semibold text-zinc-100 mb-2 font-mono">
                 Which LLM models does Eureka use?
@@ -237,13 +274,13 @@ export function LandingPage() {
       </section>
 
       {/* ── Footer ── */}
-      <footer className="py-12 border-t border-white/[0.08] bg-[#0d0e12] text-center text-xs font-mono text-zinc-500 relative z-10">
+      <footer className="py-12 border-t border-white/[0.06] bg-transparent text-center text-xs font-mono text-zinc-500 relative z-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div className="w-5 h-5 rounded-md bg-zinc-900 border border-white/10 text-white flex items-center justify-center font-bold text-[9px] font-mono">
               EU
             </div>
-            <span className="text-zinc-300 font-semibold">Eureka — OpenRouter Free Ingestion Engine</span>
+            <span className="text-zinc-300 font-semibold">Eureka — Neural Ingestion Engine</span>
           </div>
           <div className="text-zinc-500">MIT License · Lunar Space Titanium Architecture</div>
         </div>

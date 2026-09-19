@@ -81,9 +81,9 @@ function SpotlightCard({ item, dimmed, onHoverStart, onHoverEnd }: CardProps) {
       }}
       className={cn(
         "group relative flex flex-col gap-4 overflow-hidden rounded-xl border p-5",
-        "border-white/[0.08] bg-[#14161e]/90 shadow-[0_4px_24px_rgba(0,0,0,0.4)]",
-        "transition-[border-color,box-shadow] duration-300",
-        "hover:border-white/20 hover:shadow-[0_8px_32px_rgba(0,0,0,0.6)]",
+        "border-white/[0.1] bg-[#12141e]/50 backdrop-blur-sm shadow-[0_4px_24px_rgba(0,0,0,0.3)]",
+        "transition-[border-color,box-shadow,background-color] duration-300",
+        "hover:border-white/25 hover:bg-[#161926]/70 hover:shadow-[0_8px_32px_rgba(0,0,0,0.5)]",
         item.onClick && "cursor-pointer"
       )}
       onMouseEnter={handleMouseEnter}

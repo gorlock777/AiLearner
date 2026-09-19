@@ -91,6 +91,7 @@ export function NeuralCanvas({ className }: { className?: string }) {
     // ── Draw loop ───────────────────────────────────────────
     let frame = 0
     function draw() {
+      if (!ctx) return
       const w = W()
       const h = H()
 

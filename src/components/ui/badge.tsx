@@ -2,7 +2,7 @@ import * as React from 'react'
 import { cn } from '@/lib/utils'
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: 'default' | 'secondary' | 'outline' | 'destructive' | 'success' | 'warning'
+  variant?: 'default' | 'secondary' | 'outline' | 'destructive' | 'success' | 'warning' | 'info'
 }
 
 function Badge({
@@ -11,18 +11,19 @@ function Badge({
   ...props
 }: BadgeProps) {
   const variantStyles = {
-    default: 'bg-blue-600/15 border-blue-500/30 text-blue-400',
-    secondary: 'bg-[#182030] border-[#252f44] text-slate-300',
-    outline: 'border-[#252f44] text-slate-400 bg-transparent',
-    destructive: 'bg-red-500/15 border-red-500/30 text-red-400',
-    success: 'bg-emerald-500/15 border-emerald-500/30 text-emerald-400',
-    warning: 'bg-amber-500/15 border-amber-500/30 text-amber-400',
+    default: 'bg-zinc-800 text-zinc-300 border-zinc-700/60',
+    secondary: 'bg-zinc-900/80 border-zinc-800 text-zinc-400',
+    outline: 'border-zinc-800 text-zinc-400 bg-transparent',
+    destructive: 'bg-rose-500/10 border-rose-500/20 text-rose-400',
+    success: 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400',
+    warning: 'bg-amber-500/10 border-amber-500/20 text-amber-400',
+    info: 'bg-blue-500/10 border-blue-500/20 text-blue-400',
   }
 
   return (
     <div
       className={cn(
-        'inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium transition-colors',
+        'inline-flex items-center gap-1 rounded border px-1.5 py-0.5 text-[11px] font-mono font-medium transition-colors',
         variantStyles[variant],
         className
       )}
@@ -32,4 +33,3 @@ function Badge({
 }
 
 export { Badge }
-

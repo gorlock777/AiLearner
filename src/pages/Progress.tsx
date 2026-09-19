@@ -76,93 +76,92 @@ export function Progress() {
   if (topics.length === 0 && quizAttempts.length === 0) {
     return (
       <div className="min-h-full flex flex-col items-center justify-center p-8 text-center max-w-md mx-auto">
-        <div className="w-11 h-11 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mb-4">
-          <Layers size={20} />
+        <div className="w-8 h-8 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mb-3">
+          <Layers size={16} />
         </div>
-        <h2 className="text-base font-semibold text-zinc-100 mb-1">No learning metrics yet</h2>
-        <p className="text-xs text-zinc-400 mb-5">
-          Upload documents and complete quizzes to populate your retention telemetry.
+        <h2 className="text-sm font-semibold text-zinc-100 mb-1">No learning metrics yet</h2>
+        <p className="text-xs text-zinc-400 mb-4">
+          Import documents and complete quizzes to populate your retention telemetry.
         </p>
-        <Button onClick={() => navigate('/app')}>
-          Upload Notes
+        <Button size="sm" onClick={() => navigate('/app')}>
+          Import Notes
         </Button>
       </div>
     )
   }
 
   return (
-    <div className="min-h-full px-6 py-8 max-w-4xl mx-auto flex flex-col gap-6">
+    <div className="min-h-full px-6 py-6 max-w-4xl mx-auto flex flex-col gap-5">
       {/* Header */}
-      <div>
-        <h1 className="text-xl font-semibold text-zinc-100 mb-1">
+      <div className="border-b border-zinc-800/80 pb-4">
+        <h1 className="text-base font-semibold text-zinc-100 font-mono uppercase tracking-wider">
           Performance Analytics
         </h1>
-        <p className="text-xs text-zinc-400">
-          Retention analytics, quiz accuracy, and targeted revision priorities
+        <p className="text-xs text-zinc-400 mt-0.5">
+          Diagnostic accuracy, weak area revision priorities, and study streaks
         </p>
       </div>
 
       {/* Primary KPI Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-        <div className="linear-card p-5">
-          <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
-            <span>Knowledge Modules</span>
-            <BookOpen size={15} className="text-zinc-400" />
+        <div className="linear-card p-4">
+          <div className="flex items-center justify-between text-xs text-zinc-400 mb-1.5 font-mono">
+            <span>KNOWLEDGE MODULES</span>
+            <BookOpen size={14} className="text-zinc-400" />
           </div>
-          <div className="text-2xl font-bold font-mono text-zinc-100">{topics.length}</div>
-          <div className="text-[11px] text-zinc-400 mt-1">Organized from notes</div>
+          <div className="text-xl font-bold font-mono text-zinc-100">{topics.length}</div>
+          <div className="text-[11px] text-zinc-400 mt-0.5">Organized from documents</div>
         </div>
 
-        <div className="linear-card p-5">
-          <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
-            <span>Average Accuracy</span>
-            <TrendingUp size={15} className="text-emerald-400" />
+        <div className="linear-card p-4">
+          <div className="flex items-center justify-between text-xs text-zinc-400 mb-1.5 font-mono">
+            <span>AVERAGE ACCURACY</span>
+            <TrendingUp size={14} className="text-emerald-400" />
           </div>
-          <div className="text-2xl font-bold font-mono text-zinc-100">
+          <div className="text-xl font-bold font-mono text-zinc-100">
             {avgScore !== null ? `${avgScore}%` : '—'}
           </div>
-          <div className="text-[11px] text-zinc-400 mt-1 font-mono">
+          <div className="text-[11px] text-zinc-400 mt-0.5 font-mono">
             {quizAttempts.length} attempt{quizAttempts.length !== 1 ? 's' : ''} logged
           </div>
         </div>
 
-        <div className="linear-card p-5">
-          <div className="flex items-center justify-between text-xs text-zinc-400 mb-2">
-            <span>Consecutive Streak</span>
-            <Calendar size={15} className="text-amber-400" />
+        <div className="linear-card p-4">
+          <div className="flex items-center justify-between text-xs text-zinc-400 mb-1.5 font-mono">
+            <span>DAILY STREAK</span>
+            <Calendar size={14} className="text-amber-400" />
           </div>
-          <div className="text-2xl font-bold font-mono text-zinc-100">
+          <div className="text-xl font-bold font-mono text-zinc-100">
             {streak} {streak === 1 ? 'day' : 'days'}
           </div>
-          <div className="text-[11px] text-zinc-400 mt-1">Daily active retention</div>
+          <div className="text-[11px] text-zinc-400 mt-0.5">Active retention tracking</div>
         </div>
       </div>
 
-      {/* Weak Topics Alert (Needs Revision) */}
+      {/* Weak Topics Alert */}
       {weakTopicObjects.length > 0 && (
-        <div className="linear-card p-5 border-amber-500/20 bg-amber-950/10">
-          <div className="flex items-center gap-2 text-amber-300 font-semibold text-xs mb-1.5">
-            <AlertTriangle size={15} />
+        <div className="linear-card p-4 border-amber-500/20 bg-amber-950/10">
+          <div className="flex items-center gap-2 text-amber-300 font-semibold text-xs mb-1 font-mono">
+            <AlertTriangle size={14} />
             <span>High Priority Revision ({weakTopicObjects.length})</span>
           </div>
-          <p className="text-xs text-zinc-400 mb-4">
-            Topics scoring under 60% on recent testing modules. Spaced review recommended.
+          <p className="text-xs text-zinc-400 mb-3">
+            Topics scoring below 60% accuracy on recent diagnostic checks.
           </p>
           <div className="flex flex-wrap gap-2">
             {weakTopicObjects.map((t) => (
               <div
                 key={t.id}
-                className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs"
+                className="flex items-center gap-2 px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 text-xs font-mono"
               >
-                <span className="font-medium text-zinc-200">{t.title}</span>
+                <span className="text-zinc-200">{t.title}</span>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => navigate('/study')}
-                  className="h-6 px-2 text-[11px] text-zinc-400 hover:text-white"
+                  className="h-5 px-1.5 text-[10px] text-zinc-400 hover:text-white"
                 >
-                  Study
-                  <ArrowRight size={11} />
+                  Study <ArrowRight size={10} />
                 </Button>
               </div>
             ))}
@@ -171,12 +170,12 @@ export function Progress() {
       )}
 
       {/* Topics Breakdown */}
-      <div className="linear-card p-5">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-sm font-semibold text-zinc-100">
+      <div className="linear-card p-4">
+        <div className="flex items-center justify-between mb-3 border-b border-zinc-800/80 pb-2.5">
+          <h2 className="text-xs font-semibold text-zinc-100 font-mono uppercase tracking-wider">
             Module Performance Breakdown
           </h2>
-          <Badge variant="secondary" className="font-mono text-[10px]">
+          <Badge variant="secondary">
             {topics.length} topics
           </Badge>
         </div>
@@ -191,16 +190,14 @@ export function Progress() {
               const isWeak = weakTopics.includes(t.id)
 
               return (
-                <div key={t.id} className="py-3 flex items-center justify-between gap-4">
+                <div key={t.id} className="py-2.5 flex items-center justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       <span className="text-xs font-medium text-zinc-200 truncate">
                         {t.title}
                       </span>
                       {isWeak && (
-                        <Badge variant="warning" className="text-[10px]">
-                          Review
-                        </Badge>
+                        <Badge variant="warning">Review</Badge>
                       )}
                     </div>
                     <div className="text-[11px] text-zinc-400 font-mono">
@@ -208,7 +205,7 @@ export function Progress() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4 flex-shrink-0">
+                  <div className="flex items-center gap-3 flex-shrink-0">
                     <div className="text-right">
                       <div className="text-xs font-bold font-mono text-zinc-200">
                         {best !== null ? `${best}%` : 'Unranked'}
@@ -222,7 +219,7 @@ export function Progress() {
                       variant="secondary"
                       size="sm"
                       onClick={() => navigate('/quiz')}
-                      className="text-xs"
+                      className="text-xs h-7 px-2.5 font-mono"
                     >
                       Quiz
                     </Button>
@@ -236,11 +233,11 @@ export function Progress() {
 
       {/* Recent History Table */}
       {sortedAttempts.length > 0 && (
-        <div className="linear-card p-5">
-          <div className="flex items-center gap-2 mb-4">
-            <Clock size={15} className="text-zinc-400" />
-            <h2 className="text-sm font-semibold text-zinc-100">
-              Recent Activity Stream
+        <div className="linear-card p-4">
+          <div className="flex items-center gap-2 mb-3 border-b border-zinc-800/80 pb-2.5">
+            <Clock size={14} className="text-zinc-400" />
+            <h2 className="text-xs font-semibold text-zinc-100 font-mono uppercase tracking-wider">
+              Recent Assessment Activity
             </h2>
           </div>
 
@@ -252,24 +249,24 @@ export function Progress() {
               return (
                 <div
                   key={attempt.id}
-                  className="py-2.5 flex items-center justify-between gap-4 text-xs"
+                  className="py-2 flex items-center justify-between gap-4 text-xs font-mono"
                 >
                   <div className="flex items-center gap-2.5">
                     {isPass ? (
-                      <CheckCircle2 size={15} className="text-emerald-400 flex-shrink-0" />
+                      <CheckCircle2 size={14} className="text-emerald-400 flex-shrink-0" />
                     ) : (
-                      <AlertTriangle size={15} className="text-amber-400 flex-shrink-0" />
+                      <AlertTriangle size={14} className="text-amber-400 flex-shrink-0" />
                     )}
                     <div>
                       <div className="font-medium text-zinc-200 text-xs">
-                        {topic?.title ?? 'General Quiz'}
+                        {topic?.title ?? 'General Assessment'}
                       </div>
-                      <div className="text-zinc-400 text-[11px] font-mono">{formatDate(attempt.timestamp)}</div>
+                      <div className="text-zinc-400 text-[10px]">{formatDate(attempt.timestamp)}</div>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-3">
-                    <span className="text-zinc-400 text-[11px] font-mono">
+                    <span className="text-zinc-400 text-[11px]">
                       {attempt.correctCount} / {attempt.totalQuestions}
                     </span>
                     <Badge
@@ -280,7 +277,6 @@ export function Progress() {
                           ? 'warning'
                           : 'destructive'
                       }
-                      className="font-mono text-[10px]"
                     >
                       {attempt.score}%
                     </Badge>

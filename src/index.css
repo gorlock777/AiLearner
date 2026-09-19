@@ -2,13 +2,13 @@
 
 :root {
   --bg-app: #09090b;
-  --bg-surface: #111115;
-  --bg-surface-subtle: #18181b;
-  --bg-surface-hover: #222226;
+  --bg-surface: #0f0f12;
+  --bg-surface-raised: #16161a;
+  --bg-surface-hover: #1e1e24;
   --border-app: #27272a;
   --border-subtle: #1f1f23;
   --border-highlight: rgba(255, 255, 255, 0.08);
-  --text-primary: #fafafa;
+  --text-primary: #f4f4f5;
   --text-secondary: #a1a1aa;
   --text-muted: #71717a;
 }
@@ -33,108 +33,93 @@ body {
   min-height: 100vh;
 }
 
-/* Linear-style minimalist scrollbar */
+/* Minimalist precision scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
   background: #27272a;
-  border-radius: 9999px;
+  border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
   background: #3f3f46;
 }
 
-/* 21st.dev Linear Premium Card Surface */
+/* Precision Panel & Card Surfaces (Linear / Raycast aesthetic) */
 .linear-card {
   position: relative;
-  background: rgba(18, 18, 22, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 14px;
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  background: #0f0f12;
+  border: 1px solid #232328;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.15s ease, background 0.15s ease;
 }
 
 .linear-card:hover {
-  border-color: rgba(255, 255, 255, 0.14);
+  border-color: #2f2f36;
 }
 
-/* Specular top highlight line */
-.linear-card-highlight::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  pointer-events: none;
+.linear-card-highlight {
+  border-color: #2b2b32;
+  background: #111115;
 }
 
-/* 21st.dev Linear Buttons */
+/* Precision Action Buttons */
 .btn-primary {
-  background: #ffffff;
+  background: #f4f4f5;
   color: #09090b;
   font-weight: 500;
-  font-size: 13px;
-  border-radius: 8px;
-  padding: 7px 14px;
+  font-size: 12px;
+  border-radius: 6px;
+  padding: 6px 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.12s ease;
 }
 
 .btn-primary:hover {
   background: #e4e4e7;
-  transform: translateY(-0.5px);
+  color: #000000;
 }
 
 .btn-primary:active {
-  transform: translateY(0);
+  background: #d4d4d8;
 }
 
 .btn-primary:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-  transform: none;
 }
 
 .btn-secondary {
-  background: #18181b;
-  color: #e4e4e7;
+  background: #16161a;
+  color: #d4d4d8;
   font-weight: 500;
-  font-size: 13px;
-  border-radius: 8px;
-  padding: 7px 14px;
+  font-size: 12px;
+  border-radius: 6px;
+  padding: 6px 12px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
   border: 1px solid #27272a;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.12s ease;
 }
 
 .btn-secondary:hover {
-  background: #27272a;
-  border-color: #3f3f46;
-  color: #ffffff;
-}
-
-.btn-secondary:active {
-  transform: translateY(0);
+  background: #1f1f25;
+  border-color: #38383f;
+  color: #f4f4f5;
 }
 
 .btn-secondary:disabled {
@@ -142,65 +127,64 @@ body {
   cursor: not-allowed;
 }
 
-/* Linear Keycap Keyboard Badge */
+/* Sharp Keycap Keyboard Badge */
 .kbd {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 2px 6px;
+  padding: 1px 5px;
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 10px;
   font-weight: 500;
   color: #a1a1aa;
-  background: #18181b;
+  background: #16161a;
   border: 1px solid #27272a;
-  border-radius: 5px;
-  box-shadow: 0 1px 0 1px rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
 }
 
-/* Linear Status Badges */
+/* Square / Sharp Status Badges (No bubbly rounded-full pills) */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 2px 8px;
-  border-radius: 9999px;
+  padding: 1px 6px;
+  border-radius: 4px;
   font-size: 11px;
   font-weight: 500;
 }
 
 .badge-default {
-  background: #18181b;
+  background: #16161a;
   color: #a1a1aa;
   border: 1px solid #27272a;
 }
 
 .badge-success {
-  background: rgba(16, 185, 129, 0.1);
+  background: rgba(16, 185, 129, 0.08);
   color: #34d399;
   border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 .badge-warning {
-  background: rgba(245, 158, 11, 0.1);
+  background: rgba(245, 158, 11, 0.08);
   color: #fbbf24;
   border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
 .badge-danger {
-  background: rgba(244, 63, 94, 0.1);
+  background: rgba(244, 63, 94, 0.08);
   color: #fb7185;
   border: 1px solid rgba(244, 63, 94, 0.2);
 }
 
 .badge-blue {
-  background: rgba(59, 130, 246, 0.1);
+  background: rgba(59, 130, 246, 0.08);
   color: #60a5fa;
   border: 1px solid rgba(59, 130, 246, 0.2);
 }
 
-/* Subtlest background grid */
+/* Precision dot grid */
 .linear-grid {
-  background-image: radial-gradient(#27272a 1px, transparent 1px);
-  background-size: 20px 20px;
+  background-image: radial-gradient(#202025 1px, transparent 1px);
+  background-size: 24px 24px;
 }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import {
   ChevronLeft,
   ChevronRight,
@@ -10,6 +10,7 @@ import {
   Layers,
   Loader2,
   AlertCircle,
+  FileText,
 } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 import { fetchCompletion, parseJSONResponse } from '../lib/openrouter'
@@ -17,7 +18,6 @@ import { generateFlashcardsPrompt } from '../lib/prompts'
 import type { Flashcard } from '../store/useAppStore'
 import { Button } from '../components/ui/button'
 import { Badge } from '../components/ui/badge'
-import { Progress } from '../components/ui/progress'
 import { Alert, AlertDescription } from '../components/ui/alert'
 
 type CardResult = 'known' | 'review' | null
@@ -125,7 +125,7 @@ export function Study() {
       )
       setTimeout(() => {
         goNext()
-      }, 150)
+      }, 120)
     },
     [currentIndex, goNext]
   )
@@ -172,36 +172,42 @@ export function Study() {
   if (topics.length === 0) {
     return (
       <div className="min-h-full flex flex-col items-center justify-center p-8 text-center max-w-md mx-auto">
-        <div className="w-11 h-11 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mb-4">
-          <Layers size={20} />
+        <div className="w-8 h-8 rounded bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-400 mb-3">
+          <Layers size={16} />
         </div>
-        <h2 className="text-base font-semibold text-zinc-100 mb-1">No notes uploaded</h2>
-        <p className="text-xs text-zinc-400 mb-5">
-          Upload course material first to generate flashcard sets.
+        <h2 className="text-sm font-semibold text-zinc-100 mb-1">No study modules loaded</h2>
+        <p className="text-xs text-zinc-400 mb-4">
+          Import course material first to generate flashcard sets.
         </p>
-        <Button onClick={() => navigate('/app')}>
-          Upload Material
+        <Button size="sm" onClick={() => navigate('/app')}>
+          Import Material
         </Button>
       </div>
     )
   }
 
+  const activeTopic = topics.find((t) => t.id === selectedTopicId)
+
   return (
-    <div className="min-h-full flex flex-col items-center px-6 py-8 max-w-4xl mx-auto">
+    <div className="min-h-full flex flex-col items-center px-6 py-6 max-w-3xl mx-auto">
       {/* Header and Topic Tabs */}
-      <div className="w-full mb-8">
-        <div className="flex items-center justify-between mb-4">
+      <div className="w-full mb-6">
+        <div className="flex items-center justify-between mb-3 border-b border-zinc-800/80 pb-3">
           <div>
-            <h1 className="text-xl font-semibold text-zinc-100">Flashcard Workspace</h1>
-            <p className="text-xs text-zinc-400">Interactive spaced repetition deck</p>
+            <h1 className="text-sm font-semibold text-zinc-100 font-mono uppercase tracking-wider">
+              Flashcard Deck
+            </h1>
+            <p className="text-xs text-zinc-400 mt-0.5">
+              {activeTopic?.title ?? 'Active Spaced Repetition'}
+            </p>
           </div>
-          <Badge variant="secondary" className="font-mono text-xs">
+          <Badge variant="secondary">
             {cards.length > 0 ? `${currentIndex + 1} / ${cards.length}` : '0 / 0'}
           </Badge>
         </div>
 
         {/* Topic Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
           {topics.map((t) => {
             const isSelected = t.id === selectedTopicId
             return (
@@ -210,8 +216,8 @@ export function Study() {
                 variant={isSelected ? 'secondary' : 'ghost'}
                 size="sm"
                 onClick={() => setSelectedTopicId(t.id)}
-                className={`whitespace-nowrap text-xs ${
-                  isSelected ? 'border-zinc-700 bg-zinc-800 text-white' : 'text-zinc-400'
+                className={`whitespace-nowrap text-xs h-7 px-2.5 font-mono ${
+                  isSelected ? 'border-zinc-700 bg-zinc-800 text-zinc-100' : 'text-zinc-400'
                 }`}
               >
                 {t.title}
@@ -222,19 +228,19 @@ export function Study() {
       </div>
 
       {/* Main Flashcard Work Area */}
-      <div className="w-full max-w-xl flex flex-col items-center">
+      <div className="w-full flex flex-col items-center">
         {isGenerating ? (
           <div className="linear-card w-full p-12 text-center flex flex-col items-center">
-            <Loader2 size={24} className="animate-spin text-zinc-300 mb-3" />
-            <div className="text-sm font-medium text-zinc-200">
-              Generating active flashcards with AI...
+            <Loader2 size={20} className="animate-spin text-zinc-300 mb-3" />
+            <div className="text-xs font-mono text-zinc-300">
+              Generating active flashcards...
             </div>
           </div>
         ) : cards.length === 0 ? (
           <div className="linear-card w-full p-8 text-center">
-            <Layers size={22} className="text-zinc-500 mx-auto mb-3" />
-            <div className="text-sm font-medium text-zinc-200 mb-1">
-              No flashcards for this topic yet
+            <Layers size={20} className="text-zinc-500 mx-auto mb-2" />
+            <div className="text-xs font-semibold text-zinc-200 mb-1 font-mono">
+              NO FLASHCARDS FOR THIS TOPIC
             </div>
             <p className="text-xs text-zinc-400 mb-4">
               Synthesize a targeted flashcard deck for active recall.
@@ -247,62 +253,62 @@ export function Study() {
                 </Alert>
               </div>
             )}
-            <Button onClick={handleGenerate} className="mx-auto">
+            <Button size="sm" onClick={handleGenerate} className="mx-auto">
               Generate Cards
             </Button>
           </div>
         ) : sessionComplete ? (
           <div className="linear-card linear-card-highlight w-full p-8 text-center">
-            <div className="text-xs font-mono uppercase tracking-wider text-zinc-400 mb-2">
+            <div className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1">
               Deck Completed
             </div>
-            <div className="text-3xl font-bold text-zinc-100 mb-2 font-mono">
-              {cards.length > 0 ? Math.round((knownCount / cards.length) * 100) : 0}% Mastery
+            <div className="text-3xl font-bold text-zinc-100 mb-1 font-mono">
+              {cards.length > 0 ? Math.round((knownCount / cards.length) * 100) : 0}% Accuracy
             </div>
             <p className="text-xs text-zinc-400 mb-6">
-              Summary of your active recall attempt
+              Active recall session summary
             </p>
 
             <div className="grid grid-cols-2 gap-3 mb-6">
-              <div className="p-4 rounded-lg bg-zinc-900/60 border border-zinc-800 text-center">
-                <div className="text-2xl font-bold font-mono text-emerald-400">{knownCount}</div>
-                <div className="text-[11px] text-zinc-400 mt-0.5">Mastered</div>
+              <div className="p-3.5 rounded bg-zinc-900/50 border border-zinc-800 text-center">
+                <div className="text-xl font-bold font-mono text-emerald-400">{knownCount}</div>
+                <div className="text-[11px] text-zinc-400 font-mono mt-0.5">Mastered</div>
               </div>
-              <div className="p-4 rounded-lg bg-zinc-900/60 border border-zinc-800 text-center">
-                <div className="text-2xl font-bold font-mono text-amber-400">{reviewCount}</div>
-                <div className="text-[11px] text-zinc-400 mt-0.5">Needs Review</div>
+              <div className="p-3.5 rounded bg-zinc-900/50 border border-zinc-800 text-center">
+                <div className="text-xl font-bold font-mono text-amber-400">{reviewCount}</div>
+                <div className="text-[11px] text-zinc-400 font-mono mt-0.5">Needs Review</div>
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-3">
-              <Button variant="secondary" onClick={handleRestart}>
-                <RotateCcw size={14} />
+            <div className="flex items-center justify-center gap-2">
+              <Button variant="secondary" size="sm" onClick={handleRestart}>
+                <RotateCcw size={12} />
                 Restart Deck
               </Button>
-              <Button onClick={() => navigate('/quiz')}>
+              <Button size="sm" onClick={() => navigate('/quiz')}>
                 Take Practice Quiz
-                <ArrowRight size={14} />
+                <ArrowRight size={12} />
               </Button>
             </div>
           </div>
         ) : currentCard ? (
           <div className="w-full flex flex-col items-center">
-            {/* Linear 3D Card */}
+            {/* Precision Flashcard Panel */}
             <div
               onClick={handleFlip}
-              className="w-full h-72 cursor-pointer select-none linear-card linear-card-highlight p-8 flex flex-col justify-between relative shadow-lg"
+              className="w-full min-h-[260px] cursor-pointer select-none linear-card linear-card-highlight p-6 flex flex-col justify-between relative border border-zinc-800 hover:border-zinc-700 transition-colors"
             >
-              <div className="flex items-center justify-between text-xs text-zinc-400 font-mono">
-                <span className="font-semibold uppercase tracking-wider text-[10px] text-zinc-400">
-                  {isFlipped ? 'ANSWER / EXPLANATION' : 'TERM / CONCEPT'}
+              <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 border-b border-zinc-800/60 pb-2.5">
+                <span className="uppercase text-[10px] text-zinc-400">
+                  {isFlipped ? 'ANSWER / DETAILS' : 'CONCEPT / PROMPT'}
                 </span>
-                <span className="flex items-center gap-1 text-[11px]">
-                  Press <kbd className="kbd">Space</kbd> to flip
+                <span className="flex items-center gap-1 text-[11px] text-zinc-400">
+                  <kbd className="kbd">Space</kbd> Flip
                 </span>
               </div>
 
-              <div className="my-auto text-center">
-                <div className="text-lg font-medium text-zinc-100 leading-relaxed max-w-md mx-auto">
+              <div className="my-auto py-6 text-center">
+                <div className="text-base font-medium text-zinc-100 leading-relaxed max-w-lg mx-auto">
                   {isFlipped ? currentCard.card.back : currentCard.card.front}
                 </div>
                 {isFlipped && currentCard.card.hint && (
@@ -312,65 +318,71 @@ export function Study() {
                 )}
               </div>
 
-              {/* Progress step dots */}
-              <div className="flex items-center justify-center gap-1.5">
-                {cards.map((c, idx) => (
-                  <div
-                    key={c.card.id || idx}
-                    className={`h-1.5 rounded-full transition-all ${
-                      idx === currentIndex
-                        ? 'w-4 bg-zinc-200'
-                        : c.result === 'known'
-                        ? 'w-1.5 bg-emerald-500'
-                        : c.result === 'review'
-                        ? 'w-1.5 bg-amber-500'
-                        : 'w-1.5 bg-zinc-800'
-                    }`}
-                  />
-                ))}
+              {/* Progress Tracker */}
+              <div className="flex items-center justify-between pt-2.5 border-t border-zinc-800/60 text-[10px] font-mono text-zinc-400">
+                <span>{activeTopic?.title}</span>
+                <div className="flex items-center gap-1">
+                  {cards.map((c, idx) => (
+                    <div
+                      key={c.card.id || idx}
+                      className={`h-1 rounded-sm transition-all ${
+                        idx === currentIndex
+                          ? 'w-4 bg-zinc-200'
+                          : c.result === 'known'
+                          ? 'w-1.5 bg-emerald-500'
+                          : c.result === 'review'
+                          ? 'w-1.5 bg-amber-500'
+                          : 'w-1.5 bg-zinc-800'
+                      }`}
+                    />
+                  ))}
+                </div>
+                <span>{currentIndex + 1} / {cards.length}</span>
               </div>
             </div>
 
-            {/* Navigation & Keycap Legend */}
-            <div className="w-full mt-5 flex items-center justify-between">
+            {/* Navigation & Command Legend */}
+            <div className="w-full mt-4 flex items-center justify-between">
               <Button
                 variant="secondary"
-                size="icon"
+                size="sm"
                 onClick={goPrev}
                 disabled={currentIndex === 0}
+                className="h-8 px-2.5"
                 title="Previous card"
               >
-                <ChevronLeft size={16} />
+                <ChevronLeft size={14} />
               </Button>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <Button
                   variant="secondary"
+                  size="sm"
                   onClick={() => handleResult('review')}
-                  className="flex items-center gap-2 text-xs"
+                  className="h-8 text-xs font-mono"
                 >
-                  <X size={13} className="text-amber-400" />
-                  Review Again
-                  <kbd className="kbd">1</kbd>
+                  <X size={12} className="text-amber-400" />
+                  Hard <kbd className="kbd ml-1">1</kbd>
                 </Button>
                 <Button
                   variant="secondary"
+                  size="sm"
                   onClick={() => handleResult('known')}
-                  className="flex items-center gap-2 text-xs"
+                  className="h-8 text-xs font-mono"
                 >
-                  <Check size={13} className="text-emerald-400" />
-                  Mastered
-                  <kbd className="kbd">2</kbd>
+                  <Check size={12} className="text-emerald-400" />
+                  Good <kbd className="kbd ml-1">2</kbd>
                 </Button>
               </div>
 
               <Button
                 variant="secondary"
-                size="icon"
+                size="sm"
                 onClick={goNext}
+                className="h-8 px-2.5"
                 title="Next card"
               >
-                <ChevronRight size={16} />
+                <ChevronRight size={14} />
               </Button>
             </div>
           </div>

@@ -19,8 +19,7 @@ Schema:
       "title": "string",
       "summary": "string (2-3 sentences)",
       "keyPoints": ["string", "string", "string"],
-      "difficulty": "beginner | intermediate | advanced",
-      "emoji": "string (single emoji representing topic)"
+      "difficulty": "beginner | intermediate | advanced"
     }
   ]
 }

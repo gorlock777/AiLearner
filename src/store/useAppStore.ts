@@ -9,7 +9,7 @@ export interface Topic {
   summary: string
   keyPoints: string[]
   difficulty: 'beginner' | 'intermediate' | 'advanced'
-  emoji: string
+  emoji?: string
 }
 
 export interface Flashcard {

@@ -89,15 +89,15 @@ export function LandingPage() {
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-mono text-zinc-300 mb-6 backdrop-blur-md shadow-sm"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Eureka · Neural Active Recall Engine · OpenRouter Free</span>
+            <span>Eureka · Neural Active Recall Engine</span>
           </motion.div>
 
-          {/* Big Grand Merriweather Headline */}
+          {/* Big Grand Merriweather Headline (Starlight Metallic Rim Gradient) */}
           <motion.h1
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-heading font-normal text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] leading-[1.05] tracking-tight text-white mb-6 drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
+            className="font-heading font-normal text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] leading-[1.05] tracking-tight text-transparent bg-clip-text bg-gradient-to-b from-white via-zinc-100 to-zinc-400/75 mb-6 drop-shadow-[0_4px_20px_rgba(255,255,255,0.14)] drop-shadow-[0_16px_40px_rgba(0,0,0,0.95)]"
           >
             Turn dense notes <br className="hidden sm:inline" />
             into effortless recall.

@@ -11,6 +11,7 @@ import {
   Loader2,
   AlertCircle,
   Sparkles,
+  Quote,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
@@ -40,6 +41,7 @@ export function Study() {
   const [cards, setCards] = useState<SessionCard[]>([])
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isFlipped, setIsFlipped] = useState(false)
+  const [showSource, setShowSource] = useState(false)
   const [isGenerating, setIsGenerating] = useState(false)
   const [generateError, setGenerateError] = useState<string | null>(null)
   const [sessionComplete, setSessionComplete] = useState(false)
@@ -105,6 +107,7 @@ export function Study() {
     if (currentIndex < cards.length - 1) {
       setCurrentIndex((i) => i + 1)
       setIsFlipped(false)
+      setShowSource(false)
     } else {
       setSessionComplete(true)
     }
@@ -114,11 +117,13 @@ export function Study() {
     if (currentIndex > 0) {
       setCurrentIndex((i) => i - 1)
       setIsFlipped(false)
+      setShowSource(false)
     }
   }, [currentIndex])
 
   const handleFlip = useCallback(() => {
     setIsFlipped((f) => !f)
+    setShowSource(false)
   }, [])
 
   const handleResult = useCallback(
@@ -356,8 +361,8 @@ export function Study() {
                 </div>
               }
               back={
-                <div className="w-full h-full min-h-[350px] md:min-h-[390px] rounded-2xl bg-[#0d0d12] border border-emerald-500/30 p-8 sm:p-12 md:p-14 flex flex-col justify-between shadow-2xl">
-                  {/* Subtle top label */}
+                <div className="w-full h-full min-h-[350px] md:min-h-[390px] rounded-2xl bg-[#0d0d12] border border-emerald-500/30 p-8 sm:p-10 md:p-12 flex flex-col justify-between shadow-2xl">
+                  {/* Top label */}
                   <div className="flex items-center justify-between text-xs font-mono text-zinc-300">
                     <span className="uppercase tracking-widest text-[10px] text-emerald-400">
                       Answer / Key Insight
@@ -368,8 +373,8 @@ export function Study() {
                     </span>
                   </div>
 
-                  {/* Centered Editorial Typography */}
-                  <div className="my-auto py-8 text-center">
+                  {/* Answer text */}
+                  <div className="my-auto py-6 text-center">
                     <div className="font-heading font-normal text-xl sm:text-2xl md:text-3xl text-zinc-100 leading-relaxed max-w-xl mx-auto">
                       {currentCard.card.back}
                     </div>
@@ -379,9 +384,35 @@ export function Study() {
                         Context: {currentCard.card.hint}
                       </div>
                     )}
+
+                    {/* ── Source Quote Reveal ── */}
+                    {currentCard.card.sourceQuote && (
+                      <div className="mt-6 max-w-lg mx-auto" onClick={(e) => e.stopPropagation()}>
+                        <button
+                          onClick={() => setShowSource((s) => !s)}
+                          className="inline-flex items-center gap-1.5 text-[11px] font-mono text-zinc-400 hover:text-emerald-300 transition-colors cursor-pointer group"
+                        >
+                          <Quote size={11} className="text-emerald-500/70 group-hover:text-emerald-400 transition-colors" />
+                          {showSource ? 'Hide source' : 'Show source passage'}
+                        </button>
+
+                        {showSource && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.18 }}
+                            className="mt-3 text-left border-l-2 border-emerald-500/50 pl-4 py-1"
+                          >
+                            <p className="text-[12px] text-zinc-300 leading-relaxed font-sans italic">
+                              "{currentCard.card.sourceQuote}"
+                            </p>
+                          </motion.div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Bottom Card Footer */}
+                  {/* Bottom footer */}
                   <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 pt-3 border-t border-zinc-850/70">
                     <span className="text-emerald-400/80">{activeTopic?.title}</span>
                     <span className="text-zinc-400">{currentIndex + 1} / {cards.length}</span>

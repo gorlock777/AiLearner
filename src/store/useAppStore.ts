@@ -17,6 +17,7 @@ export interface Flashcard {
   front: string
   back: string
   hint: string
+  sourceQuote?: string // exact sentence(s) from original doc this card was derived from
 }
 
 export interface FlashcardSet {

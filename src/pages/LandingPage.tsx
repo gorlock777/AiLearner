@@ -26,12 +26,9 @@ export function LandingPage() {
 
   return (
     <div className="min-h-screen bg-[#070709] text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white linear-grid overflow-x-hidden">
-      {/* ── Floating Dynamic Island Navigation ── */}
       <FloatingNavbar hasTopics={topics.length > 0} />
 
-      {/* ── Hero Section ── */}
       <CosmicAuroraHero>
-        {/* Subtle Top Badge */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -42,7 +39,6 @@ export function LandingPage() {
           <span>Eureka · Neural Active Recall Engine · OpenRouter Free</span>
         </motion.div>
 
-        {/* Giant Grand Merriweather Headline */}
         <motion.h1
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -53,7 +49,6 @@ export function LandingPage() {
           into effortless recall.
         </motion.h1>
 
-        {/* Subheadline */}
         <motion.p
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -64,7 +59,6 @@ export function LandingPage() {
           spaced memory intervals, and diagnostic test insights — completely in-browser.
         </motion.p>
 
-        {/* Hero Action Buttons */}
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
@@ -88,7 +82,6 @@ export function LandingPage() {
           </a>
         </motion.div>
 
-        {/* Scroll Indicator */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -99,11 +92,9 @@ export function LandingPage() {
           <ChevronDown size={14} className="animate-bounce text-emerald-400" />
         </motion.div>
 
-        {/* Live Interactive Demo */}
         <LivePreviewBento onLaunch={() => navigate('/app')} />
       </CosmicAuroraHero>
 
-      {/* ── 3-Step Precision Pipeline ── */}
       <section id="pipeline" className="py-24 px-6 border-t border-white/[0.06] bg-[#09090d] relative z-10">
         <div className="max-w-5xl mx-auto">
           <SpotlightCards
@@ -121,7 +112,7 @@ export function LandingPage() {
               {
                 icon: Network,
                 title: "Topic Extraction & Cards",
-                description: "Extracts topic hierarchies and key concepts without emoji fluff. Generates two-sided 3D flashcards with spring physics and keyboard shortcuts.",
+                description: "Extracts topic hierarchies and key concepts. Generates two-sided 3D flashcards with spring physics and keyboard shortcuts.",
                 color: "#60a5fa",
                 badge: "JSON Schema",
               },
@@ -137,7 +128,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Capabilities Grid ── */}
       <section id="features" className="py-24 px-6 border-t border-white/[0.06] bg-[#070709] relative z-10">
         <div className="max-w-5xl mx-auto">
           <SpotlightCards
@@ -174,7 +164,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── FAQ Section ── */}
       <section id="faq" className="py-24 px-6 border-t border-white/[0.06] bg-[#09090d] relative z-10">
         <div className="max-w-4xl mx-auto">
           <div className="mb-10 text-center">
@@ -217,7 +206,6 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* ── Footer ── */}
       <footer className="py-12 border-t border-white/[0.06] bg-[#070709] text-center text-xs font-mono text-zinc-500 relative z-10">
         <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">

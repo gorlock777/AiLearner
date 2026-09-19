@@ -49,12 +49,13 @@ Schema:
       "id": "string",
       "front": "string (concise question or term)",
       "back": "string (clear, complete answer or definition)",
-      "hint": "string (optional hint, can be empty string)"
+      "hint": "string (optional hint, can be empty string)",
+      "sourceQuote": "string (copy the exact sentence or two from the provided notes that this card was derived from — verbatim, not paraphrased)"
     }
   ]
 }
 
-Generate 8–12 flashcards. Mix definitions, concepts, and application questions.`,
+Generate 8–12 flashcards. Mix definitions, concepts, and application questions. For sourceQuote, copy the most relevant 1-2 sentences from the input text verbatim.`,
     },
     {
       role: 'user',

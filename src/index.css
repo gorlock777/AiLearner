@@ -1,14 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --bg-app: #09090b;
-  --bg-surface: #0f0f12;
-  --bg-surface-raised: #16161a;
-  --bg-surface-hover: #1e1e24;
-  --border-app: #27272a;
-  --border-subtle: #1f1f23;
-  --border-highlight: rgba(255, 255, 255, 0.08);
-  --text-primary: #f4f4f5;
+  --bg-app: #070709;
+  --bg-surface: #0e0e12;
+  --bg-surface-raised: #14141a;
+  --bg-surface-hover: #1c1c24;
+  --border-app: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.05);
+  --text-primary: #f4f4f6;
   --text-secondary: #a1a1aa;
   --text-muted: #71717a;
 }
@@ -17,8 +16,24 @@
   box-sizing: border-box;
 }
 
+/* Official Lenis Smooth Scrolling Styles — prevents stepped/jaggy scrolling */
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
 html {
-  scroll-behavior: smooth;
   color-scheme: dark;
 }
 
@@ -35,7 +50,7 @@ body {
   text-rendering: optimizeLegibility;
 }
 
-/* Headings & Display: Merriweather (Elegant editorial serif, warm, not sharp) */
+/* Headings & Display: Merriweather (Elegant editorial serif, warm, luxury) */
 h1, h2, h3, .font-heading, .font-serif, .font-display {
   font-family: "Merriweather", Georgia, "Times New Roman", serif;
   letter-spacing: -0.02em;
@@ -47,68 +62,89 @@ code, kbd, .font-mono {
   font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Minimalist precision scrollbar */
+/* Minimalist luxury scrollbar */
 ::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
 }
 ::-webkit-scrollbar-track {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
-  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
+  background: rgba(255, 255, 255, 0.22);
 }
 
-/* Precision Panel & Card Surfaces (Linear / Raycast aesthetic) */
+/* ── Luxury Soft Gradient Card Surfaces (Replaces sharp/harsh solid borders) ── */
+.luxury-card {
+  position: relative;
+  background: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.035), transparent 75%), #0d0d12;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.06);
+  transition: all 0.25s ease;
+}
+
+.luxury-card:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 8px 32px -2px rgba(0, 0, 0, 0.6), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.luxury-card-glow {
+  background: radial-gradient(circle at 50% 0%, rgba(52, 211, 153, 0.06), transparent 70%), #0d0d12;
+  border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+/* Precision Panel & Card Surfaces */
 .linear-card {
   position: relative;
-  background: #0f0f12;
-  border: 1px solid #232328;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
-  transition: border-color 0.15s ease, background 0.15s ease;
+  background: #0d0d11;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  transition: border-color 0.2s ease, background 0.2s ease;
 }
 
 .linear-card:hover {
-  border-color: #2f2f36;
+  border-color: rgba(255, 255, 255, 0.14);
 }
 
 .linear-card-highlight {
-  border-color: #2b2b32;
-  background: #111115;
+  border-color: rgba(255, 255, 255, 0.12);
+  background: #101015;
 }
 
 /* Precision Action Buttons */
 .btn-primary {
   background: #f4f4f5;
   color: #09090b;
-  font-family: "Plus Jakarta Sans", sans-serif;
   font-family: "Signika", "Oxygen", sans-serif;
   font-weight: 500;
   font-size: 12px;
-  border-radius: 6px;
-  padding: 6px 12px;
+  border-radius: 8px;
+  padding: 7px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all 0.15s ease;
 }
 
 .btn-primary:hover {
-  background: #e4e4e7;
-  color: #000000;
+  background: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
 }
 
 .btn-primary:active {
   background: #d4d4d8;
+  transform: translateY(0);
 }
 
 .btn-primary:disabled {
@@ -117,28 +153,27 @@ code, kbd, .font-mono {
 }
 
 .btn-secondary {
-  background: #16161a;
+  background: rgba(255, 255, 255, 0.05);
   color: #d4d4d8;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-weight: 500;
   font-family: "Signika", "Oxygen", sans-serif;
   font-weight: 400;
   font-size: 12px;
-  border-radius: 6px;
-  padding: 6px 12px;
+  border-radius: 8px;
+  padding: 7px 14px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  border: 1px solid #27272a;
+  border: 1px solid rgba(255, 255, 255, 0.09);
   cursor: pointer;
-  transition: all 0.12s ease;
+  transition: all 0.15s ease;
+  backdrop-filter: blur(8px);
 }
 
 .btn-secondary:hover {
-  background: #1f1f25;
-  border-color: #38383f;
-  color: #f4f4f5;
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
 }
 
 .btn-secondary:disabled {
@@ -146,11 +181,73 @@ code, kbd, .font-mono {
   cursor: not-allowed;
 }
 
+/* Sharp Keycap Keyboard Badge */
+.kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 10px;
+  font-weight: 500;
+  color: #a1a1aa;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+}
+
+/* Status Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.badge-default {
+  background: rgba(255, 255, 255, 0.06);
+  color: #a1a1aa;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.badge-danger {
+  background: rgba(244, 63, 94, 0.1);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.25);
+}
+
+.badge-blue {
+  background: rgba(59, 130, 246, 0.1);
+  color: #60a5fa;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+/* Precision dot grid */
+.linear-grid {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
 /* GPU-composite optimized scrollable regions */
 main, [data-scroll-area] {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
 }
 
 /* Reduce motion for users who prefer it */
@@ -159,67 +256,4 @@ main, [data-scroll-area] {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }
-}
-
-/* Sharp Keycap Keyboard Badge */
-.kbd {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1px 5px;
-  font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-  font-size: 10px;
-  font-weight: 500;
-  color: #a1a1aa;
-  background: #16161a;
-  border: 1px solid #27272a;
-  border-radius: 4px;
-}
-
-/* Square / Sharp Status Badges (No bubbly rounded-full pills) */
-.badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-family: "JetBrains Mono", monospace;
-  font-size: 11px;
-  font-weight: 500;
-}
-
-.badge-default {
-  background: #16161a;
-  color: #a1a1aa;
-  border: 1px solid #27272a;
-}
-
-.badge-success {
-  background: rgba(16, 185, 129, 0.08);
-  color: #34d399;
-  border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.badge-warning {
-  background: rgba(245, 158, 11, 0.08);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.2);
-}
-
-.badge-danger {
-  background: rgba(244, 63, 94, 0.08);
-  color: #fb7185;
-  border: 1px solid rgba(244, 63, 94, 0.2);
-}
-
-.badge-blue {
-  background: rgba(59, 130, 246, 0.08);
-  color: #60a5fa;
-  border: 1px solid rgba(59, 130, 246, 0.2);
-}
-
-/* Precision dot grid */
-.linear-grid {
-  background-image: radial-gradient(#202025 1px, transparent 1px);
-  background-size: 24px 24px;
 }

@@ -10,8 +10,10 @@ import {
   Cpu,
   Activity,
   ChevronDown,
+  Terminal,
+  Radio,
 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
 import { CosmicHero } from '../components/ui/cosmic-hero'
 import { LivePreviewBento } from '../components/ui/live-preview-bento'
@@ -24,83 +26,137 @@ export function LandingPage() {
   const navigate = useNavigate()
   const { topics } = useAppStore()
 
+  // ── Multi-layer Smooth Parallax Transforms ──
+  const { scrollY } = useScroll()
+  const heroTextY = useTransform(scrollY, [0, 500], [0, -80])
+  const heroTextOpacity = useTransform(scrollY, [0, 400], [1, 0.25])
+  const heroTextScale = useTransform(scrollY, [0, 500], [1, 0.95])
+
+  const leftTelemetryY = useTransform(scrollY, [0, 500], [0, -140])
+  const rightTelemetryY = useTransform(scrollY, [0, 500], [0, -90])
+
+  const bentoY = useTransform(scrollY, [0, 500], [50, -30])
+  const bentoScale = useTransform(scrollY, [0, 450], [0.94, 1])
+
   return (
     <div className="min-h-screen bg-[#0d0e12] text-zinc-100 flex flex-col selection:bg-zinc-800 selection:text-white linear-grid overflow-x-hidden">
       {/* ── Luminous Floating Dynamic Island Navigation ── */}
       <FloatingNavbar hasTopics={topics.length > 0} />
 
-      {/* ── Big Centered Hero with Celestial Astrolabe Orbits ── */}
+      {/* ── Big Centered Hero with Celestial Astrolabe Orbits & Parallax Depth ── */}
       <CosmicHero>
-        {/* Ambient Top Badge */}
+        {/* Floating Sci-Fi Parallax Telemetry Beacons (Desktop Only) */}
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-mono text-zinc-300 mb-6 backdrop-blur-md shadow-sm"
+          style={{ y: leftTelemetryY }}
+          className="hidden xl:flex absolute left-8 top-44 pointer-events-none z-10 flex-col gap-2 p-3.5 rounded-2xl bg-zinc-900/60 border border-white/10 backdrop-blur-md shadow-2xl text-left"
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span>Eureka · Neural Active Recall Engine · OpenRouter Free</span>
+          <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-400">
+            <Radio size={12} className="animate-pulse" />
+            <span className="font-semibold tracking-wider uppercase">Telemetry Stream</span>
+          </div>
+          <div className="text-[11px] font-mono text-zinc-400 space-y-0.5">
+            <div>ORBIT: <span className="text-zinc-200">GEO-STATIONARY</span></div>
+            <div>WARP COIL: <span className="text-emerald-400">ENGAGED</span></div>
+            <div>RETENTION: <span className="text-amber-400">98.4% RECALL</span></div>
+          </div>
         </motion.div>
 
-        {/* Big Grand Merriweather Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          className="font-heading font-normal text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] leading-[1.05] tracking-tight text-white mb-6 drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
-        >
-          Turn dense notes <br className="hidden sm:inline" />
-          into effortless recall.
-        </motion.h1>
-
-        {/* Subtitle */}
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15 }}
-          className="max-w-2xl text-sm sm:text-base md:text-lg text-zinc-300 leading-relaxed font-sans mb-8"
-        >
-          Eureka transforms complex lecture notes and textbooks into 3D active flashcards,
-          spaced memory intervals, and diagnostic test insights — completely in-browser.
-        </motion.p>
-
-        {/* Hero Action Buttons */}
         <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex flex-wrap items-center justify-center gap-4 mb-10"
+          style={{ y: rightTelemetryY }}
+          className="hidden xl:flex absolute right-8 top-56 pointer-events-none z-10 flex-col gap-2 p-3.5 rounded-2xl bg-zinc-900/60 border border-white/10 backdrop-blur-md shadow-2xl text-left"
         >
-          <ShimmerButton
-            onClick={() => navigate('/app')}
-            className="px-7 py-3 text-xs font-mono rounded-full"
+          <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-300">
+            <Terminal size={12} className="text-emerald-400" />
+            <span className="font-semibold tracking-wider uppercase">OpenRouter Router</span>
+          </div>
+          <div className="text-[11px] font-mono text-zinc-400 space-y-0.5">
+            <div>ENGINE: <span className="text-zinc-200">CLIENT-SIDE</span></div>
+            <div>LATENCY: <span className="text-emerald-400">&lt; 12ms SYNC</span></div>
+            <div>DECK DB: <span className="text-blue-400">LOCALSTORAGE</span></div>
+          </div>
+        </motion.div>
+
+        {/* Parallax Hero Headline & CTA Block */}
+        <motion.div
+          style={{ y: heroTextY, opacity: heroTextOpacity, scale: heroTextScale }}
+          className="w-full flex flex-col items-center will-change-transform"
+        >
+          {/* Ambient Top Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/90 border border-white/10 text-[11px] font-mono text-zinc-300 mb-6 backdrop-blur-md shadow-sm"
           >
-            <FileText size={14} />
-            <span>Launch Eureka Workspace</span>
-            <ArrowRight size={13} />
-          </ShimmerButton>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>Eureka · Neural Active Recall Engine · OpenRouter Free</span>
+          </motion.div>
 
-          <a
-            href="#pipeline"
-            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-xs font-mono text-zinc-300 hover:text-white hover:border-white/20 transition-all backdrop-blur-md"
+          {/* Big Grand Merriweather Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="font-heading font-normal text-4xl sm:text-6xl md:text-7xl lg:text-[5.25rem] leading-[1.05] tracking-tight text-white mb-6 drop-shadow-[0_10px_35px_rgba(0,0,0,0.8)]"
           >
-            <span>Explore Architecture</span>
-          </a>
+            Turn dense notes <br className="hidden sm:inline" />
+            into effortless recall.
+          </motion.h1>
+
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="max-w-2xl text-sm sm:text-base md:text-lg text-zinc-300 leading-relaxed font-sans mb-8"
+          >
+            Eureka transforms complex lecture notes and textbooks into 3D active flashcards,
+            spaced memory intervals, and diagnostic test insights — completely in-browser.
+          </motion.p>
+
+          {/* Hero Action Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex flex-wrap items-center justify-center gap-4 mb-10"
+          >
+            <ShimmerButton
+              onClick={() => navigate('/app')}
+              className="px-7 py-3 text-xs font-mono rounded-full"
+            >
+              <FileText size={14} />
+              <span>Launch Eureka Workspace</span>
+              <ArrowRight size={13} />
+            </ShimmerButton>
+
+            <a
+              href="#pipeline"
+              className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-6 py-3 text-xs font-mono text-zinc-300 hover:text-white hover:border-white/20 transition-all backdrop-blur-md"
+            >
+              <span>Explore Architecture</span>
+            </a>
+          </motion.div>
+
+          {/* Scroll Indicator */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1, delay: 0.4 }}
+            className="flex flex-col items-center gap-1.5 text-zinc-400 font-mono text-[10px] uppercase tracking-widest mb-12"
+          >
+            <span>Scroll to charge warp engine</span>
+            <ChevronDown size={14} className="animate-bounce text-emerald-400" />
+          </motion.div>
         </motion.div>
 
-        {/* Scroll Indicator */}
+        {/* Live Interactive Ingestion Simulator with Smooth Parallax Rise */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1, delay: 0.4 }}
-          className="flex flex-col items-center gap-1.5 text-zinc-400 font-mono text-[10px] uppercase tracking-widest mb-12"
+          style={{ y: bentoY, scale: bentoScale }}
+          className="w-full will-change-transform"
         >
-          <span>Scroll to explore</span>
-          <ChevronDown size={14} className="animate-bounce text-emerald-400" />
+          <LivePreviewBento onLaunch={() => navigate('/app')} />
         </motion.div>
-
-        {/* Live Interactive Ingestion Simulator (Clean Normal Flow) */}
-        <LivePreviewBento onLaunch={() => navigate('/app')} />
       </CosmicHero>
 
       {/* ── 3-Step Precision Pipeline ── */}

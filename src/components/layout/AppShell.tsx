@@ -7,7 +7,6 @@ import {
   Settings,
   Trash2,
   KeyRound,
-  ExternalLink,
   Lightbulb,
 } from 'lucide-react'
 import { useState } from 'react'
@@ -186,7 +185,7 @@ export function AppShell() {
           <DialogHeader>
             <DialogTitle className="text-white font-heading">Eureka Workspace Settings</DialogTitle>
             <DialogDescription className="text-zinc-400">
-              Configure OpenRouter API parameters or reset cached browser storage.
+              Configure neural API key parameters or reset cached browser storage.
             </DialogDescription>
           </DialogHeader>
 
@@ -195,23 +194,18 @@ export function AppShell() {
               <label className="text-xs font-medium text-zinc-300 mb-1.5 flex items-center justify-between">
                 <span className="flex items-center gap-1.5">
                   <KeyRound size={13} className="text-zinc-400" />
-                  Custom OpenRouter API Key (Optional)
+                  Custom API Key (Optional)
                 </span>
-                <a
-                  href="https://openrouter.ai/keys"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-emerald-400 hover:underline inline-flex items-center gap-1 text-[11px]"
-                >
-                  Get free key <ExternalLink size={10} />
-                </a>
+                <span className="text-zinc-500 text-[11px] font-mono">
+                  Stored securely in browser
+                </span>
               </label>
               <div className="flex gap-2">
                 <Input
                   type="password"
                   value={apiKeyInput}
                   onChange={(e) => setApiKeyInput(e.target.value)}
-                  placeholder="sk-or-v1-..."
+                  placeholder="sk-..."
                   className="font-mono text-xs flex-1 bg-zinc-900 border-white/10"
                 />
                 <Button size="sm" onClick={handleSaveApiKey}>
@@ -230,9 +224,9 @@ export function AppShell() {
                 Active Inference Endpoint
               </div>
               <div className="flex items-center justify-between text-xs text-zinc-400 font-mono bg-zinc-900/60 p-2.5 rounded border border-white/10">
-                <span>Model Router</span>
+                <span>Neural Router</span>
                 <Badge variant="outline" className="text-[10px] text-zinc-300 border-white/10">
-                  openrouter/free (auto)
+                  Adaptive Intelligence (Auto)
                 </Badge>
               </div>
             </div>

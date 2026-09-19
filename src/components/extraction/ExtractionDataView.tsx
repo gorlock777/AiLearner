@@ -121,7 +121,7 @@ export function ExtractionDataView({ topics }: ExtractionDataViewProps) {
               <TabsTrigger value="table" className="text-xs font-mono gap-2 rounded-full px-4 py-1.5 data-[state=active]:bg-white/10 data-[state=active]:text-white">
                 <TableIcon size={13} /> Table
               </TabsTrigger>
-              <TabsTrigger value="telemetry" className="text-xs font-mono gap-2 rounded-full px-4 py-1.5 data-[state=active]:bg-white/10 data-[state=active]:text-white">
+              <TabsTrigger value="overview" className="text-xs font-mono gap-2 rounded-full px-4 py-1.5 data-[state=active]:bg-white/10 data-[state=active]:text-white">
                 <BarChart3 size={13} /> Overview
               </TabsTrigger>
             </TabsList>
@@ -336,7 +336,7 @@ export function ExtractionDataView({ topics }: ExtractionDataViewProps) {
           </TabsContent>
 
           {/* TAB 4: Overview Metrics */}
-          <TabsContent value="telemetry" className="mt-0">
+          <TabsContent value="overview" className="mt-0">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               <div className="p-6 md:p-8 rounded-2xl bg-[#12141e]/60 border border-white/[0.08] backdrop-blur-md text-center shadow-lg">
                 <div className="font-heading text-3xl md:text-4xl text-white mb-1">{topics.length}</div>

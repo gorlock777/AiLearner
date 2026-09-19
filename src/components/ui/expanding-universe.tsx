@@ -102,7 +102,7 @@ export function ExpandingUniverse({ children, className }: ExpandingUniverseProp
             <line x1="450" y1="30" x2="450" y2="870" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="4 8" />
             <line x1="30" y1="450" x2="870" y2="450" stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="4 8" />
 
-            {/* Orbit Science Constants & Astronomical Telemetry */}
+            {/* Orbit Science Constants & Astrodynamics */}
             <g transform="translate(450, 450)">
               {/* Origin Core */}
               <circle cx="0" cy="0" r="5" fill="#34d399" />

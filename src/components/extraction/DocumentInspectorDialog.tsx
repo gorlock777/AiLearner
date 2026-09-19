@@ -77,13 +77,13 @@ export function DocumentInspectorDialog({
               </div>
               <div>
                 <DialogTitle className="text-sm font-semibold text-zinc-100 font-mono flex items-center gap-2">
-                  {document?.name ?? 'Parsed Document Telemetry'}
+                  {document?.name ?? 'Parsed Document Overview'}
                   <Badge variant="secondary" className="font-mono text-[10px]">
                     {document?.type?.toUpperCase() ?? 'DOC'}
                   </Badge>
                 </DialogTitle>
                 <DialogDescription className="text-xs text-zinc-400 mt-0.5">
-                  Extracted text layer, OCR transcription stream, and token metrics.
+                  Extracted text layer, OCR transcription data, and token metrics.
                 </DialogDescription>
               </div>
             </div>
@@ -109,7 +109,7 @@ export function DocumentInspectorDialog({
           </div>
         </DialogHeader>
 
-        {/* Telemetry KPI Strip */}
+        {/* Document KPI Strip */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 py-3 border-b border-zinc-800/80 flex-shrink-0">
           <div className="p-2.5 rounded bg-zinc-900/60 border border-zinc-800 text-center">
             <div className="text-xs font-bold font-mono text-zinc-200">

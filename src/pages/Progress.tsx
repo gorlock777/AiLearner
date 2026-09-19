@@ -83,7 +83,7 @@ export function Progress() {
         </div>
         <h2 className="text-sm font-semibold text-zinc-100 mb-1">No learning metrics yet</h2>
         <p className="text-xs text-zinc-400 mb-4">
-          Import documents and complete quizzes to populate your retention telemetry.
+          Import documents and complete quizzes to populate your retention analytics.
         </p>
         <ShimmerButton onClick={() => navigate('/app')}>
           Import Notes
@@ -106,7 +106,7 @@ export function Progress() {
           </h1>
         </div>
         <p className="text-xs text-zinc-400 max-w-xs sm:text-right leading-relaxed font-sans">
-          Diagnostic accuracy telemetry, spaced repetition retention tracking, and revision priorities.
+          Diagnostic accuracy metrics, spaced repetition retention tracking, and revision priorities.
         </p>
       </div>
 

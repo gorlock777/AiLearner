@@ -10,8 +10,6 @@ import {
   Cpu,
   Activity,
   ChevronDown,
-  Terminal,
-  Radio,
 } from 'lucide-react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useAppStore } from '../store/useAppStore'
@@ -32,9 +30,6 @@ export function LandingPage() {
   const heroTextOpacity = useTransform(scrollY, [0, 400], [1, 0.25])
   const heroTextScale = useTransform(scrollY, [0, 500], [1, 0.95])
 
-  const leftTelemetryY = useTransform(scrollY, [0, 500], [0, -140])
-  const rightTelemetryY = useTransform(scrollY, [0, 500], [0, -90])
-
   const bentoY = useTransform(scrollY, [0, 500], [50, -30])
   const bentoScale = useTransform(scrollY, [0, 450], [0.94, 1])
 
@@ -45,37 +40,6 @@ export function LandingPage() {
 
       {/* ── Big Centered Hero with Celestial Astrolabe Orbits & Parallax Depth ── */}
       <CosmicHero>
-        {/* Floating Sci-Fi Parallax Telemetry Beacons (Desktop Only) */}
-        <motion.div
-          style={{ y: leftTelemetryY }}
-          className="hidden xl:flex absolute left-8 top-44 pointer-events-none z-10 flex-col gap-2 p-3.5 rounded-2xl bg-zinc-900/60 border border-white/10 backdrop-blur-md shadow-2xl text-left"
-        >
-          <div className="flex items-center gap-2 text-[10px] font-mono text-emerald-400">
-            <Radio size={12} className="animate-pulse" />
-            <span className="font-semibold tracking-wider uppercase">Telemetry Stream</span>
-          </div>
-          <div className="text-[11px] font-mono text-zinc-400 space-y-0.5">
-            <div>ORBIT: <span className="text-zinc-200">GEO-STATIONARY</span></div>
-            <div>WARP COIL: <span className="text-emerald-400">ENGAGED</span></div>
-            <div>RETENTION: <span className="text-amber-400">98.4% RECALL</span></div>
-          </div>
-        </motion.div>
-
-        <motion.div
-          style={{ y: rightTelemetryY }}
-          className="hidden xl:flex absolute right-8 top-56 pointer-events-none z-10 flex-col gap-2 p-3.5 rounded-2xl bg-zinc-900/60 border border-white/10 backdrop-blur-md shadow-2xl text-left"
-        >
-          <div className="flex items-center gap-2 text-[10px] font-mono text-zinc-300">
-            <Terminal size={12} className="text-emerald-400" />
-            <span className="font-semibold tracking-wider uppercase">OpenRouter Router</span>
-          </div>
-          <div className="text-[11px] font-mono text-zinc-400 space-y-0.5">
-            <div>ENGINE: <span className="text-zinc-200">CLIENT-SIDE</span></div>
-            <div>LATENCY: <span className="text-emerald-400">{'< 12ms SYNC'}</span></div>
-            <div>DECK DB: <span className="text-blue-400">LOCALSTORAGE</span></div>
-          </div>
-        </motion.div>
-
         {/* Parallax Hero Headline & CTA Block */}
         <motion.div
           style={{ y: heroTextY, opacity: heroTextOpacity, scale: heroTextScale }}

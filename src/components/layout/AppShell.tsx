@@ -6,10 +6,24 @@ import {
   BarChart3,
   Cpu,
   FileText,
-  Command,
+  Settings,
+  Trash2,
+  KeyRound,
+  ExternalLink,
 } from 'lucide-react'
 import { useState } from 'react'
 import { useAppStore } from '../../store/useAppStore'
+import { Button } from '../ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '../ui/dialog'
+import { Input } from '../ui/input'
+import { Badge } from '../ui/badge'
 
 const navItems = [
   { to: '/app', icon: UploadCloud, label: 'Upload Notes' },
@@ -66,12 +80,28 @@ function SidebarNavItem({
 }
 
 export function AppShell() {
-  const { topics, documents } = useAppStore()
+  const { topics, documents, clearAll } = useAppStore()
   const activeDoc = documents[0]
   const location = useLocation()
 
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [apiKeyInput, setApiKeyInput] = useState(
+    () => localStorage.getItem('ai_learner_openrouter_key') || ''
+  )
+  const [savedKeyMsg, setSavedKeyMsg] = useState(false)
+
+  const handleSaveApiKey = () => {
+    if (apiKeyInput.trim()) {
+      localStorage.setItem('ai_learner_openrouter_key', apiKeyInput.trim())
+    } else {
+      localStorage.removeItem('ai_learner_openrouter_key')
+    }
+    setSavedKeyMsg(true)
+    setTimeout(() => setSavedKeyMsg(false), 2000)
+  }
+
   const getPageTitle = () => {
-    if (location.pathname === '/') return 'Document Workspace'
+    if (location.pathname === '/app') return 'Document Workspace'
     if (location.pathname.startsWith('/study')) return 'Flashcard Deck'
     if (location.pathname.startsWith('/quiz')) return 'Adaptive Quiz'
     if (location.pathname.startsWith('/progress')) return 'Performance Analytics'
@@ -83,7 +113,11 @@ export function AppShell() {
       {/* ── Linear Sidebar ── */}
       <aside className="relative z-20 flex flex-col items-center py-4 flex-shrink-0 w-16 bg-[#0c0c0e] border-r border-zinc-800/80">
         {/* Logo */}
-        <Link to="/" className="mb-6 flex items-center justify-center group" title="Back to Landing Page">
+        <Link
+          to="/"
+          className="mb-6 flex items-center justify-center group"
+          title="Back to Landing Page"
+        >
           <div className="flex items-center justify-center w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-700/80 text-white shadow-inner font-bold text-xs group-hover:border-zinc-500 transition-colors">
             AL
           </div>
@@ -97,12 +131,12 @@ export function AppShell() {
               to={item.to}
               icon={item.icon}
               label={item.label}
-              isExact={item.to === '/'}
+              isExact={item.to === '/app'}
             />
           ))}
         </nav>
 
-        {/* Bottom indicator */}
+        {/* Bottom controls */}
         <div className="flex flex-col items-center gap-2">
           {topics.length > 0 && (
             <div
@@ -112,7 +146,16 @@ export function AppShell() {
               {topics.length}
             </div>
           )}
-          <span className="text-[10px] font-mono text-zinc-400">v1.0</span>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setSettingsOpen(true)}
+            className="text-zinc-400 hover:text-zinc-200"
+            title="Workspace Settings"
+          >
+            <Settings size={16} />
+          </Button>
         </div>
       </aside>
 
@@ -134,15 +177,19 @@ export function AppShell() {
           </div>
 
           <div className="flex items-center gap-3">
-            <div className="hidden sm:inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-zinc-900/90 border border-zinc-800 text-[11px] text-zinc-400 font-mono">
+            <div className="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-900/90 border border-zinc-800 text-[11px] text-zinc-400 font-mono">
               <Cpu size={12} className="text-emerald-400" />
               openrouter/free
             </div>
 
-            <div className="hidden lg:flex items-center gap-1 text-xs text-zinc-400 bg-zinc-900/80 px-2 py-1 rounded border border-zinc-800">
-              <Command size={11} />
-              <span className="text-[10px]">K</span>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setSettingsOpen(true)}
+              className="text-[11px] font-mono h-7 px-2"
+            >
+              Settings
+            </Button>
           </div>
         </header>
 
@@ -151,6 +198,95 @@ export function AppShell() {
           <Outlet />
         </main>
       </div>
+
+      {/* ── Shadcn Settings Dialog Modal ── */}
+      <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>AiLearner Workspace Settings</DialogTitle>
+            <DialogDescription>
+              Configure OpenRouter API parameters or reset cached browser storage.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="flex flex-col gap-4 py-2">
+            <div>
+              <label className="text-xs font-medium text-zinc-300 block mb-1.5 flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <KeyRound size={13} className="text-zinc-400" />
+                  Custom OpenRouter API Key (Optional)
+                </span>
+                <a
+                  href="https://openrouter.ai/keys"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[11px] text-zinc-400 hover:text-zinc-200 inline-flex items-center gap-1"
+                >
+                  Get Key <ExternalLink size={10} />
+                </a>
+              </label>
+              <Input
+                type="password"
+                placeholder="sk-or-v1-..."
+                value={apiKeyInput}
+                onChange={(e) => setApiKeyInput(e.target.value)}
+                className="font-mono text-xs"
+              />
+              <p className="text-[11px] text-zinc-400 mt-1.5">
+                Leave blank to use the default configured free router key from environment.
+              </p>
+            </div>
+
+            <div className="rounded-lg border border-zinc-800 bg-zinc-900/50 p-3 text-xs flex flex-col gap-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-400">Current LLM Endpoint</span>
+                <Badge variant="secondary" className="font-mono text-[10px]">
+                  openrouter/free
+                </Badge>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-400">Storage Persistence</span>
+                <span className="text-zinc-300 font-mono text-[11px]">Browser localStorage</span>
+              </div>
+            </div>
+
+            <div className="pt-2 border-t border-zinc-800/80">
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={() => {
+                  if (confirm('Are you sure you want to clear all topics, cards, and quizzes?')) {
+                    clearAll()
+                    setSettingsOpen(false)
+                  }
+                }}
+                className="w-full justify-center text-xs"
+              >
+                <Trash2 size={13} />
+                Clear Workspace Cache & Data
+              </Button>
+            </div>
+          </div>
+
+          <DialogFooter>
+            {savedKeyMsg && (
+              <span className="text-xs text-emerald-400 self-center font-mono mr-auto">
+                Saved!
+              </span>
+            )}
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setSettingsOpen(false)}
+            >
+              Close
+            </Button>
+            <Button size="sm" onClick={handleSaveApiKey}>
+              Save Key
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

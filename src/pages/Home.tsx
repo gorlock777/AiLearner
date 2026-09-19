@@ -1,5 +1,4 @@
 import { useCallback, useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {
   UploadCloud,
   FileText,
@@ -21,6 +20,10 @@ import {
 import { useAppStore } from '../store/useAppStore'
 import type { Topic, FlashcardSet, QuizSet } from '../store/useAppStore'
 import { ExtractionDataView } from '../components/extraction/ExtractionDataView'
+import { Button } from '../components/ui/button'
+import { Badge } from '../components/ui/badge'
+import { Progress } from '../components/ui/progress'
+import { Alert, AlertDescription, AlertTitle } from '../components/ui/alert'
 
 const STEPS = [
   { id: 1, label: 'Reading and parsing document contents' },
@@ -36,7 +39,6 @@ function formatBytes(bytes: number): string {
 }
 
 export function Home() {
-  const navigate = useNavigate()
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const {
@@ -176,11 +178,14 @@ export function Home() {
         </p>
       </div>
 
-      {/* Error alert */}
+      {/* Error alert using Shadcn Alert */}
       {error && (
-        <div className="w-full max-w-xl mb-6 p-4 rounded-lg bg-rose-950/30 border border-rose-800/60 text-rose-200 text-xs flex items-start gap-3">
-          <AlertCircle size={16} className="text-rose-400 mt-0.5 flex-shrink-0" />
-          <div className="flex-1">{error}</div>
+        <div className="w-full max-w-xl mb-6">
+          <Alert variant="destructive">
+            <AlertCircle className="h-4 w-4" />
+            <AlertTitle>Extraction Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
         </div>
       )}
 
@@ -190,16 +195,18 @@ export function Home() {
           <ExtractionDataView topics={topics} />
 
           <div className="mt-4 flex items-center gap-3">
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={() => {
                 clearAll()
                 setFile(null)
               }}
-              className="text-xs text-zinc-400 hover:text-zinc-200 inline-flex items-center gap-1.5 transition-colors font-mono"
+              className="text-xs text-zinc-400 hover:text-zinc-200 font-mono"
             >
               <RotateCcw size={12} />
               Reset Workspace & Upload New File
-            </button>
+            </Button>
           </div>
         </div>
       ) : null}
@@ -230,11 +237,16 @@ export function Home() {
             />
 
             {isProcessing ? (
-              <div className="py-6 flex flex-col items-center">
-                <Loader2 size={24} className="animate-spin text-zinc-300 mb-4" />
+              <div className="py-6 flex flex-col items-center w-full">
+                <Loader2 size={24} className="animate-spin text-zinc-300 mb-3" />
                 <div className="text-sm font-medium text-zinc-200 mb-4">
                   Synthesizing study modules with AI
                 </div>
+
+                <div className="w-full max-w-xs mb-5">
+                  <Progress value={currentStep} max={4} />
+                </div>
+
                 <div className="w-full max-w-xs flex flex-col gap-2.5 text-left">
                   {STEPS.map((step) => {
                     const isDone = currentStep > step.id
@@ -274,17 +286,18 @@ export function Home() {
                 <div className="text-xs text-zinc-400 mb-4 font-mono">
                   {formatBytes(file.size)}
                 </div>
-                <button
+                <Button
                   type="button"
+                  size="lg"
                   onClick={(e) => {
                     e.stopPropagation()
                     handleProcess()
                   }}
-                  className="btn-primary mx-auto"
+                  className="mx-auto"
                 >
                   Generate Study System
                   <ArrowRight size={13} />
-                </button>
+                </Button>
               </div>
             ) : (
               <div className="py-4">
@@ -298,9 +311,15 @@ export function Home() {
                   Accepts PDF, Markdown, and TXT files
                 </div>
                 <div className="flex items-center justify-center gap-2">
-                  <span className="kbd">PDF</span>
-                  <span className="kbd">TXT</span>
-                  <span className="kbd">MD</span>
+                  <Badge variant="secondary" className="font-mono text-[10px]">
+                    PDF
+                  </Badge>
+                  <Badge variant="secondary" className="font-mono text-[10px]">
+                    TXT
+                  </Badge>
+                  <Badge variant="secondary" className="font-mono text-[10px]">
+                    MD
+                  </Badge>
                 </div>
               </div>
             )}

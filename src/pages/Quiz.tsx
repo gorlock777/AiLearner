@@ -11,6 +11,9 @@ import {
 } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 import type { QuizQuestion } from '../store/useAppStore'
+import { Button } from '../components/ui/button'
+import { Badge } from '../components/ui/badge'
+import { Progress } from '../components/ui/progress'
 
 export function Quiz() {
   const navigate = useNavigate()
@@ -94,9 +97,9 @@ export function Quiz() {
         <p className="text-xs text-zinc-400 mb-5">
           Upload course material to automatically generate practice quizzes.
         </p>
-        <button onClick={() => navigate('/')} className="btn-primary">
+        <Button onClick={() => navigate('/app')}>
           Upload Notes
-        </button>
+        </Button>
       </div>
     )
   }
@@ -117,11 +120,11 @@ export function Quiz() {
             <h1 className="text-xl font-semibold text-zinc-100">Adaptive Quiz</h1>
             <p className="text-xs text-zinc-400">Multiple choice active recall test</p>
           </div>
-          <span className="text-xs font-mono text-zinc-400 bg-zinc-900 border border-zinc-800 px-2 py-1 rounded">
+          <Badge variant="secondary" className="font-mono text-xs">
             {questions.length > 0
               ? `Question ${currentIndex + 1} / ${questions.length}`
               : '0 / 0'}
-          </span>
+          </Badge>
         </div>
 
         {/* Topic Pills */}
@@ -129,17 +132,17 @@ export function Quiz() {
           {topics.map((t) => {
             const isSelected = t.id === selectedTopicId
             return (
-              <button
+              <Button
                 key={t.id}
+                variant={isSelected ? 'secondary' : 'ghost'}
+                size="sm"
                 onClick={() => setSelectedTopicId(t.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all border ${
-                  isSelected
-                    ? 'bg-zinc-800 text-white border-zinc-700 shadow-sm font-semibold'
-                    : 'bg-zinc-900/60 text-zinc-400 border-zinc-800/80 hover:bg-zinc-850 hover:text-zinc-200'
+                className={`whitespace-nowrap text-xs ${
+                  isSelected ? 'border-zinc-700 bg-zinc-800 text-white' : 'text-zinc-400'
                 }`}
               >
                 {t.title}
-              </button>
+              </Button>
             )
           })}
         </div>
@@ -156,9 +159,9 @@ export function Quiz() {
             <p className="text-xs text-zinc-400 mb-4">
               Return to Upload to process notes or generate quizzes.
             </p>
-            <button onClick={() => navigate('/')} className="btn-primary mx-auto">
+            <Button onClick={() => navigate('/app')} className="mx-auto">
               Upload Notes
-            </button>
+            </Button>
           </div>
         ) : quizFinished ? (
           /* Results Screen */
@@ -202,27 +205,22 @@ export function Quiz() {
             </div>
 
             <div className="flex items-center justify-center gap-3">
-              <button onClick={handleRestart} className="btn-secondary">
+              <Button variant="secondary" onClick={handleRestart}>
                 <RotateCcw size={13} />
                 Retry Quiz
-              </button>
-              <button onClick={() => navigate('/progress')} className="btn-primary">
+              </Button>
+              <Button onClick={() => navigate('/progress')}>
                 <BarChart3 size={13} />
                 View Analytics
-              </button>
+              </Button>
             </div>
           </div>
         ) : currentQuestion ? (
           /* Question Runner */
           <div className="linear-card linear-card-highlight p-6 md:p-8">
             {/* Progress bar */}
-            <div className="w-full h-1 bg-zinc-900 rounded-full mb-6 overflow-hidden border border-zinc-800/80">
-              <div
-                className="h-full bg-zinc-200 transition-all duration-200"
-                style={{
-                  width: `${((currentIndex) / questions.length) * 100}%`,
-                }}
-              />
+            <div className="mb-6">
+              <Progress value={currentIndex} max={questions.length} />
             </div>
 
             <h2 className="text-base font-medium text-zinc-100 mb-6 leading-relaxed">
@@ -288,10 +286,10 @@ export function Quiz() {
             {/* Next Button */}
             {isAnswered && (
               <div className="flex justify-end">
-                <button onClick={handleNext} className="btn-primary">
+                <Button onClick={handleNext}>
                   {currentIndex < questions.length - 1 ? 'Next Question' : 'Complete Quiz'}
                   <ArrowRight size={13} />
-                </button>
+                </Button>
               </div>
             )}
           </div>

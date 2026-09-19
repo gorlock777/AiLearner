@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import {
   ChevronLeft,
@@ -9,12 +9,16 @@ import {
   X,
   Layers,
   Loader2,
-  Sparkles,
+  AlertCircle,
 } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
 import { fetchCompletion, parseJSONResponse } from '../lib/openrouter'
 import { generateFlashcardsPrompt } from '../lib/prompts'
 import type { Flashcard } from '../store/useAppStore'
+import { Button } from '../components/ui/button'
+import { Badge } from '../components/ui/badge'
+import { Progress } from '../components/ui/progress'
+import { Alert, AlertDescription } from '../components/ui/alert'
 
 type CardResult = 'known' | 'review' | null
 
@@ -175,9 +179,9 @@ export function Study() {
         <p className="text-xs text-zinc-400 mb-5">
           Upload course material first to generate flashcard sets.
         </p>
-        <Link to="/" className="btn-primary">
+        <Button onClick={() => navigate('/app')}>
           Upload Material
-        </Link>
+        </Button>
       </div>
     )
   }
@@ -191,9 +195,9 @@ export function Study() {
             <h1 className="text-xl font-semibold text-zinc-100">Flashcard Workspace</h1>
             <p className="text-xs text-zinc-400">Interactive spaced repetition deck</p>
           </div>
-          <span className="text-xs font-mono text-zinc-400 bg-zinc-900 border border-zinc-800 px-2 py-1 rounded">
+          <Badge variant="secondary" className="font-mono text-xs">
             {cards.length > 0 ? `${currentIndex + 1} / ${cards.length}` : '0 / 0'}
-          </span>
+          </Badge>
         </div>
 
         {/* Topic Pills */}
@@ -201,17 +205,17 @@ export function Study() {
           {topics.map((t) => {
             const isSelected = t.id === selectedTopicId
             return (
-              <button
+              <Button
                 key={t.id}
+                variant={isSelected ? 'secondary' : 'ghost'}
+                size="sm"
                 onClick={() => setSelectedTopicId(t.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all border ${
-                  isSelected
-                    ? 'bg-zinc-800 text-white border-zinc-700 shadow-sm font-semibold'
-                    : 'bg-zinc-900/60 text-zinc-400 border-zinc-800/80 hover:bg-zinc-850 hover:text-zinc-200'
+                className={`whitespace-nowrap text-xs ${
+                  isSelected ? 'border-zinc-700 bg-zinc-800 text-white' : 'text-zinc-400'
                 }`}
               >
                 {t.title}
-              </button>
+              </Button>
             )
           })}
         </div>
@@ -236,11 +240,16 @@ export function Study() {
               Synthesize a targeted flashcard deck for active recall.
             </p>
             {generateError && (
-              <div className="text-xs text-rose-400 mb-4">{generateError}</div>
+              <div className="mb-4">
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{generateError}</AlertDescription>
+                </Alert>
+              </div>
             )}
-            <button onClick={handleGenerate} className="btn-primary mx-auto">
+            <Button onClick={handleGenerate} className="mx-auto">
               Generate Cards
-            </button>
+            </Button>
           </div>
         ) : sessionComplete ? (
           <div className="linear-card linear-card-highlight w-full p-8 text-center">
@@ -266,14 +275,14 @@ export function Study() {
             </div>
 
             <div className="flex items-center justify-center gap-3">
-              <button onClick={handleRestart} className="btn-secondary">
+              <Button variant="secondary" onClick={handleRestart}>
                 <RotateCcw size={14} />
                 Restart Deck
-              </button>
-              <button onClick={() => navigate('/quiz')} className="btn-primary">
+              </Button>
+              <Button onClick={() => navigate('/quiz')}>
                 Take Practice Quiz
                 <ArrowRight size={14} />
-              </button>
+              </Button>
             </div>
           </div>
         ) : currentCard ? (
@@ -324,41 +333,45 @@ export function Study() {
 
             {/* Navigation & Keycap Legend */}
             <div className="w-full mt-5 flex items-center justify-between">
-              <button
+              <Button
+                variant="secondary"
+                size="icon"
                 onClick={goPrev}
                 disabled={currentIndex === 0}
-                className="btn-secondary px-3 py-1.5"
                 title="Previous card"
               >
                 <ChevronLeft size={16} />
-              </button>
+              </Button>
 
               <div className="flex items-center gap-3">
-                <button
+                <Button
+                  variant="secondary"
                   onClick={() => handleResult('review')}
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-zinc-800 bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 text-xs"
                 >
                   <X size={13} className="text-amber-400" />
                   Review Again
                   <kbd className="kbd">1</kbd>
-                </button>
-                <button
+                </Button>
+                <Button
+                  variant="secondary"
                   onClick={() => handleResult('known')}
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-zinc-800 bg-zinc-900 text-zinc-300 hover:bg-zinc-800 hover:text-white transition-colors flex items-center gap-2"
+                  className="flex items-center gap-2 text-xs"
                 >
                   <Check size={13} className="text-emerald-400" />
                   Mastered
                   <kbd className="kbd">2</kbd>
-                </button>
+                </Button>
               </div>
 
-              <button
+              <Button
+                variant="secondary"
+                size="icon"
                 onClick={goNext}
-                className="btn-secondary px-3 py-1.5"
                 title="Next card"
               >
                 <ChevronRight size={16} />
-              </button>
+              </Button>
             </div>
           </div>
         ) : null}

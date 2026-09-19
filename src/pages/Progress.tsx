@@ -3,17 +3,16 @@ import { useNavigate } from 'react-router-dom'
 import {
   TrendingUp,
   BookOpen,
-  CheckSquare,
   AlertTriangle,
   Clock,
   ArrowRight,
   CheckCircle2,
   Calendar,
   Layers,
-  Award,
 } from 'lucide-react'
 import { useAppStore } from '../store/useAppStore'
-import type { Topic, QuizAttempt } from '../store/useAppStore'
+import { Button } from '../components/ui/button'
+import { Badge } from '../components/ui/badge'
 
 function formatDate(ts: number): string {
   const d = new Date(ts)
@@ -84,9 +83,9 @@ export function Progress() {
         <p className="text-xs text-zinc-400 mb-5">
           Upload documents and complete quizzes to populate your retention telemetry.
         </p>
-        <button onClick={() => navigate('/')} className="btn-primary">
+        <Button onClick={() => navigate('/app')}>
           Upload Notes
-        </button>
+        </Button>
       </div>
     )
   }
@@ -156,13 +155,15 @@ export function Progress() {
                 className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs"
               >
                 <span className="font-medium text-zinc-200">{t.title}</span>
-                <button
+                <Button
+                  variant="ghost"
+                  size="sm"
                   onClick={() => navigate('/study')}
-                  className="text-zinc-400 hover:text-white font-medium flex items-center gap-1 transition-colors text-[11px]"
+                  className="h-6 px-2 text-[11px] text-zinc-400 hover:text-white"
                 >
                   Study
                   <ArrowRight size={11} />
-                </button>
+                </Button>
               </div>
             ))}
           </div>
@@ -175,9 +176,9 @@ export function Progress() {
           <h2 className="text-sm font-semibold text-zinc-100">
             Module Performance Breakdown
           </h2>
-          <span className="text-[11px] font-mono text-zinc-400">
+          <Badge variant="secondary" className="font-mono text-[10px]">
             {topics.length} topics
-          </span>
+          </Badge>
         </div>
 
         {topics.length === 0 ? (
@@ -197,7 +198,9 @@ export function Progress() {
                         {t.title}
                       </span>
                       {isWeak && (
-                        <span className="badge badge-warning text-[10px]">Review</span>
+                        <Badge variant="warning" className="text-[10px]">
+                          Review
+                        </Badge>
                       )}
                     </div>
                     <div className="text-[11px] text-zinc-400 font-mono">
@@ -215,12 +218,14 @@ export function Progress() {
                       </div>
                     </div>
 
-                    <button
+                    <Button
+                      variant="secondary"
+                      size="sm"
                       onClick={() => navigate('/quiz')}
-                      className="btn-secondary py-1 px-2.5 text-xs"
+                      className="text-xs"
                     >
                       Quiz
-                    </button>
+                    </Button>
                   </div>
                 </div>
               )
@@ -267,17 +272,18 @@ export function Progress() {
                     <span className="text-zinc-400 text-[11px] font-mono">
                       {attempt.correctCount} / {attempt.totalQuestions}
                     </span>
-                    <span
-                      className={`badge font-mono text-[10px] ${
+                    <Badge
+                      variant={
                         attempt.score >= 80
-                          ? 'badge-success'
+                          ? 'success'
                           : attempt.score >= 60
-                          ? 'badge-warning'
-                          : 'badge-danger'
-                      }`}
+                          ? 'warning'
+                          : 'destructive'
+                      }
+                      className="font-mono text-[10px]"
                     >
                       {attempt.score}%
-                    </span>
+                    </Badge>
                   </div>
                 </div>
               )

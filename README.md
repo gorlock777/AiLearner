@@ -1,5 +1,4 @@
 # React + TypeScript + Vite
-# AiLearner 🧠⚡
 # Eureka
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
@@ -17,19 +16,19 @@ Built in 24 hours for the **E2 Hackathon 2026**.
 ---
 
 ## React Compiler
-## ✨ Features
+##  Features
 ## What it does
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 | Feature | Description |
 | Feature | What you get |
 |---|---|
-| 📄 **Document Upload** | Upload PDF, TXT, or MD notes |
-| 🗺️ **Topic Extraction** | AI identifies and organizes key topics |
-| 🃏 **Flashcard Deck** | 3D-flip cards with keyboard navigation |
-| 🧪 **Practice Quiz** | MCQ quiz with instant feedback & explanations |
-| 📊 **Progress Dashboard** | Per-topic scores, streak tracking, weak-spot detection |
-| 🔥 **Weak Topic Tracking** | Automatic flagging of topics scoring below 60% |
+|  **Document Upload** | Upload PDF, TXT, or MD notes |
+|  **Topic Extraction** | AI identifies and organizes key topics |
+|  **Flashcard Deck** | 3D-flip cards with keyboard navigation |
+|  **Practice Quiz** | MCQ quiz with instant feedback & explanations |
+|  **Progress Dashboard** | Per-topic scores, streak tracking, weak-spot detection |
+|  **Weak Topic Tracking** | Automatic flagging of topics scoring below 60% |
 | Document upload | PDF, TXT, or Markdown — including scanned pages via vision OCR |
 | Topic extraction | Key concepts organized into a structured hierarchy by the AI |
 | 3D flashcards | Spring-animated flip cards with keyboard navigation |
@@ -40,7 +39,7 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ---
 
 If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-## 🚀 Quick Start
+##  Quick Start
 ## Quick start
 
 ```json
@@ -81,7 +80,7 @@ See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rule
 ---
 ### Getting an OpenRouter API key
 
-## 🔑 Getting an OpenRouter API Key
+##  Getting an OpenRouter API Key
 1. Head to [openrouter.ai](https://openrouter.ai) and create a free account
 2. Go to **API Keys** → **Create Key**
 3. Paste it into your `.env` file
@@ -96,7 +95,7 @@ The free tier gives you around 50 requests a day — more than enough for a demo
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 ## Tech stack
 
 - **Frontend**: React 19 + Vite + TypeScript
@@ -117,7 +116,7 @@ The free tier gives you around 50 requests a day — more than enough for a demo
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 ## Project structure
 
 ```
@@ -157,7 +156,7 @@ src/
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 ## Architecture notes
 
 - **Zero backend** — everything runs in the browser
@@ -169,7 +168,7 @@ State is managed by Zustand and persisted to `localStorage` — your flashcard d
 
 ---
 
-## 🚢 Deploy to Vercel
+##  Deploy to Vercel
 ## Deploy
 
 Connect the repo to [Vercel](https://vercel.com) for automatic deployments on push, or run:
@@ -185,16 +184,7 @@ Add `VITE_OPENROUTER_API_KEY` as an environment variable in your Vercel project 
 > Add `VITE_OPENROUTER_API_KEY` as an **Environment Variable** in your Vercel project settings.
 
 ---
-
-## 👥 Team
-## Team
-
-Built by **gorlock777** @ E2 Hackathon 2026
-Built by **gorlock777** — E2 Hackathon 2026
-
----
-
-## 📄 License
+##  License
 
 MIT
 MIT License

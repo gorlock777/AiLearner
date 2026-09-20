@@ -1,4 +1,4 @@
-# React + TypeScript + Vite
+
 # Eureka
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
@@ -14,9 +14,6 @@ Upload a PDF, paste some text, or drop in a markdown file — Eureka extracts ke
 Built in 24 hours for the **E2 Hackathon 2026**.
 
 ---
-
-## React Compiler
-##  Features
 ## What it does
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
@@ -39,7 +36,6 @@ The React Compiler is not enabled on this template because of its impact on dev 
 ---
 
 If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-##  Quick Start
 ## Quick start
 
 ```json
@@ -94,8 +90,6 @@ The free tier gives you around 50 requests a day — more than enough for a demo
 **Free tier**: ~50 requests/day (enough for a hackathon demo)
 
 ---
-
-##  Tech Stack
 ## Tech stack
 
 - **Frontend**: React 19 + Vite + TypeScript
@@ -115,8 +109,6 @@ The free tier gives you around 50 requests a day — more than enough for a demo
 - **React Router v7**
 
 ---
-
-##  Project Structure
 ## Project structure
 
 ```
@@ -155,8 +147,6 @@ src/
 ```
 
 ---
-
-## Architecture
 ## Architecture notes
 
 - **Zero backend** — everything runs in the browser
@@ -169,8 +159,6 @@ State is managed by Zustand and persisted to `localStorage` — your flashcard d
 ---
 
 ##  Deploy to Vercel
-## Deploy
-
 Connect the repo to [Vercel](https://vercel.com) for automatic deployments on push, or run:
 
 ```bash
